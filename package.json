@@ -10,8 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.7.9",
+    "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-pro-sidebar": "^1.1.0",
+    "react-router-dom": "^7.1.1",
+    "react-toastify": "^11.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
