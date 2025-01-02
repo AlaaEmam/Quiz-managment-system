@@ -5,7 +5,7 @@ import logo from '../../../../assets/images/Logo.png';
 export default function AuthLayout() {
   return (
     <>
-      <div className="grid md:grid-cols-2  bg-dark_blue  w-screen h-screen p-[50px]">
+      <div className="grid md:grid-cols-2  bg-dark_blue  w-full h-full p-[50px]">
         <div>
           <div className="text-white mb-10">
             <img src={logo} alt="logo" />
