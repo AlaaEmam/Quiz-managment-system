@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import auth_pic from "../../../../assets/auth pic.png"
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { EMAIL_VALIDATION, PasswordValidation } from "../../../Shared/Url/components/validations";
 import { Auth, axiosInstance } from "../../../Shared/Url/components/URL";
 
@@ -13,10 +13,10 @@ export default function ResetPassword() {
   const navigate=useNavigate();
   const{register, handleSubmit, formState:{isSubmitting, errors}}=useForm<formData>()
   
-  const onSubmit=async()=>{
+  const onSubmit:SubmitHandler<formData>=async(data)=>{
     try{
       const response=await axiosInstance.post(Auth.resetPassword);
-
+      navigate('/auth/login', {state:data.email})
     }catch(error){
       console.log(error)
     }
@@ -32,7 +32,7 @@ export default function ResetPassword() {
          md:text-base
          lg:text-2xl
          xl:text-4xl">Reset Password</h1>
-        <form >
+        <form onSubmit={handleSubmit(onSubmit)}>
           <label className="mt-5">Your Email address</label>
           
           {errors.email && <span className="text-danger ">{errors.email.message}</span>}
@@ -40,7 +40,7 @@ export default function ResetPassword() {
           <div className="mt-3 border-2 
             rounded-lg
             border-solid 
-          border-white flex items-center rounded-md">
+          border-white flex items-center ">
             <span className="border-2 p-2 border-none rounded-lg
             border-white">
               <i className="bi bi-envelope text-xl"></i>
@@ -75,7 +75,7 @@ export default function ResetPassword() {
           <div className="mt-3 border-2 
             rounded-lg
             border-solid 
-          border-white flex items-center rounded-md">
+          border-white flex items-center ">
             <span className="border-2 p-2 border-none rounded-lg
             border-white">
               <i className="bi bi-envelope text-xl"></i>
@@ -107,7 +107,7 @@ export default function ResetPassword() {
           <button className="mt-5 rounded-lg 
             bg-white text-black p-2 px-4  text-center" 
             type="submit">
-              Reset
+              {isSubmitting? "Reseting...":"Reset"}
               <span className="">
                 <i className=" bi bi-check-circle-fill text-lg ml-2"></i>
               </span>
