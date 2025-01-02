@@ -11,7 +11,7 @@ export default function Register() {
       <div>
         <div className="mt-[50px]">
           <h2 className="text-green text-[25px]">
-            Continue your learning journey with QuizWiz!
+          Create your account and start using QuizWiz!
           </h2>
         </div>
         <div className="flex gap-[50px] items-center mt-[30px]">
