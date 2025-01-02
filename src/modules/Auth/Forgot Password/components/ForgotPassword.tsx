@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import auth_pic from "../../../../assets/auth pic.png"
 import { useForm } from 'react-hook-form';
+import { Auth, axiosInstance } from "../../../Shared/Url/components/URL";
+import { EMAIL_VALIDATION } from "../../../Shared/Url/components/validations";
 
 
 
@@ -13,7 +15,12 @@ export default function ForgotPassword() {
   let {register, formState:{isSubmitting, errors}, handleSubmit}=useForm<formData>();
   
   const onSubmit=async(data:formData)=>{
-    // const response= await;
+    try{
+      const response= await axiosInstance.post(Auth.forgotPassword);
+      navigate('/auth/reset-password', {state:data.email});
+    }catch(error){
+      console.log(error)
+    }
   }
   
   
@@ -45,7 +52,7 @@ export default function ForgotPassword() {
             className="
             p-2
             w-full  bg-black"
-            {...register('email')
+            {...register('email',EMAIL_VALIDATION)
             }
             />
           </div>
