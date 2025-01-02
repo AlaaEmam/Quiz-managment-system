@@ -33,3 +33,27 @@ export const Student={
   updateStudentGroup:(id:string, id2:string)=>`/student/${id}/${id2}`,
   
 }
+
+export const Question={
+  getAll:`/question`,
+  getById:(id:string)=>`/question/${id}`,
+  createQuestion:`/question`,
+  updateQuestion:(id:string)=>`/question/${id}`,
+  deleteQuestion:(id:string)=>`/question/${id}`,
+  searchQuestion:`/question/search`
+}
+
+export const Quiz={
+  getAll:`/quiz`,
+  getById:(id:string)=>`/quiz/${id}`,
+  createQuiz:`/quiz`,
+  updateQuiz:(id:string)=>`/quiz/${id}`,
+  deleteQuiz:(id:string)=>`/quiz/${id}`,
+  joinQuiz:`/quiz/join`,
+  submit:(id:string)=>`/quiz/submit/${id}`,
+  questionsWithoutAnswers:(id:string)=>`quiz/without-answers/${id}`,
+  allResults:`quiz/result`,
+  firstFiveIncomming:`quiz/incomming`,
+  lastFiveCompleted:`quiz/completed`,
+  reassign:(id:string)=>`quiz/reassign/${id}`
+}
