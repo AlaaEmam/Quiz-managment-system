@@ -15,7 +15,7 @@ function App() {
   
   const Routes= createBrowserRouter([
     {
-      path: "auth",
+      path: "/",
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
