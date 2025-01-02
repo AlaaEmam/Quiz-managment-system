@@ -30,10 +30,12 @@ export default function ForgotPassword() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <label className="">Email address</label>
           
+          {errors.email && <span className="text-danger ">{errors.email.message}</span>}
+                
           <div className="mt-3 border-2 
             rounded-lg
             border-solid 
-          border-white flex items-center rounded-md">
+          border-white flex items-center">
             <span className="border-2 p-2 border-none rounded-lg
     
             border-white">
@@ -42,7 +44,7 @@ export default function ForgotPassword() {
             <input placeholder="Type your Email here" 
             className="
             p-2
-            w-96  bg-black"
+            w-full  bg-black"
             {...register('email')
             }
             />
@@ -51,7 +53,7 @@ export default function ForgotPassword() {
           
 
           <button className="mt-10 rounded-lg bg-white
-           text-black p-2 " type="submit">Send email 
+           text-black p-2 " type="submit">{isSubmitting? "sending Email":'Send Email'} 
            
             <i className=" bi bi-check-circle-fill ml-2 text-xl "></i>
         
