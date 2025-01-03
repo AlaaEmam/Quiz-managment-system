@@ -13,7 +13,7 @@ export default function AuthLayout() {
           <Outlet />
         </div>
 
-        <div className="flex justify-end items-center">
+        <div className="flex justify-end ">
           <div className="bg-light_cream  h-[620px] w-[540px] hidden  md:flex justify-center items-center rounded-2xl">
             <img
               src={auth_pic}
