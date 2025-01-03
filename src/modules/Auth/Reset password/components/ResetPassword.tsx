@@ -85,6 +85,7 @@ export default function ResetPassword() {
                   <FaKey />
                 </span>
                 <input
+                  type="password"
                   placeholder="Type your password "
                   className="  bg-inherit w-full   focus:outline-none "
                   {...register("password", PASSWORD_VALIDATION)}

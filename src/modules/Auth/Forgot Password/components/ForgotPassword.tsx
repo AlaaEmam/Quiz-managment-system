@@ -40,6 +40,7 @@ export default function ForgotPassword() {
                   <i className="bi bi-envelope text-xl"></i>
                 </span>
                 <input
+                  type="email"
                   placeholder="Type your email "
                   className="  bg-inherit w-full   focus:outline-none "
                   {...register('email', EMAIL_VALIDATION)}

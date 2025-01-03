@@ -14,17 +14,14 @@ export default function ChangePassword() {
     handleSubmit,
   } = useForm<formData>();
 
-  const onSubmit = async (data:formData) =>{
+  const onSubmit = async (data: formData) => {
     try {
-      let response = await axiosInstance.post(Auth.changePassword,data)
+      let response = await axiosInstance.post(Auth.changePassword, data);
       console.log(response);
-      
     } catch (error) {
       console.log(error);
-      
     }
-    
-  }
+  };
   return (
     <>
       <div>
@@ -41,9 +38,12 @@ export default function ChangePassword() {
                   <FaKey />
                 </span>
                 <input
+                  type="password"
                   placeholder="Type your old password "
                   className="  bg-inherit w-full   focus:outline-none "
-                  {...register("password",{required:"Old password is required"})}
+                  {...register("password", {
+                    required: "Old password is required",
+                  })}
                 />
               </div>
               {errors.password && (
@@ -57,13 +57,16 @@ export default function ChangePassword() {
                   <FaKey />
                 </span>
                 <input
+                  type="password"
                   placeholder="Type your new password "
                   className="  bg-inherit w-full   focus:outline-none "
-                  {...register("password_new",PASSWORD_VALIDATION)}
+                  {...register("password_new", PASSWORD_VALIDATION)}
                 />
               </div>
               {errors.password_new && (
-                <span className="text-red-600">{errors.password_new.message}</span>
+                <span className="text-red-600">
+                  {errors.password_new.message}
+                </span>
               )}
             </div>
             <div className="flex justify-between items-center">
@@ -72,7 +75,7 @@ export default function ChangePassword() {
                 type="submit"
                 disabled={isSubmitting}
               >
-                {isSubmitting?"Submitting":"Change"}
+                {isSubmitting ? "Submitting" : "Change"}
                 <i className=" bi bi-check-circle-fill ml-2 text-xl "></i>
               </button>
             </div>
