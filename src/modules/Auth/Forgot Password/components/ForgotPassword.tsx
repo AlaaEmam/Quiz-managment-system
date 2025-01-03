@@ -1,8 +1,8 @@
-import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import { EMAIL_VALIDATION } from "../../../../Constants/Validation/validation";
-import { Auth, axiosInstance } from "../../../../Constants/URLS/URL";
-import { toast } from "react-toastify";
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Auth, axiosInstance } from '../../../../Constants/URLS/URL';
+import { EMAIL_VALIDATION } from '../../../../Constants/Validation/validation';
 
 interface formData {
   email: string;
@@ -10,7 +10,7 @@ interface formData {
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
-  let {
+  const {
     register,
     formState: { isSubmitting, errors },
     handleSubmit,
@@ -18,11 +18,11 @@ export default function ForgotPassword() {
 
   const onSubmit = async (data: formData) => {
     try {
-      let response = await axiosInstance.post(Auth.forgotPassword, data);
-      toast.success(response.data.message || "Check your mail");
-      navigate("/reset-password", { state: data.email });
+      const response = await axiosInstance.post(Auth.forgotPassword, data);
+      toast.success(response.data.message || 'Check your mail');
+      navigate('/reset-password', { state: data.email });
     } catch (error) {
-      toast.error("request failed");
+      toast.error(`Request failed: ${error}`);
     }
   };
   return (
@@ -42,7 +42,7 @@ export default function ForgotPassword() {
                 <input
                   placeholder="Type your email "
                   className="  bg-inherit w-full   focus:outline-none "
-                  {...register("email", EMAIL_VALIDATION)}
+                  {...register('email', EMAIL_VALIDATION)}
                 />
               </div>
               {errors.email && (
@@ -54,7 +54,7 @@ export default function ForgotPassword() {
               type="submit"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Sending..." : "Send email"}
+              {isSubmitting ? 'Sending...' : 'Send email'}
 
               <i className=" bi bi-check-circle-fill ml-2 text-xl "></i>
             </button>
@@ -64,7 +64,7 @@ export default function ForgotPassword() {
         <div className="flex justify-end mt-20 text-white gap-1 ">
           Login?
           <button className="">
-            <Link to={"/login"} className="text-green underline">
+            <Link to={'/login'} className="text-green underline">
               click here
             </Link>
           </button>
