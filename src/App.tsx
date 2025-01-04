@@ -9,6 +9,13 @@ import ForgotPassword from './modules/Auth/Forgot Password/components/ForgotPass
 import ResetPassword from './modules/Auth/Reset password/components/ResetPassword'
 import ChangePassword from './modules/Auth/Change Password/components/ChangePassword'
 import { ToastContainer } from 'react-toastify'
+import ProtectedRoute from './modules/Shared/ProtectedRoute/components/ProtectedRoute'
+import DashBoard from './modules/Admin/Dashboard/components/Dashboard'
+import { Group } from './modules/Admin/Groups/components/Group'
+import Questions from './modules/Admin/Questions/components/Questions'
+import { Quizes } from './modules/Admin/Quizes/components/Quizes'
+import Students from './modules/Admin/Students/components/Students'
+import MasterAdminLayout from './modules/Shared/MasterAdminLayout/components/MasterAdminLayout'
 
 
 function App() {
@@ -27,6 +34,26 @@ function App() {
         { path: "reset-password", element: <ResetPassword /> },
 
         { path: "change-password", element: <ChangePassword /> },
+      ],
+    },
+
+    {
+      path: "dashboard",
+      element: (
+        <ProtectedRoute loginData={loginData}>
+          <MasterAdminLayout />
+        </ProtectedRoute>
+      ),
+      errorElement: <NotFound />,
+      children: [
+        { index: true, element: <DashBoard /> },
+
+        { path: "groups", element: <Group /> },
+
+        { path: "questions", element: <Questions /> },
+
+        { path: "booking-list", element: <Quizes/> },
+        { path: "users-list", element: <Students /> },
       ],
     },
 
