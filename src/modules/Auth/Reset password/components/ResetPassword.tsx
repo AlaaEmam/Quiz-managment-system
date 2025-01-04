@@ -1,127 +1,114 @@
-import { Link, useNavigate } from "react-router-dom";
-import auth_pic from "../../../../assets/auth pic.png"
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { EMAIL_VALIDATION, PasswordValidation } from "../../../Shared/Url/components/validations";
-import { Auth, axiosInstance } from "../../../Shared/Url/components/URL";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { FaKey } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
+import { RiCompassDiscoverFill } from "react-icons/ri";
+import {
+  EMAIL_VALIDATION,
+  PASSWORD_VALIDATION,
+} from "../../../../Constants/Validation/validation";
+import { Auth, axiosInstance } from "../../../../Constants/URLS/URL";
+import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
-interface formData{
-  email:string;
-  otp:string;
-  password:string;
+interface formData {
+  email: string;
+  password: string;
+  otp: number;
 }
+
 export default function ResetPassword() {
-  const navigate=useNavigate();
-  const{register, handleSubmit, formState:{isSubmitting, errors}}=useForm<formData>()
-  
-  const onSubmit:SubmitHandler<formData>=async(data)=>{
-    try{
-      const response=await axiosInstance.post(Auth.resetPassword);
-      navigate('/auth/login', {state:data.email})
-    }catch(error){
-      console.log(error)
+  const location = useLocation();
+  let {
+    register,
+    formState: { isSubmitting, errors },
+    handleSubmit,
+  } = useForm<formData>({
+    defaultValues: { email: location.state },
+    mode: "onChange",
+  });
+  const onSubmit = async (data: formData) => {
+    try {
+      let response = await axiosInstance.post(Auth.resetPassword, data);
+      toast.success(response.data.message || "Password updated successfully");
+    } catch (error) {
+      toast.error("failed to reset password");
     }
-  }
-
+  };
   return (
-    <div className="bg-black text-white">
-    <div className="grid grid-cols-2">
-      <div className="ml-40">
-        
-        <h1 className="text-green-300 mt-40 mb-20 
-         sm:text-sm
-         md:text-base
-         lg:text-2xl
-         xl:text-4xl">Reset Password</h1>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <label className="mt-5">Your Email address</label>
-          
-          {errors.email && <span className="text-danger ">{errors.email.message}</span>}
-              
-          <div className="mt-3 border-2 
-            rounded-lg
-            border-solid 
-          border-white flex items-center ">
-            <span className="border-2 p-2 border-none rounded-lg
-            border-white">
-              <i className="bi bi-envelope text-xl"></i>
-            </span>
-            <input placeholder="Type your Email here" 
-            className="
-            p-2
-            w-96  bg-black"
-            {...register("email",EMAIL_VALIDATION)}/>
-          </div>
+    <>
+      <div>
+        <div className="mt-[50px]">
+          <h2 className="text-green text-[25px]">Reset password</h2>
+        </div>
 
+        <div className="text-white mt-[25px]">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div>
+              <label className="">Your email address</label>
+              <div className="mt-3 px-2 py-3  flex items-center justify-center border-[3px] border-white rounded-xl ">
+                <span className=" px-3">
+                  <MdEmail className="text-[20px]" />
+                </span>
+                <input
+                  placeholder="Type your email"
+                  className="bg-inherit w-full focus:outline-none "
+                  {...register("email", EMAIL_VALIDATION)}
+                />
+              </div>
+              {errors.email && (
+                <span className="text-red-600">{errors.email.message}</span>
+              )}
+            </div>
 
-          <label className="mt-5">OTP</label>
-          
-          <div className="mt-3 border-2 
-            rounded-lg
-            border-solid 
-          border-white flex items-center rounded-md">
-            <span className="border-2 p-2 border-none rounded-lg
-            border-white">
-              <i className="bi bi-envelope text-xl"></i>
-            </span>
-            <input type="text" placeholder="Choose your otp" 
-            className="
-            p-2
-            w-96  bg-black"
-            {...register("otp")}/>
-          </div>
+            <div className="mt-5">
+              <label className="">OTP</label>
+              <div className="mt-3 px-2 py-3  flex items-center justify-center border-[3px] border-white rounded-xl ">
+                <span className=" px-3">
+                  <RiCompassDiscoverFill className="text-[20px]" />
+                </span>
+                <input
+                  placeholder="Type your otp "
+                  className="  bg-inherit w-full   focus:outline-none "
+                  {...register("otp", { required: "OTP is required" })}
+                />
+              </div>
+              {errors.otp && (
+                <span className="text-red-600">{errors.otp.message}</span>
+              )}
+            </div>
 
-          <label className="mt-5">Password</label>
-          
-          <div className="mt-3 border-2 
-            rounded-lg
-            border-solid 
-          border-white flex items-center ">
-            <span className="border-2 p-2 border-none rounded-lg
-            border-white">
-              <i className="bi bi-envelope text-xl"></i>
-            </span>
-            <input type="password" placeholder="Type your Password" 
-            className="
-            p-2
-            w-96  bg-black"
-            {...register("password",PasswordValidation("invalid Password"))}/>
-          </div>
+            <div className="mt-5">
+              <label className="">Password</label>
+              <div className="mt-3 px-2 py-3  flex items-center justify-center border-[3px] border-white rounded-xl ">
+                <span className=" px-3">
+                  <FaKey />
+                </span>
+                <input
+                  type="password"
+                  placeholder="Type your password "
+                  className="  bg-inherit w-full   focus:outline-none "
+                  {...register("password", PASSWORD_VALIDATION)}
+                />
+              </div>
+              {errors.password && (
+                <span className="text-red-600">{errors.password.message}</span>
+              )}
+            </div>
+            <div className="flex justify-between items-center">
+              <button
+                className="mt-10 rounded-lg bg-white text-black px-3 py-2 flex items-center font-bold "
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Submitting..." : "Reset"}
 
-          <label className="mt-5">Confirm Password</label>
-          
-          <div className="mt-3 border-2 
-            rounded-lg
-            border-solid 
-          border-white flex items-center rounded-md">
-            <span className="border-2 p-2 border-none rounded-lg
-            border-white">
-              <i className="bi bi-envelope text-xl"></i>
-            </span>
-            <input type="password" placeholder="Type your confirm Password" 
-            className="
-            p-2
-            w-96  bg-black"
-            {...register("password",PasswordValidation("invalid Password"))}/>
-          </div>
-
-          <button className="mt-5 rounded-lg 
-            bg-white text-black p-2 px-4  text-center" 
-            type="submit">
-              {isSubmitting? "Reseting...":"Reset"}
-              <span className="">
-                <i className=" bi bi-check-circle-fill text-lg ml-2"></i>
-              </span>
-          </button>
-        </form>
-        
-      </div>
-      <div className="p-14">
-        <div className="bg-amber-200 rounded-2xl">
-          <img src={auth_pic} alt="auth pic" />
-
+                <i className=" bi bi-check-circle-fill ml-2 text-xl "></i>
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-      
-    </div>
-  </div>);
+    </>
+  );
 }

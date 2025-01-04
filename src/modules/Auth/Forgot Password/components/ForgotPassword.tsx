@@ -1,9 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
-import auth_pic from "../../../../assets/auth pic.png"
 import { useForm } from 'react-hook-form';
-import { Auth, axiosInstance } from "../../../Shared/Url/components/URL";
-import { EMAIL_VALIDATION } from "../../../Shared/Url/components/validations";
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Auth, axiosInstance } from '../../../../Constants/URLS/URL';
+import { EMAIL_VALIDATION } from '../../../../Constants/Validation/validation';
 
+interface formData {
+  email: string;
+}
 
 
 interface formData{
@@ -11,74 +14,68 @@ interface formData{
 }
 
 export default function ForgotPassword() {
-  const navigate=useNavigate();
-  let {register, formState:{isSubmitting, errors}, handleSubmit}=useForm<formData>();
-  
-  const onSubmit=async(data:formData)=>{
-    try{
-      const response= await axiosInstance.post(Auth.forgotPassword);
-      navigate('/auth/reset-password', {state:data.email});
-    }catch(error){
-      console.log(error)
+  const navigate = useNavigate();
+  const {
+    register,
+    formState: { isSubmitting, errors },
+    handleSubmit,
+  } = useForm<formData>();
+
+  const onSubmit = async (data: formData) => {
+    try {
+      const response = await axiosInstance.post(Auth.forgotPassword, data);
+      toast.success(response.data.message || 'Check your mail');
+      navigate('/reset-password', { state: data.email });
+    } catch (error) {
+      toast.error(`Request failed: ${error}`);
     }
-  }
-  
-  
+  };
   return (
-  <div className="bg-black text-white">
-    <div className="grid grid-cols-2">
-      <div className="ml-40">
-        
-        <h1 className="text-green-300 mt-40 mb-20 
-         sm:text-sm
-         md:text-base
-         lg:text-2xl
-         xl:text-4xl">Forget Password</h1>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <label className="">Email address</label>
-          
-          {errors.email && <span className="text-danger ">{errors.email.message}</span>}
-                
-          <div className="mt-3 border-2 
-            rounded-lg
-            border-solid 
-          border-white flex items-center">
-            <span className="border-2 p-2 border-none rounded-lg
-    
-            border-white">
-              <i className="bi bi-envelope text-xl"></i>
-            </span>
-            <input placeholder="Type your Email here" 
-            className="
-            p-2
-            w-full  bg-black"
-            {...register('email',EMAIL_VALIDATION)
-            }
-            />
-          </div>
+    <>
+      <div className="">
+        <div>
+          <h2 className="text-green text-3xl mb-16">Forget Password</h2>
+        </div>
+        <div className="text-white">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div>
+              <label className="">Email address</label>
+              <div className="mt-3   px-2 py-3  flex items-center justify-center border-[3px] border-white rounded-xl mb-20">
+                <span className=" px-3">
+                  <i className="bi bi-envelope text-xl"></i>
+                </span>
+                <input
+                  type="email"
+                  placeholder="Type your email "
+                  className="  bg-inherit w-full   focus:outline-none "
+                  {...register('email', EMAIL_VALIDATION)}
+                />
+              </div>
+              {errors.email && (
+                <span className="text-red-600">{errors.email.message}</span>
+              )}
+            </div>
+            <button
+              className="mt-10 rounded-lg bg-white text-black px-3 py-2 flex items-center font-bold "
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Sending...' : 'Send email'}
 
-          
+              <i className=" bi bi-check-circle-fill ml-2 text-xl "></i>
+            </button>
+          </form>
+        </div>
 
-          <button className="mt-10 rounded-lg bg-white
-           text-black p-2 " type="submit">{isSubmitting? "sending Email":'Send Email'} 
-           
-            <i className=" bi bi-check-circle-fill ml-2 text-xl "></i>
-        
-           </button>
-        </form>
-        <div className="flex justify-end xl:mt-10 lg:mt-5 md:mt-3 ">
-          <p>
-            Login? <Link to={"/auth/login"} className="text-yellow-200">click here</Link>  
-          </p>
+        <div className="flex justify-end mt-20 text-white gap-1 ">
+          Login?
+          <button className="">
+            <Link to={'/login'} className="text-green underline">
+              click here
+            </Link>
+          </button>
         </div>
       </div>
-      <div className="p-14">
-        <div className="bg-amber-200 rounded-2xl">
-          <img src={auth_pic} alt="auth pic" />
-
-        </div>
-      </div>
-      
-    </div>
-  </div>);
+    </>
+  );
 }
