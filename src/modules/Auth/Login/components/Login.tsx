@@ -39,6 +39,7 @@ export default function Login() {
       dispatch(setToken(response.data.data.accessToken));
       localStorage.setItem("token", response.data.data.accessToken);
       toast.success(response.data.message || "login successfully");
+      navigate("/dashboard");
     } catch (error) {
       toast.error("Login failed");
     }

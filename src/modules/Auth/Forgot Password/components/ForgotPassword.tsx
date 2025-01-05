@@ -8,6 +8,11 @@ interface formData {
   email: string;
 }
 
+
+interface formData{
+  email:string;
+}
+
 export default function ForgotPassword() {
   const navigate = useNavigate();
   const {

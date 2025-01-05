@@ -45,7 +45,7 @@ export default function Register() {
       navigate('/login');
     } catch (error) {
       console.log(error);
-      toast.error(`Request failed: ${error.response.data.message}`);
+      // toast.error(`Request failed: ${error.response.data.message}`);
     }
   };
   return (
