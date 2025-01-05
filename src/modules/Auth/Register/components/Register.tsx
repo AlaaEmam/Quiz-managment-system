@@ -12,7 +12,7 @@ import { FaArrowDown } from 'react-icons/fa6';
 import { MdEmail } from 'react-icons/md';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Auth, axiosInstance } from '../../../../Constants/URLS/URL';
+import { Auth, AuthAxiosInstance } from '../../../../Constants/URLS/URL';
 import {
   EMAIL_VALIDATION,
   GetRequiredMessage,
@@ -39,7 +39,7 @@ export default function Register() {
 
   const onSumbit = async (data: RegisterDataForm) => {
     try {
-      const response = await axiosInstance.post(Auth.register, data);
+      const response = await AuthAxiosInstance.post(Auth.register, data);
       console.log(response);
       toast.success(response.data.message || 'Registeration Successfully');
       navigate('/login');

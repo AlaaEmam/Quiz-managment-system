@@ -1,16 +1,15 @@
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Auth, axiosInstance } from '../../../../Constants/URLS/URL';
+import { Auth, AuthAxiosInstance } from '../../../../Constants/URLS/URL';
 import { EMAIL_VALIDATION } from '../../../../Constants/Validation/validation';
 
 interface formData {
   email: string;
 }
 
-
-interface formData{
-  email:string;
+interface formData {
+  email: string;
 }
 
 export default function ForgotPassword() {
@@ -23,7 +22,7 @@ export default function ForgotPassword() {
 
   const onSubmit = async (data: formData) => {
     try {
-      const response = await axiosInstance.post(Auth.forgotPassword, data);
+      const response = await AuthAxiosInstance.post(Auth.forgotPassword, data);
       toast.success(response.data.message || 'Check your mail');
       navigate('/reset-password', { state: data.email });
     } catch (error) {

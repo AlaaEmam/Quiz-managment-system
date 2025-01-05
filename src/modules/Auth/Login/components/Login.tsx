@@ -4,7 +4,7 @@ import { FaKey, FaUserTie } from 'react-icons/fa';
 import { FaUserPlus } from 'react-icons/fa6';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Auth, axiosInstance } from '../../../../Constants/URLS/URL';
+import { Auth, AuthAxiosInstance } from '../../../../Constants/URLS/URL';
 import {
   EMAIL_VALIDATION,
   GetRequiredMessage,
@@ -35,7 +35,7 @@ export default function Login() {
 
   const onSubmit = async (data: formData) => {
     try {
-      const response = await axiosInstance.post(Auth.login, data);
+      const response = await AuthAxiosInstance.post(Auth.login, data);
       dispatch(setToken(response.data.data.accessToken));
       localStorage.setItem('token', response.data.data.accessToken);
       toast.success(response.data.message || 'login successfully');

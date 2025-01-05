@@ -7,6 +7,10 @@ export const axiosInstance = axios.create({
   // headers: { Authorization: localStorage.getItem('token') },
 });
 
+export const AuthAxiosInstance = axios.create({
+  baseURL,
+});
+
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (!token) {
