@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BsBank2 } from 'react-icons/bs';
 import { FaLongArrowAltRight } from 'react-icons/fa';
 import { IoIosAlarm } from 'react-icons/io';
@@ -6,6 +7,8 @@ import upcoming1 from '../../../../assets/images/upcoming-quiz1.png';
 // import upcoming2 from "../../../../assets/images/upcoming-quiz2.png"
 
 export default function Quizes() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const categories = ['TV/Monitors', 'PC', 'Gaming/Console', 'Phones'];
   return (
     <>
       <div className="grid grid-cols-2 gap-16">
@@ -168,6 +171,111 @@ export default function Quizes() {
             </div>
           </div>
         </div>
+      </div>
+
+      <div>
+        <div className="">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="block text-black "
+            type="button"
+          >
+            New Quiz
+          </button>
+        </div>
+
+        {isModalOpen && (
+          <div
+            role="dialog"
+            aria-labelledby="modal-title"
+            aria-modal="true"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50"
+          >
+            <div className="relative p-4 w-full max-w-3xl h-full md:h-auto bg-white rounded-lg ">
+              <div className="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 ">
+                <h3
+                  id="modal-title"
+                  className="text-lg font-semibold text-gray-900 "
+                >
+                  Set up a new quiz
+                </h3>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  type="button"
+                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  <svg
+                    aria-hidden="true"
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                  <span className="sr-only">Close modal</span>
+                </button>
+              </div>
+
+              <form>
+                <div className="relative ">
+                  <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black  border-e-0 border rounded-lg rounded-e-none">
+                    Title:
+                  </span>
+                  <input className="pl-24 rounded-lg  w-full p-2 border border-black focus:border-none " />
+                </div>
+
+                <div className="my-4 ">
+                  <div className="grid grid-cols-3 gap-x-4">
+                    <div className="relative overflow-hidden">
+                      <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black  border-e-0 border rounded-lg rounded-e-none overflow-hidden">
+                        Duration (in minutes)
+                      </span>
+                      <input className="pl-24 rounded-lg  w-full p-2 border border-black " />
+                    </div>
+                    <div className="relative ">
+                      <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black  border-e-0 border rounded-lg rounded-e-none">
+                        No. of questions
+                      </span>
+                      <input className="pl-24 rounded-lg  w-full p-2 border border-black  " />
+                    </div>
+                    <div className="relative ">
+                      <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black  border-e-0 border rounded-lg rounded-e-none">
+                        Score per question
+                      </span>
+                      <input className="pl-24 rounded-lg  w-full p-2 border border-black  " />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="relative ">
+                  <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black  border-e-0 border rounded-lg rounded-e-none">
+                    Description:
+                  </span>
+                  <input className="pl-36 rounded-lg  w-full p-6 border border-black focus:border-none " />
+                </div>
+
+                <div className="relative my-4">
+                  <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black  border-e-0 border rounded-lg rounded-e-none">
+                  Schedule
+                  </span>
+                  <input className="pl-24 rounded-lg  w-full p-2 border border-black focus:border-none " />
+                </div>
+
+
+                <div className="flex justify-end">
+                  <button className=" text-black my-6 px-6 py-2 rounded-lg bg-light_cream border-2 font-semibold ">
+                    Add Quiz
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
