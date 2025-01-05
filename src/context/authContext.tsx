@@ -1,5 +1,5 @@
-import { jwtDecode } from "jwt-decode";
-import { createContext, useEffect, useState, ReactNode } from "react";
+import { jwtDecode } from 'jwt-decode';
+import { createContext, ReactNode, useEffect, useState } from 'react';
 
 // تعريف نوع البيانات الخاصة بـ AuthContext
 interface LoginData {
@@ -21,28 +21,27 @@ interface AuthContextProviderProps {
 }
 
 // توفير نوع افتراضي للـ Context
-export const  AuthContext = createContext<AuthContextProps | null>(null);
+export const AuthContext = createContext<AuthContextProps | null>(null);
 
-
-
-export default function AuthContextProvider({ children }: AuthContextProviderProps) {
+export default function AuthContextProvider({
+  children,
+}: AuthContextProviderProps) {
   const [loginData, setLoginData] = useState<LoginData | null>(null);
 
-
   const saveLoginData = () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (token) {
       const decodedToken = jwtDecode<LoginData>(token);
-      console.log("Decoded Token:", decodedToken); // Check the contents
+      console.log('Decoded Token:', decodedToken); // Check the contents
       setLoginData(decodedToken);
-        // console.log(decodedToken)
+      // console.log(decodedToken)
     } else {
-      console.log("No token found");
+      console.log('No token found');
     }
   };
-  
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (token) {
       saveLoginData();
     }
@@ -53,5 +52,4 @@ export default function AuthContextProvider({ children }: AuthContextProviderPro
       {children}
     </AuthContext.Provider>
   );
-
 }
