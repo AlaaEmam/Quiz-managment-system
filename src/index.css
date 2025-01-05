@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+input:-webkit-autofill {
+    background-color: white !important;
+    color: white !important;
+    -webkit-text-fill-color: white !important; /* Ensures autofilled text color */
+    box-shadow: 0 0 0px 1000px  inset !important; /* Applies consistent background */
+  }
+  
+  input:-webkit-autofill::first-line {
+    color: white !important;
+  }
