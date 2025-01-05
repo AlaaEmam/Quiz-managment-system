@@ -1,18 +1,16 @@
-import { useEffect } from "react";
-import { FaUserTie } from "react-icons/fa";
-import { FaUserPlus } from "react-icons/fa6";
-import { FaKey } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { FaKey, FaUserTie } from 'react-icons/fa';
+import { FaUserPlus } from 'react-icons/fa6';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Auth, axiosInstance } from '../../../../Constants/URLS/URL';
 import {
   EMAIL_VALIDATION,
   GetRequiredMessage,
-} from "../../../../Constants/Validation/validation";
-import { Auth, axiosInstance } from "../../../../Constants/URLS/URL";
-import { useDispatch, useSelector } from "react-redux";
-import { setToken } from "../../../../redux/AuthSlice";
-import { toast } from "react-toastify";
-import { useAppDispatch, useAppSelector } from "../../../../redux";
+} from '../../../../Constants/Validation/validation';
+import { useAppDispatch, useAppSelector } from '../../../../redux';
+import { setToken } from '../../../../redux/AuthSlice';
 
 interface formData {
   email: string;
@@ -23,25 +21,28 @@ export default function Login() {
 
   const dispatch = useAppDispatch();
   const { token } = useAppSelector((state) => state.auth);
-  let {
+  const {
     register,
     formState: { isSubmitting, errors },
     handleSubmit,
   } = useForm<formData>();
-  // useEffect(() => {
-  //   if (token) {
-  //     navigate("/dashboard");
-  //   }
-  // }, [token, navigate]);
+
+  useEffect(() => {
+    if (token) {
+      navigate('/dashboard');
+    }
+  }, [token, navigate]);
+
   const onSubmit = async (data: formData) => {
     try {
-      let response = await axiosInstance.post(Auth.login, data);
+      const response = await axiosInstance.post(Auth.login, data);
       dispatch(setToken(response.data.data.accessToken));
-      localStorage.setItem("token", response.data.data.accessToken);
-      toast.success(response.data.message || "login successfully");
-      navigate("/dashboard");
+      localStorage.setItem('token', response.data.data.accessToken);
+      toast.success(response.data.message || 'login successfully');
     } catch (error) {
-      toast.error("Login failed");
+      console.log(error);
+
+      toast.error('Login failed');
     }
   };
   return (
@@ -57,7 +58,7 @@ export default function Login() {
             <FaUserTie className="text-[40px] text-green" />
             <p className="mt-5">Sign in </p>
           </div>
-          <Link to={"/register"}>
+          <Link to={'/register'}>
             <div className="bg-[#333333] text-white px-[53px] py-[20px] flex flex-col justify-between items-center rounded-[20px] border-4 border-dark_blue duration-150 hover:border-green group">
               <FaUserPlus className="text-[40px] group-hover:text-green" />
               <p className="mt-5">Sign up </p>
@@ -75,7 +76,7 @@ export default function Login() {
                 <input
                   placeholder="Type your email "
                   className="  bg-inherit w-full   focus:outline-none "
-                  {...register("email", EMAIL_VALIDATION)}
+                  {...register('email', EMAIL_VALIDATION)}
                 />
               </div>
               {errors.email && (
@@ -89,10 +90,10 @@ export default function Login() {
                   <FaKey />
                 </span>
                 <input
-                type="password"
+                  type="password"
                   placeholder="Type your password "
                   className="  bg-inherit w-full   focus:outline-none "
-                  {...register("password", {
+                  {...register('password', {
                     required: GetRequiredMessage(`Password`),
                   })}
                 />
@@ -107,7 +108,7 @@ export default function Login() {
                 type="submit"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Loging.." : "Login"}
+                {isSubmitting ? 'Loging..' : 'Login'}
 
                 <i className=" bi bi-check-circle-fill ml-2 text-xl "></i>
               </button>
@@ -115,7 +116,7 @@ export default function Login() {
                 Forgot password?
                 <button className="ml-1">
                   <Link
-                    to={"/forget-Password"}
+                    to={'/forget-Password'}
                     className="text-green underline"
                   >
                     click here
