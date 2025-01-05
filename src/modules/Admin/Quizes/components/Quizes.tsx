@@ -1,6 +1,7 @@
-export function Quizes() {
+import React from 'react'
+
+export default function Quizes() {
   return (
-  <>
-    Quizes
-  </>);
+    <div>Quizes</div>
+  )
 }
