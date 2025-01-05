@@ -13,7 +13,7 @@ export const Auth = {
   logout: `auth/logout`,
 };
 
-export const Group = {
+export const Groups = {
   getAll: `/group`,
   createGroup: `/group`,
   getById: (id: string) => `/group/${id}`,
