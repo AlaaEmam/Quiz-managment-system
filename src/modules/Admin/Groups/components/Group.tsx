@@ -1,13 +1,17 @@
+import { useEffect } from "react";
 import { axiosInstance, Groups } from "../../../../Constants/URLS/URL";
 
 export default function Group() {
   
   const getGroups=async()=>{
     const response= await axiosInstance.get(Groups.getAll);
-    console.log(response.data)
+    // console.log(response.data)
   }
   
-  
+
+
+  getGroups();
+
   
   return (
   <div className="w-full">
@@ -20,7 +24,9 @@ export default function Group() {
       </div>
       <div className="border-2 mt-4 rounded-xl h-svh p-5">
         <h1 className="text-3xl">Group list</h1>
-        <div className=""></div>
+        <div className="grid-cols-2">
+          <div></div>
+        </div>
       </div>
     </div>
   </div>);
