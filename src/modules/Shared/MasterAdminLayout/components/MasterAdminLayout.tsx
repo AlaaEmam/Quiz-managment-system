@@ -15,7 +15,7 @@ export default function MasterAdminLayout(){
       <div>
       <Navbar toggleSidebar={toggleSidebar} />
       <SideBar isSidebarOpen={isSidebarOpen} />
-      <div className=" ml-64 mt-96">
+      <div className=" ml-64 mt-24">
         <Outlet /> 
       </div>
     </div>
