@@ -7,7 +7,6 @@ import Register from './modules/Auth/Register/components/Register';
 import ResetPassword from './modules/Auth/Reset password/components/ResetPassword';
 import AuthLayout from './modules/Shared/AuthLayout/components/AuthLayouts';
 import NotFound from './modules/Shared/NotFound/components/NotFound';
-import ProtectedRoute from './modules/Shared/ProtectedRoute/components/ProtectedRoute';
 import MasterAdminLayout from './modules/Shared/MasterAdminLayout/components/MasterAdminLayout';
 import DashBoard from './modules/Admin/Dashboard/components/Dashboard';
 
