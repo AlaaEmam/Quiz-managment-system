@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaCalendarAlt, FaPen, FaTrash } from "react-icons/fa";
 import { FaAnglesRight } from "react-icons/fa6";
 import { MdWatchLater } from "react-icons/md";
-import { axiosInstance, QUIZZES } from "../../../../Constants/URLS/URL";
+import { axiosInstance, Quiz } from "../../../../Constants/URLS/URL";
 import { format, parseISO } from "date-fns";
 
 import DeleteConfirmation from "../../../Shared/DeleteConfirmation/DeleteConfirmation";
@@ -28,7 +28,7 @@ export default function QuizesDetails() {
 
   const getAllQuizzes = async () => {
     try {
-      const response = await axiosInstance.get(QUIZZES.getAll);
+      const response = await axiosInstance.get(Quiz.getAll);
       setQuizes(response.data);
       console.log(response);
     } catch (error) {
@@ -37,7 +37,7 @@ export default function QuizesDetails() {
   };
   const deleteQuiz = async () => {
     try {
-      const response = await axiosInstance.delete(QUIZZES.deleteQuiz(quizId));
+      const response = await axiosInstance.delete(Quiz.deleteQuiz(quizId));
       console.log(response);
       setIsModalOpen(false);
       toast.success("Deleted");
