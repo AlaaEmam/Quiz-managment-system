@@ -37,6 +37,10 @@ export const Groups = {
   updateGroup: (id: string) => `/group/${id}`,
   deleteGroup: (id: string) => `/group/${id}`,
 };
+export const QUIZZES = {
+  getAll: `/quiz`,
+  deleteQuiz : (id:number) => `/quiz/${id}`,
+};
 
 export const Student = {
   getAll: `/student`,

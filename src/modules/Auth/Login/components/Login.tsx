@@ -27,11 +27,11 @@ export default function Login() {
     handleSubmit,
   } = useForm<formData>();
 
-  useEffect(() => {
-    if (token) {
-      navigate('/dashboard');
-    }
-  }, [token, navigate]);
+  // useEffect(() => {
+  //   if (token) {
+  //     navigate('/dashboard');
+  //   }
+  // }, [token, navigate]);
 
   const onSubmit = async (data: formData) => {
     try {
