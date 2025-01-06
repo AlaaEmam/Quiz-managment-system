@@ -48,3 +48,6 @@ export const Student = {
   AddToGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
   updateStudentGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
 };
+export const Quiz = {
+  Create_Quiz: `/quiz`,
+};
