@@ -1,15 +1,14 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { FaKey } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
-import { RiCompassDiscoverFill } from "react-icons/ri";
+import { useForm } from 'react-hook-form';
+import { FaKey } from 'react-icons/fa';
+import { MdEmail } from 'react-icons/md';
+import { RiCompassDiscoverFill } from 'react-icons/ri';
+import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Auth, AuthAxiosInstance } from '../../../../Constants/URLS/URL';
 import {
   EMAIL_VALIDATION,
   PASSWORD_VALIDATION,
-} from "../../../../Constants/Validation/validation";
-import { Auth, axiosInstance } from "../../../../Constants/URLS/URL";
-import { useLocation } from "react-router-dom";
-import { toast } from "react-toastify";
+} from '../../../../Constants/Validation/validation';
 
 interface formData {
   email: string;
@@ -19,20 +18,22 @@ interface formData {
 
 export default function ResetPassword() {
   const location = useLocation();
-  let {
+  const {
     register,
     formState: { isSubmitting, errors },
     handleSubmit,
   } = useForm<formData>({
     defaultValues: { email: location.state },
-    mode: "onChange",
+    mode: 'onChange',
   });
   const onSubmit = async (data: formData) => {
     try {
-      let response = await axiosInstance.post(Auth.resetPassword, data);
-      toast.success(response.data.message || "Password updated successfully");
+      const response = await AuthAxiosInstance.post(Auth.resetPassword, data);
+      toast.success(response.data.message || 'Password updated successfully');
     } catch (error) {
-      toast.error("failed to reset password");
+      console.log(error);
+
+      toast.error('failed to reset password');
     }
   };
   return (
@@ -53,7 +54,7 @@ export default function ResetPassword() {
                 <input
                   placeholder="Type your email"
                   className="bg-inherit w-full focus:outline-none "
-                  {...register("email", EMAIL_VALIDATION)}
+                  {...register('email', EMAIL_VALIDATION)}
                 />
               </div>
               {errors.email && (
@@ -70,7 +71,7 @@ export default function ResetPassword() {
                 <input
                   placeholder="Type your otp "
                   className="  bg-inherit w-full   focus:outline-none "
-                  {...register("otp", { required: "OTP is required" })}
+                  {...register('otp', { required: 'OTP is required' })}
                 />
               </div>
               {errors.otp && (
@@ -88,7 +89,7 @@ export default function ResetPassword() {
                   type="password"
                   placeholder="Type your password "
                   className="  bg-inherit w-full   focus:outline-none "
-                  {...register("password", PASSWORD_VALIDATION)}
+                  {...register('password', PASSWORD_VALIDATION)}
                 />
               </div>
               {errors.password && (
@@ -101,7 +102,7 @@ export default function ResetPassword() {
                 type="submit"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Submitting..." : "Reset"}
+                {isSubmitting ? 'Submitting...' : 'Reset'}
 
                 <i className=" bi bi-check-circle-fill ml-2 text-xl "></i>
               </button>

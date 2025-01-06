@@ -1,14 +1,13 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { FaKey } from "react-icons/fa";
-import { PASSWORD_VALIDATION } from "../../../../Constants/Validation/validation";
-import { Auth, axiosInstance } from "../../../../Constants/URLS/URL";
+import { useForm } from 'react-hook-form';
+import { FaKey } from 'react-icons/fa';
+import { Auth, axiosInstance } from '../../../../Constants/URLS/URL';
+import { PASSWORD_VALIDATION } from '../../../../Constants/Validation/validation';
 interface formData {
   password: string;
   password_new: string;
 }
 export default function ChangePassword() {
-  let {
+  const {
     register,
     formState: { isSubmitting, errors },
     handleSubmit,
@@ -16,7 +15,7 @@ export default function ChangePassword() {
 
   const onSubmit = async (data: formData) => {
     try {
-      let response = await axiosInstance.post(Auth.changePassword, data);
+      const response = await axiosInstance.post(Auth.changePassword, data);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -41,8 +40,8 @@ export default function ChangePassword() {
                   type="password"
                   placeholder="Type your old password "
                   className="  bg-inherit w-full   focus:outline-none "
-                  {...register("password", {
-                    required: "Old password is required",
+                  {...register('password', {
+                    required: 'Old password is required',
                   })}
                 />
               </div>
@@ -60,7 +59,7 @@ export default function ChangePassword() {
                   type="password"
                   placeholder="Type your new password "
                   className="  bg-inherit w-full   focus:outline-none "
-                  {...register("password_new", PASSWORD_VALIDATION)}
+                  {...register('password_new', PASSWORD_VALIDATION)}
                 />
               </div>
               {errors.password_new && (
@@ -75,7 +74,7 @@ export default function ChangePassword() {
                 type="submit"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Submitting" : "Change"}
+                {isSubmitting ? 'Submitting' : 'Change'}
                 <i className=" bi bi-check-circle-fill ml-2 text-xl "></i>
               </button>
             </div>

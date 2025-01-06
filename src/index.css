@@ -8,7 +8,12 @@ input:-webkit-autofill {
     -webkit-text-fill-color: white !important; /* Ensures autofilled text color */
     box-shadow: 0 0 0px 1000px  inset !important; /* Applies consistent background */
   }
-  
+
   input:-webkit-autofill::first-line {
     color: white !important;
   }
+
+
+  .leading-10	{line-height: 2.5rem !important}
+
+  .focus:outline-transparent[type='text']:focus{outline:  none !important;}

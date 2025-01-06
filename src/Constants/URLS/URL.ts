@@ -7,6 +7,10 @@ export const axiosInstance = axios.create({
   // headers: { Authorization: localStorage.getItem('token') },
 });
 
+export const AuthAxiosInstance = axios.create({
+  baseURL,
+});
+
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (!token) {
@@ -43,4 +47,9 @@ export const Student = {
   deleteFromGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
   AddToGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
   updateStudentGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
+};
+export const Quiz = {
+  Create_Quiz: `/quiz`,
+  getAll: `/quiz`,
+  deleteQuiz : (id:number) => `/quiz/${id}`,
 };
