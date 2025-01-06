@@ -12,7 +12,7 @@ import { ToastContainer } from 'react-toastify'
 
 
 function App() {
-  
+
   const Routes= createBrowserRouter([
     {
       path: "auth",
@@ -30,7 +30,7 @@ function App() {
       ],
     },
 
-    
+
   ])
 
   return (
