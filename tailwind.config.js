@@ -2,7 +2,7 @@
 
 export default {
   content: [
-    './index.html', 
+    './index.html',
     './src/**/*.{js,ts,jsx,tsx}' ,
     './node_modules/flowbite/**/*.js',
 
@@ -10,9 +10,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        dark_blue: '#0D1321', 
-        light_cream: '#FFEDDF', 
-        green: '#C5D86D', 
+        dark_blue: '#0D1321',
+        light_cream: '#FFEDDF',
+        green: '#C5D86D',
+        orange: `#FB7C19`
+
+
       },
     },
   },
