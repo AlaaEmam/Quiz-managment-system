@@ -1,8 +1,7 @@
+import React from 'react'
 
-
-export default function DashBoard() {
+export default function Dashboard() {
   return (
-  <>
-    Dashboard
-  </>);
+    <div>Dashboard</div>
+  )
 }
