@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { createPortal } from 'react-dom'; // Import createPortal
-import { Link } from 'react-router-dom';
-import LogoDark from '../../../assets/Logo-black.svg';
-import NewQuiz from '../../../assets/icons/newquiz.svg';
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { createPortal } from "react-dom";  // Import createPortal
+import LogoDark from "../../../assets/Logo-black.svg";
+import NewQuiz from "../../../assets/icons/newquiz.svg";
+import { useAppSelector } from "../../../redux";
 
 // Define types for props
 interface NavbarProps {
@@ -11,7 +12,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const [isDropdownOpen, setDropdownOpen] = useState<boolean>(false);
-
+  const user = useAppSelector(state=>state.auth.user)
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
   };
