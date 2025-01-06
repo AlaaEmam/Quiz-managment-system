@@ -14,6 +14,7 @@ import AuthLayout from './modules/Shared/AuthLayout/components/AuthLayouts';
 import MasterAdminLayout from './modules/Shared/MasterAdminLayout/components/MasterAdminLayout';
 import NotFound from './modules/Shared/NotFound/components/NotFound';
 import QuizesDetails from './modules/Admin/Quizes/components/QuizesDetails';
+import '../node_modules/@fortawesome/fontawesome-free/css/all.min.css'
 // import ProtectedRoute from './modules/Shared/ProtectedRoute/components/ProtectedRoute';
 
 function App() {
@@ -43,6 +44,8 @@ function App() {
         { path: 'Quizes', element: <Quizes /> },
         { path: 'Quiz-details', element: <QuizesDetails/> },
         { path: 'Students', element: <Students /> },
+        { path: 'Questions', element: <Questions/> },
+
       ],
     },
   ]);
