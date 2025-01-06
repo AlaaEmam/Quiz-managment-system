@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import { createPortal } from "react-dom";  // Import createPortal
-import LogoDark from "../../../assets/Logo-black.svg";
-import NewQuiz from "../../../assets/icons/newquiz.svg";
+import { useState } from 'react';
+import { createPortal } from 'react-dom'; // Import createPortal
+import { Link } from 'react-router-dom';
+import LogoDark from '../../../assets/Logo-black.svg';
+import NewQuiz from '../../../assets/icons/newquiz.svg';
 
 // Define types for props
 interface NavbarProps {
@@ -17,7 +17,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   };
 
   return (
-    <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <nav className="  sticky h-[12vh] top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 ">
       <div className="px-3 py-3 lg:px-5 lg:pl-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-start rtl:justify-end">
@@ -46,11 +46,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
 
             {/* Logo */}
             <Link to="#" className="flex ms-2 md:me-24">
-              <img
-                src={LogoDark}
-                className="h-8 me-3"
-                alt="Logo"
-              />
+              <img src={LogoDark} className="h-8 me-3" alt="Logo" />
             </Link>
           </div>
 
@@ -79,8 +75,20 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                 <div className="font-medium">Nwabuikwu Chizuruoke</div>
                 <div className="truncate text-green">Instructor</div>
               </div>
-              <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+              <svg
+                className="w-2.5 h-2.5 ms-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 4 4 4-4"
+                />
               </svg>
             </button>
 
@@ -94,28 +102,40 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                   </div>
                   <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                     <li>
-                      <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <a
+                        href="#"
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
                         Dashboard
                       </a>
                     </li>
                     <li>
-                      <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <a
+                        href="#"
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
                         Settings
                       </a>
                     </li>
                     <li>
-                      <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <a
+                        href="#"
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
                         Earnings
                       </a>
                     </li>
                   </ul>
                   <div className="py-2">
-                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    >
                       Sign out
                     </a>
                   </div>
                 </div>,
-                document.body // Render dropdown in the body for correct positioning
+                document.body, // Render dropdown in the body for correct positioning
               )}
           </div>
         </div>
