@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../../Navbar/Navbar";
-import Sidebar from "../../SideBar/SideBar";
 import { useState } from "react";
+import SideBar from "../../SideBar/Sidebar";
 
 export default function MasterAdminLayout(){
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
@@ -14,7 +14,7 @@ export default function MasterAdminLayout(){
     <>
       <div>
       <Navbar toggleSidebar={toggleSidebar} />
-      <Sidebar isSidebarOpen={isSidebarOpen} />
+      <SideBar isSidebarOpen={isSidebarOpen} />
       <div className=" ml-64 mt-96">
         <Outlet /> 
       </div>

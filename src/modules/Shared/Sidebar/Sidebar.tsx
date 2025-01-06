@@ -10,7 +10,7 @@ interface SidebarProps {
   isSidebarOpen: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen }) => {
+const  SideBar: React.FC<SidebarProps> = ({ isSidebarOpen }) => {
   return (
     <aside
       id="logo-sidebar"
@@ -91,4 +91,4 @@ const Sidebar: React.FC<SidebarProps> = ({ isSidebarOpen }) => {
   );
 };
 
-export default Sidebar;
+export default  SideBar;
