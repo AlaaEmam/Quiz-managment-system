@@ -50,4 +50,5 @@ export const Student = {
 };
 export const Quiz = {
   Create_Quiz: `/quiz`,
+  Incomming_Quiz: `/quiz/incomming`,
 };
