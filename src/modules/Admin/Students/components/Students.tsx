@@ -4,31 +4,39 @@ import { axiosInstance } from "../../../../Constants/URLS/URL";
 const Students = () => {
   const [studentsList, setStudentsList] = useState([]);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
 
-  // Get students from API
   useEffect(() => {
     const getStudents = async () => {
       try {
         const response = await axiosInstance.get("student/without-group");
-        setStudentsList(response.data); // Assuming response.data contains the students array
+        setStudentsList(response.data);
       } catch (error) {
         console.error("Error fetching students:", error);
       }
     };
 
     getStudents();
-  }, []); // This effect runs once when the component mounts
+  }, []);
 
   const handleEditClick = (student) => {
     setSelectedStudent(student);
     setEditModalOpen(true);
   };
 
+  const handleDeleteClick = (student) => {
+    setSelectedStudent(student);
+    setDeleteModalOpen(true);
+  };
+
   const handleUpdateStudent = (e) => {
     e.preventDefault();
-    console.log("Updated Student:", selectedStudent);
     setEditModalOpen(false);
+  };
+
+  const handleDeleteStudent = () => {
+    setDeleteModalOpen(false);
   };
 
   return (
@@ -58,7 +66,6 @@ const Students = () => {
                 <button
                   type="button"
                   className="text-gray-700 hover:text-gray-900 text-lg"
-                  aria-label="Edit"
                   onClick={() => handleEditClick(student)}
                 >
                   <i className="fas fa-pen-to-square"></i>
@@ -66,7 +73,7 @@ const Students = () => {
                 <button
                   type="button"
                   className="text-gray-700 hover:text-gray-900 text-lg"
-                  aria-label="Delete"
+                  onClick={() => handleDeleteClick(student)}
                 >
                   <i className="fas fa-trash"></i>
                 </button>
@@ -110,7 +117,7 @@ const Students = () => {
                     id="name"
                     value={selectedStudent?.first_name}
                     onChange={(e) =>
-                      setSelectedStudent({ ...selectedStudent, first_name: e.target .value })
+                      setSelectedStudent({ ...selectedStudent, first_name: e.target.value })
                     }
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ml-0"
                   />
@@ -133,6 +140,33 @@ const Students = () => {
                   />
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {isDeleteModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white w-[400px] p-6 rounded-lg shadow-xl">
+              <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-300">
+                <h2 className="text-lg font-medium text-gray-800">Delete student</h2>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={handleDeleteStudent}
+                    className="w-6 h-6 flex items-center justify-center bg-gray-100 text-black rounded-full hover:bg-gray-200"
+                  >
+                    <i className="fa-solid fa-check"></i>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDeleteModalOpen(false)}
+                    className="w-6 h-6 flex items-center justify-center bg-gray-100 text-black rounded-full hover:bg-gray-200"
+                  >
+                    <i className="fa-solid fa-x"></i>
+                  </button>
+                </div>
+              </div>
+              <p className="text-sm text-gray-600">Are you sure you want to delete this student?</p>
             </div>
           </div>
         )}
