@@ -49,10 +49,8 @@ export const Student = {
   updateStudentGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
 };
 
-export const QuestionsUrl = {
-  gettAllQUT:`/question`,
 
-}
+
 export const Quiz = {
   Create_Quiz: `/quiz`,
   Incomming_Quiz: `/quiz/incomming`,
@@ -60,4 +58,12 @@ export const Quiz = {
   deleteQuiz : (id:number) => `/quiz/${id}`,
   getQuizById : (id:number) => `/quiz/${id}`,
   editQuiz : (id:number) => `/quiz/${id}`,
+};
+
+export const QuestionsUrl = {
+  gettAllQUT:"/question",
+
+  getSpcQUT:(id:string)=>`/question/${id}`,
+  addQuestion:'/question'
+
 };
