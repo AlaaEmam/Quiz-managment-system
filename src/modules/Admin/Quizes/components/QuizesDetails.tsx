@@ -220,7 +220,7 @@ export default function QuizesDetails() {
             </div>
             <div className="border-2 border-[#0000004D] rounded-[10px] p-5 ">
               <div className="mb-[10px]">
-                <h2 className="font-[700] text-[24px]">{quiz.title}</h2>
+                <h2 className="font-[700] text-[24px]  break-words  ">{quiz.title}</h2>
               </div>
               <div className="flex justify-start items-center gap-5 mb-[22px]">
                 <div className="flex justify-center items-center gap-2">
