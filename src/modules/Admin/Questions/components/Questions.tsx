@@ -1,11 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "./Modal";
 import plus from "../../../../assets/plus-circle.svg";
+import { AuthAxiosInstance, axiosInstance, QuestionsUrl } from "../../../../Constants/URLS/URL";
+
 export default function Questions() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const allQut = async () => {
+    try {
+      const res = await axiosInstance.get(
+        QuestionsUrl.gettAllQUT
+      );
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    allQut()
+  });
 
   return (
     <>
@@ -59,7 +75,6 @@ export default function Questions() {
                 <i className="fa-solid fa-trash-can"></i>
               </td>
             </tr>
-
             <tr>
               <td className="border border-slate-300 ...">Ohio</td>
               <td className="border border-slate-300 ...">Columbus</td>
@@ -73,7 +88,8 @@ export default function Questions() {
                 <i className="fa-solid fa-pen-to-square  px-4"></i>
                 <i className="fa-solid fa-trash-can"></i>
               </td>
-            </tr> <tr>
+            </tr>{" "}
+            <tr>
               <td className="border border-slate-300 ...">Ohio</td>
               <td className="border border-slate-300 ...">Columbus</td>
               <td className="border border-slate-300 ...">Ohio</td>
@@ -86,7 +102,8 @@ export default function Questions() {
                 <i className="fa-solid fa-pen-to-square  px-4"></i>
                 <i className="fa-solid fa-trash-can"></i>
               </td>
-            </tr> <tr>
+            </tr>{" "}
+            <tr>
               <td className="border border-slate-300 ...">Ohio</td>
               <td className="border border-slate-300 ...">Columbus</td>
               <td className="border border-slate-300 ...">Ohio</td>
@@ -99,7 +116,8 @@ export default function Questions() {
                 <i className="fa-solid fa-pen-to-square  px-4"></i>
                 <i className="fa-solid fa-trash-can"></i>
               </td>
-            </tr> <tr>
+            </tr>{" "}
+            <tr>
               <td className="border border-slate-300 ...">Ohio</td>
               <td className="border border-slate-300 ...">Columbus</td>
               <td className="border border-slate-300 ...">Ohio</td>
@@ -113,9 +131,6 @@ export default function Questions() {
                 <i className="fa-solid fa-trash-can"></i>
               </td>
             </tr>
-
-
-
           </tbody>
         </table>
       </div>

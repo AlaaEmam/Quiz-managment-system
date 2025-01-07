@@ -4,7 +4,7 @@ export const baseURL = 'https://upskilling-egypt.com:3005/api';
 
 export const axiosInstance = axios.create({
   baseURL,
-  // headers: { Authorization: localStorage.getItem('token') },
+   headers: { Authorization: localStorage.getItem('token') },
 });
 
 export const AuthAxiosInstance = axios.create({
@@ -48,3 +48,8 @@ export const Student = {
   AddToGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
   updateStudentGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
 };
+
+export const QuestionsUrl = {
+  gettAllQUT:`/question`,
+
+}

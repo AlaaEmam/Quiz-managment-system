@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import AuthReducer from './AuthSlice';  
+import AuthReducer from './AuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 export const store = configureStore({ //replace "create context"
     reducer: {
-        auth: AuthReducer,  
+        auth: AuthReducer,
+
+
     }
 });
 type AppState = ReturnType<typeof store.getState>
