@@ -37,8 +37,10 @@ export default function Login() {
     try {
       const response = await AuthAxiosInstance.post(Auth.login, data);
       dispatch(setToken(response.data.data.accessToken));
-      localStorage.setItem('token', response.data.data.accessToken);
+      // localStorage.setItem('token', response.data.data.accessToken);
       toast.success(response.data.message || 'login successfully');
+      console.log(response);
+      
     } catch (error) {
       console.log(error);
 
