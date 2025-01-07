@@ -1,9 +1,11 @@
+import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { BsBank2 } from 'react-icons/bs';
 import { FaCheck, FaCheckCircle, FaLongArrowAltRight } from 'react-icons/fa';
 import { IoIosAlarm, IoIosCopy } from 'react-icons/io';
 import { TiArrowRight } from 'react-icons/ti';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import upcoming1 from '../../../../assets/images/upcoming-quiz1.png';
 import { axiosInstance, Groups, Quiz } from '../../../../Constants/URLS/URL';
@@ -26,6 +28,7 @@ interface QuizData {
 export default function Quizes() {
   const navigate = useNavigate()
   const [groups, setGroups] = useState([]);
+  const [incomingQuiz, setIncomingQuiz] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
 
@@ -58,8 +61,19 @@ export default function Quizes() {
     }
   };
 
+  const getIncomingQuiz = async () => {
+    try {
+      const response = await axiosInstance.get(Quiz.Incomming_Quiz);
+      console.log(response);
+      setIncomingQuiz(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getAllGroups();
+    getIncomingQuiz();
   }, []);
 
   return (
@@ -100,68 +114,39 @@ export default function Quizes() {
             <h3 className=" font-semibold text-xl tracking-wide mb-5">
               Upcoming quizzes
             </h3>
-            <div className="flex items-center justify-start gap-x-4 border-2 rounded-lg mb-5">
-              <div className="bg-light_cream p-2 rounded-lg">
-                <img src={upcoming1} alt="upcoming1" />
-              </div>
-              <div>
-                <span className="block font-bold text-lg ">
-                  Introduction to computer programming
-                </span>
-                <span className="block">
-                  12 / 03 / 2023{' '}
-                  <span>
-                    <span className="mx-3">|</span>09:00 AM
-                  </span>
-                </span>
-                <div className="flex mt-3 justify-between">
-                  <div>
-                    <span className="block font-semibold ">
-                      No. of students enrolled: 32
+
+            {incomingQuiz.map((quiz) => (
+              <div className="flex items-center justify-start gap-x-4 border-2 rounded-lg mb-5">
+                <div className="bg-light_cream p-2 rounded-lg">
+                  <img src={upcoming1} alt="upcoming1" />
+                </div>
+                <div>
+                  <span className="block font-bold text-lg ">{quiz.title}</span>
+                  <span className="block">
+                    {format(new Date(quiz.schadule), 'yyyy-MM-dd')}
+                    <span>
+                      <span className="mx-3">|</span>
+                      {format(new Date(quiz.schadule), 'HH : mm')}
                     </span>
-                  </div>
-                  <div>
-                    <button className="flex items-center">
-                      open
-                      <div className="bg-green  rounded-lg text-white">
-                        <TiArrowRight />
-                      </div>
-                    </button>
+                  </span>
+                  <div className="flex mt-3 justify-between gap-20 ">
+                    <div>
+                      <span className="block font-semibold ">
+                        No. of students enrolled: {quiz.participants}
+                      </span>
+                    </div>
+                    <div>
+                      <Link to="/quiz-details" className="flex items-center">
+                        open
+                        <div className="bg-green  rounded-lg text-white">
+                          <TiArrowRight />
+                        </div>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="flex items-center justify-start gap-x-4 border-2 rounded-lg">
-              <div className="bg-light_cream p-2 rounded-lg">
-                <img src={upcoming1} alt="upcoming1" />
-              </div>
-              <div>
-                <span className="block font-bold text-lg ">
-                  Introduction to computer programming
-                </span>
-                <span className="block">
-                  12 / 03 / 2023{' '}
-                  <span>
-                    <span className="mx-3">|</span>09:00 AM
-                  </span>
-                </span>
-                <div className="flex mt-3 justify-between">
-                  <div>
-                    <span className="block font-semibold ">
-                      No. of students enrolled: 32
-                    </span>
-                  </div>
-                  <div>
-                    <button className="flex items-center">
-                      open
-                      <div className="bg-green  rounded-lg text-white">
-                        <TiArrowRight />
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
 
           <div className="border-2 rounded-lg p-4 mt-8">
@@ -230,16 +215,6 @@ export default function Quizes() {
       </div>
 
       <div>
-        <div className="">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="block text-black "
-            type="button"
-          >
-            New Quiz
-          </button>
-        </div>
-
         {isModalOpen && (
           <div
             role="dialog"
@@ -499,7 +474,9 @@ export default function Quizes() {
                           Select group
                         </option>
                         {groups.map(({ _id, name }) => (
-                          <option key={_id} value={_id}>{name}</option>
+                          <option key={_id} value={_id}>
+                            {name}
+                          </option>
                         ))}
                       </select>
                     </div>
