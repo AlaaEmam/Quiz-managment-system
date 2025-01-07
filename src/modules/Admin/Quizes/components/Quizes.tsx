@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import upcoming1 from '../../../../assets/images/upcoming-quiz1.png';
 import { axiosInstance, Groups, Quiz } from '../../../../Constants/URLS/URL';
 import { GetRequiredMessage } from '../../../../Constants/Validation/validation';
+import { useNavigate } from 'react-router-dom';
 // import upcoming2 from "../../../../assets/images/upcoming-quiz2.png"
 
 interface QuizData {
@@ -25,6 +26,7 @@ interface QuizData {
 }
 
 export default function Quizes() {
+  const navigate = useNavigate()
   const [groups, setGroups] = useState([]);
   const [incomingQuiz, setIncomingQuiz] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,8 +44,10 @@ export default function Quizes() {
       const response = await axiosInstance.post(Quiz.Create_Quiz, data);
       console.log(response);
       toast.success('Create succesfully');
+      navigate("/quiz-details")
     } catch (error) {
       console.log(error);
+      toast.error(error.response.data.message)
     }
   };
 
@@ -485,7 +489,7 @@ export default function Quizes() {
                 </div>
 
                 <div className="flex justify-end">
-                  <button className=" text-black my-6 px-6 py-2 rounded-lg bg-light_cream border-2 font-semibold ">
+                  <button className=" text-black my-6 px-6 py-2 rounded-lg bg-light_cream border-2 font-semibold " >
                     Add Quiz
                   </button>
                 </div>
