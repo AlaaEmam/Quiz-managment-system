@@ -52,4 +52,6 @@ export const Quiz = {
   Create_Quiz: `/quiz`,
   getAll: `/quiz`,
   deleteQuiz : (id:number) => `/quiz/${id}`,
+  getQuizById : (id:number) => `/quiz/${id}`,
+  editQuiz : (id:number) => `/quiz/${id}`,
 };
