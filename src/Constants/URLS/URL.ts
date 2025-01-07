@@ -52,8 +52,8 @@ export const Student = {
 
 export const QuestionsUrl = {
   gettAllQUT:"/question",
-
   getSpcQUT:(id:string)=>`/question/${id}`,
-  addQuestion:'/question'
+  addQuestion:'/question',
+  updateQuestion:(id:string)=>`/question/${id}`,
 
 };

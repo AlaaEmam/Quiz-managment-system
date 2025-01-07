@@ -5,25 +5,37 @@ import { axiosInstance, QuestionsUrl } from "../../../../Constants/URLS/URL";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Question } from "../../../Shared/Url/components/URL";
 import { toast } from "react-toastify";
+import { data } from "react-router-dom";
 export default function Questions() {
   const [question, setquestion] = useState<QU_IF[]>([]);
-  const [isAddNewQU,setIsAddNewQU]= useState(false)
+  const [isAddNewQU, setIsAddNewQU] = useState(false);
+  const [isUpdateQU, setIsUpdateQU] = useState(false);
+
   let [queBy_ID, setQueBy_ID] = useState<QU_IF>();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
-    setIsAddNewQU(true)
+    setValue("title", queBy_ID?.title);
+    setValue("description", queBy_ID?.description);
+    setValue("answer", queBy_ID?.answer);
+    setValue("difficulty", queBy_ID?.difficulty);
+    setValue("options.A", queBy_ID?.options.A);
+    setValue("options.B", queBy_ID?.options.B);
+    setValue("options.C", queBy_ID?.options.C);
+    setValue("options.D", queBy_ID?.options.D);
+    setValue("points", queBy_ID?.points);
+    setValue("type", queBy_ID?.type);
 
     setIsModalOpen(true);
   };
   const openclearModal = () => {
-    setIsAddNewQU(true)
+    setIsAddNewQU(true);
     setIsModalOpen(true);
-
   };
   const closeModal = () => {
     setIsModalOpen(false);
-     };
+    reset();
+  };
   interface QU_IF {
     description: string;
     difficulty: string;
@@ -49,25 +61,23 @@ export default function Questions() {
 
   useEffect(() => {
     allQut();
-
   }, []);
-
-
 
   // get QU by ID
   const getSpcQUbyid = async (id: string) => {
     try {
-     // setIsAddNewQU(false)
       const { data } = await axiosInstance.get<QU_IF>(
         QuestionsUrl.getSpcQUT(`${id}`)
       );
-
       setQueBy_ID(data);
+      setIsAddNewQU(false);
+      setIsUpdateQU(true);
       openModal();
     } catch (error) {
       console.log(error);
     }
   };
+
 
   ///add Qu
   const {
@@ -75,44 +85,54 @@ export default function Questions() {
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<QU_IF>();
   const onSubmit: SubmitHandler<QU_IF> = async (data) => {
     try {
-       await axiosInstance.post(QuestionsUrl.addQuestion, data);
-      toast.success( "Record created successfully");
-      setQueBy_ID({
-        description: "",
-        difficulty: "",
-        instructor: "",
-        options: { A: "", B: "", C: "", D: "" },
-        points: 0,
-        status: "",
-        answer: "",
-        title: "",
-        type: "",
-        _id: "",
-      })
+      if(!isModalOpen)
+      { await axiosInstance.post(QuestionsUrl.addQuestion, data);
+        toast.success("Record created successfully");
+        setQueBy_ID({
+          description: "",
+          difficulty: "",
+          instructor: "",
+          options: { A: "", B: "", C: "", D: "" },
+          points: 0,
+          status: "",
+          answer: "",
+          title: "",
+          type: "",
+          _id: "",
+        });}
+
+        else
+        {
+          const res =await axiosInstance.put(QuestionsUrl.updateQuestion(`${queBy_ID?._id}`),data);
+          console.log(res);
+        }
       allQut();
-      closeModal()
+      closeModal();
     } catch (error: any) {
       toast.success("error");
     }
   };
 
-//clear form
+  //clear form
 
   const clearInput = () => {
-      setQueBy_ID({description: "",
-        difficulty: "",
-        instructor: "",
-        options: { A: "", B: "", C: "", D: "" },
-        points: 0,
-        status: "",
-        answer: "",
-        title: "",
-        type: "",
-        _id: "",});
+    setQueBy_ID({
+      description: "",
+      difficulty: "",
+      instructor: "",
+      options: { A: "", B: "", C: "", D: "" },
+      points: 0,
+      status: "",
+      answer: "",
+      title: "",
+      type: "",
+      _id: "",
+    });
   };
 
   const Modal = ({ isOpen, closeModal }) => {
@@ -123,19 +143,29 @@ export default function Questions() {
         <div className="bg-white rounded-lg shadow-lg pt-0 max-w-screen-md w-full">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-12 border-b-2 ">
-              <h2 className="text-lg font-bold col-span-8  border-r-2  py-2  px-3 leading-10">
+              <h2 className="text-lg font-bold col-span-8    py-2  px-3 leading-10">
                 Set up a new question
               </h2>
 
-             {isAddNewQU ? <button
+              {isAddNewQU ? (
+                <button
+                  type="submit"
+                  className="col-span-2  py-2  border-l-2 text-center px-2"
+                >
+                  <i className=" fa-solid fa-check  align-middle	leading-10  "></i>
+                </button>
+              ) : (
+                <button
                 type="submit"
-                className="col-span-2  py-2  border-r-2 text-center px-2"
-              >
-                <i className=" fa-solid fa-check  align-middle	leading-10  "></i>
-              </button> :""}
+                  className="col-span-2  py-2  border-l-2 text-center px-2 "
+                  onClick={()=>setIsUpdateQU(true)}
+                >
+                  <i className=" fa-solid fa-check-double  align-middle	leading-10  "></i>
+                </button>
+              )}
               <i
                 onClick={closeModal}
-                className=" cursor-pointer	 fa-solid fa-xmark col-span-2  py-2 text-center px-2 leading-10"
+                className=" cursor-pointer  border-l-2	 fa-solid fa-xmark col-span-2  py-2 text-center px-2 leading-10"
               ></i>
             </div>
             <div className="p-5">
@@ -151,8 +181,6 @@ export default function Questions() {
               text-base text-gray-900 border-none
                placeholder:text-gray-400  sm:text-sm/6    "
                     {...register("title")}
-                    value={isAddNewQU ? queBy_ID?.title :""}
-
                   />
                 </div>
                 ``
@@ -165,7 +193,6 @@ export default function Questions() {
                 <div className=" col-span-8 m-0 border-2 rounded-r-lg border-l-0 ">
                   <textarea
                     id="about"
-                    value={queBy_ID?.description}
                     {...register("description")}
                     className="block w-full rounded-md
                  bg-white px-3 py-1.5 text-base text-gray-900 border-none
@@ -182,7 +209,6 @@ export default function Questions() {
                 <div className=" mb-3 col-span-5 m-0 border-2 rounded-r-lg border-l-0 ">
                   <input
                     type="text"
-                    value={queBy_ID?.options?.A}
                     {...register("options.A")}
                     className=" leading-10   w-full rounded-md
                bg-white px-3 py-1.5
@@ -196,7 +222,6 @@ export default function Questions() {
                 <div className=" mb-3 col-span-5 m-0 border-2 rounded-r-lg border-l-0 ">
                   <input
                     type="text"
-                    value={queBy_ID?.options?.B}
                     {...register("options.B")}
                     className=" leading-10   w-full rounded-md
                bg-white px-3 py-1.5
@@ -210,7 +235,6 @@ export default function Questions() {
                 <div className=" mb-3 col-span-5 m-0 border-2 rounded-r-lg border-l-0 ">
                   <input
                     type="text"
-                    value={queBy_ID?.options?.C}
                     {...register("options.C")}
                     className=" leading-10   w-full rounded-md
                bg-white px-3 py-1.5
@@ -224,7 +248,6 @@ export default function Questions() {
                 <div className=" mb-3 col-span-5 m-0 border-2 rounded-r-lg border-l-0 ">
                   <input
                     type="text"
-                    value={queBy_ID?.options?.D}
                     {...register("options.D")}
                     className=" leading-10   w-full rounded-md
                bg-white px-3 py-1.5
@@ -241,7 +264,6 @@ export default function Questions() {
                 <div className=" col-span-1 m-0 border-2 rounded-r-lg border-l-0 ">
                   <input
                     type="text"
-                    value={queBy_ID?.answer}
                     {...register("answer")}
                     className=" leading-10   w-full rounded-md
                bg-white px-3 py-1.5 shadow-none text-center
@@ -256,7 +278,6 @@ export default function Questions() {
                 <div className=" col-span-1 m-0 border-2 rounded-r-lg border-l-0 ">
                   <select
                     id="country"
-                    value={queBy_ID?.type}
                     {...register("type")}
                     className="  leading-10   w-full rounded-md border-none bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   >
@@ -329,7 +350,10 @@ export default function Questions() {
                     className="fa-solid fa-eye cursor-pointer "
                     onClick={() => getSpcQUbyid(QU._id)}
                   ></i>
-                  <i className="fa-solid fa-pen-to-square  px-4"></i>
+                  <i
+                    className="fa-solid fa-pen-to-square  px-4"
+                    onClick={() => getSpcQUbyid(QU._id)}
+                  ></i>
                   <i className="fa-solid fa-trash-can"></i>
                 </td>
               </tr>
