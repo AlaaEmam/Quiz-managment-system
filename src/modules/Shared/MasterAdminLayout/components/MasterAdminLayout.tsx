@@ -1,24 +1,27 @@
-import { Outlet } from "react-router-dom";
-import Navbar from "../../Navbar/Navbar";
-import { useState } from "react";
-import SideBar from "../../SideBar/Sidebar";
+import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import Navbar from '../../Navbar/Navbar';
+import SideBar from '../../Sidebar/Sidebar';
 
-export default function MasterAdminLayout(){
+export default function MasterAdminLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  return(
+  return (
     <>
       <div>
-      <Navbar toggleSidebar={toggleSidebar} />
-      <SideBar isSidebarOpen={isSidebarOpen} />
-      <div className=" ml-64 mt-24 p-4">
-        <Outlet />
+        <Navbar toggleSidebar={toggleSidebar} />
+
+        <div className="flex">
+          <SideBar isSidebarOpen={isSidebarOpen} />
+          <div className="w-full px-5 pt-5">
+            <Outlet />
+          </div>
+        </div>
       </div>
-    </div>
     </>
   );
 }

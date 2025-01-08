@@ -3,6 +3,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";  // Import createPortal
 import LogoDark from "../../../assets/Logo-black.svg";
 import NewQuiz from "../../../assets/icons/newquiz.svg";
+import { useAppSelector } from "../../../redux";
 
 // Define types for props
 interface NavbarProps {
@@ -11,13 +12,15 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const [isDropdownOpen, setDropdownOpen] = useState<boolean>(false);
-
+  const user = useAppSelector(state => state.auth.user);
+  console.log("Logged in user:", user);
+  
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
   };
 
   return (
-    <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <nav className="  sticky h-[12vh] top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 ">
       <div className="px-3 py-3 lg:px-5 lg:pl-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center justify-start rtl:justify-end">
@@ -46,17 +49,14 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
 
             {/* Logo */}
             <Link to="#" className="flex ms-2 md:me-24">
-              <img
-                src={LogoDark}
-                className="h-8 me-3"
-                alt="Logo"
-              />
+              <img src={LogoDark} className="h-8 me-3" alt="Logo" />
             </Link>
           </div>
 
           {/* New Quiz Button */}
           <div className="flex items-center ms-3">
-            <button
+            <Link
+              to={"/quiz"}
               type="button"
               className="mr-11 px-8 text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 me-2 mb-2"
             >
@@ -66,7 +66,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                 className="text-gray-500 pr-4 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
               />
               <div className="font-bold text-xl">New Quiz</div>
-            </button>
+            </Link>
 
             {/* User Profile Dropdown */}
             <button
@@ -79,8 +79,20 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                 <div className="font-medium">Nwabuikwu Chizuruoke</div>
                 <div className="truncate text-green">Instructor</div>
               </div>
-              <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+              <svg
+                className="w-2.5 h-2.5 ms-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 4 4 4-4"
+                />
               </svg>
             </button>
 
@@ -90,32 +102,44 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                 <div className="z-50 absolute top-16 right-3 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                   <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                     <div className="font-medium">Pro User</div>
-                    <div className="truncate">name@flowbite.com</div>
+                    <div className="truncate">{user?.email}</div>
                   </div>
                   <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                     <li>
-                      <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <a
+                        href="#"
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
                         Dashboard
                       </a>
                     </li>
                     <li>
-                      <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <a
+                        href="#"
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
                         Settings
                       </a>
                     </li>
                     <li>
-                      <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <a
+                        href="#"
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
                         Earnings
                       </a>
                     </li>
                   </ul>
                   <div className="py-2">
-                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    >
                       Sign out
                     </a>
                   </div>
                 </div>,
-                document.body // Render dropdown in the body for correct positioning
+                document.body, // Render dropdown in the body for correct positioning
               )}
           </div>
         </div>

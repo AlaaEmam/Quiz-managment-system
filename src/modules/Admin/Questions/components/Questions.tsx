@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import plus from "../../../../assets/plus-circle.svg";
+
 import { axiosInstance, QuestionsUrl } from "../../../../Constants/URLS/URL";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -282,6 +283,20 @@ export default function Questions() {
       </div>
     );
   };
+
+  const allQut = async () => {
+    try {
+      const res = await axiosInstance.get(
+        QuestionsUrl.gettAllQUT
+      );
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    allQut()
+  });
 
   return (
     <>
