@@ -1,31 +1,17 @@
 import { useEffect, useState } from "react";
-import Modal from "./Modal";
 import plus from "../../../../assets/plus-circle.svg";
 import { axiosInstance, QuestionsUrl } from "../../../../Constants/URLS/URL";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Question } from "../../../Shared/Url/components/URL";
 import { toast } from "react-toastify";
-import { data } from "react-router-dom";
 export default function Questions() {
   const [question, setquestion] = useState<QU_IF[]>([]);
   const [isAddNewQU, setIsAddNewQU] = useState(false);
-  const [isUpdateQU, setIsUpdateQU] = useState(false);
+  const [_id, set_Id] = useState("0");
 
-  let [queBy_ID, setQueBy_ID] = useState<QU_IF>();
+  //let [queBy_ID, setQueBy_ID] = useState<QU_IF>();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
-    setValue("title", queBy_ID?.title);
-    setValue("description", queBy_ID?.description);
-    setValue("answer", queBy_ID?.answer);
-    setValue("difficulty", queBy_ID?.difficulty);
-    setValue("options.A", queBy_ID?.options.A);
-    setValue("options.B", queBy_ID?.options.B);
-    setValue("options.C", queBy_ID?.options.C);
-    setValue("options.D", queBy_ID?.options.D);
-    setValue("points", queBy_ID?.points);
-    setValue("type", queBy_ID?.type);
-
     setIsModalOpen(true);
   };
   const openclearModal = () => {
@@ -66,18 +52,28 @@ export default function Questions() {
   // get QU by ID
   const getSpcQUbyid = async (id: string) => {
     try {
+      set_Id(id);
       const { data } = await axiosInstance.get<QU_IF>(
         QuestionsUrl.getSpcQUT(`${id}`)
       );
-      setQueBy_ID(data);
+
+      setValue("title", data?.title);
+      setValue("description", data?.description);
+      setValue("answer", data?.answer);
+      setValue("difficulty", data?.difficulty);
+      setValue("options.A", data?.options.A);
+      setValue("options.B", data?.options.B);
+      setValue("options.C", data?.options.C);
+      setValue("options.D", data?.options.D);
+      setValue("points", data?.points);
+      setValue("type", data?.type);
+      //  setQueBy_ID(data);
       setIsAddNewQU(false);
-      setIsUpdateQU(true);
       openModal();
     } catch (error) {
       console.log(error);
     }
   };
-
 
   ///add Qu
   const {
@@ -90,49 +86,34 @@ export default function Questions() {
   } = useForm<QU_IF>();
   const onSubmit: SubmitHandler<QU_IF> = async (data) => {
     try {
-      if(!isModalOpen)
-      { await axiosInstance.post(QuestionsUrl.addQuestion, data);
+      if (isAddNewQU) {
+        await axiosInstance.post(QuestionsUrl.addQuestion, data);
         toast.success("Record created successfully");
-        setQueBy_ID({
-          description: "",
-          difficulty: "",
-          instructor: "",
-          options: { A: "", B: "", C: "", D: "" },
-          points: 0,
-          status: "",
-          answer: "",
-          title: "",
-          type: "",
-          _id: "",
-        });}
+        // setQueBy_ID({
+        //   description: "b",
+        //   difficulty: "b",
+        //   instructor: "",
+        //   options: { A: "", B: "", C: "", D: "" },
+        //   points: 0,
+        //   status: "",
+        //   answer: "",
+        //   title: "",
+        //   type: "",
+        //   _id: "",
+        // });
+      } else {
+       await axiosInstance.put(
+          QuestionsUrl.updateQuestion(`${_id}`),
+          data
+        );
+        toast.info(" updated successfully");
 
-        else
-        {
-          const res =await axiosInstance.put(QuestionsUrl.updateQuestion(`${queBy_ID?._id}`),data);
-          console.log(res);
-        }
+      }
       allQut();
       closeModal();
     } catch (error: any) {
       toast.success("error");
     }
-  };
-
-  //clear form
-
-  const clearInput = () => {
-    setQueBy_ID({
-      description: "",
-      difficulty: "",
-      instructor: "",
-      options: { A: "", B: "", C: "", D: "" },
-      points: 0,
-      status: "",
-      answer: "",
-      title: "",
-      type: "",
-      _id: "",
-    });
   };
 
   const Modal = ({ isOpen, closeModal }) => {
@@ -156,9 +137,8 @@ export default function Questions() {
                 </button>
               ) : (
                 <button
-                type="submit"
+                  type="submit"
                   className="col-span-2  py-2  border-l-2 text-center px-2 "
-                  onClick={()=>setIsUpdateQU(true)}
                 >
                   <i className=" fa-solid fa-check-double  align-middle	leading-10  "></i>
                 </button>
