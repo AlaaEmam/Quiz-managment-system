@@ -15,7 +15,10 @@ import ResetPassword from './modules/Auth/Reset password/components/ResetPasswor
 import AuthLayout from './modules/Shared/AuthLayout/components/AuthLayouts';
 import MasterAdminLayout from './modules/Shared/MasterAdminLayout/components/MasterAdminLayout';
 import NotFound from './modules/Shared/NotFound/components/NotFound';
+import Results from './modules/Learner/Results/components/Results';
 // import ProtectedRoute from './modules/Shared/ProtectedRoute/components/ProtectedRoute';
+
+
 
 function App() {
   const Routes = createBrowserRouter([
@@ -40,6 +43,7 @@ function App() {
         { index: true, element: <Dashboard /> },
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'group', element: <Group /> },
+        { path: 'result', element: <Results /> },
         { path: 'quiz', element: <Quizes /> },
         { path: 'quiz-details', element: <QuizesDetails /> },
         { path: 'students', element: <Students /> },
