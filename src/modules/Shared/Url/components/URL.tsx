@@ -26,6 +26,7 @@ export const Student={
   getAll:`/student`,
   getAllWithoutgroup:`/student/without-group`,
   getById:(id:string)=>`/student/${id}`,
+  gettopFiveStudents: `/student/top-five`,
   updateMyAcc:`/student`,
   deleteStudent:(id:string)=>`/student/${id}`,
   deleteFromGroup:(id:string, id2:string)=>`/student/${id}/${id2}`,
