@@ -43,7 +43,7 @@ function App() {
         { path: 'quiz', element: <Quizes /> },
         { path: 'quiz-details', element: <QuizesDetails /> },
         { path: 'students', element: <Students /> },
-        { path: 'questions', element: <Questions /> },
+        { path: 'quiz/questions', element: <Questions /> },
       ],
     },
   ]);

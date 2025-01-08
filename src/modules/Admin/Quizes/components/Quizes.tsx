@@ -92,7 +92,19 @@ export default function Quizes() {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-16">
+    <div className="flex items-center space-x-2 mb-5">
+          <h3 className="font-light text-gray-500">
+            <Link to="/dashboard">  Dashboard </Link>
+             /
+            <Link
+              to="/quiz" // Adjust this route as needed
+              className="font-normal text-gray-900 underline"
+            >
+              Quizzes
+            </Link>
+          </h3>
+        </div>
+        <div className="grid grid-cols-2 gap-16">
         <div>
           <div className="grid grid-cols-2 gap-5">
             <button
@@ -110,7 +122,7 @@ export default function Quizes() {
                 </div>
               </div>
             </button>
-            <div className="border-2 rounded-lg py-5 ">
+            <Link to="questions" className="border-2 rounded-lg py-5 ">
               <div className="flex flex-col justify-center  items-center gap-y-2">
                 <div>
                   <BsBank2 className="text-6xl" />
@@ -119,7 +131,7 @@ export default function Quizes() {
                   <span className="font-semibold text-lg">Question Bank</span>
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
 
