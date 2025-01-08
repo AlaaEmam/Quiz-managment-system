@@ -65,5 +65,6 @@ export const QuestionsUrl = {
   getSpcQUT:(id:string)=>`/question/${id}`,
   addQuestion:'/question',
   updateQuestion:(id:string)=>`/question/${id}`,
+  deleteQuestion:(id:string)=>`/question/${id}`,
 
 };

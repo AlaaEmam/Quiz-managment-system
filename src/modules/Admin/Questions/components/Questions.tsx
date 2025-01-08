@@ -4,6 +4,7 @@ import plus from "../../../../assets/plus-circle.svg";
 import { axiosInstance, QuestionsUrl } from "../../../../Constants/URLS/URL";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import DeleteConfirmation from "../../../Shared/DeleteConfirmation/DeleteConfirmation";
 export default function Questions() {
   const [question, setquestion] = useState<QU_IF[]>([]);
   const [isAddNewQU, setIsAddNewQU] = useState(false);
@@ -12,17 +13,29 @@ export default function Questions() {
   //let [queBy_ID, setQueBy_ID] = useState<QU_IF>();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const openModal = () => {
-    setIsModalOpen(true);
-  };
-  const openclearModal = () => {
-    setIsAddNewQU(true);
     setIsModalOpen(true);
   };
   const closeModal = () => {
     setIsModalOpen(false);
     reset();
   };
+  const openclearModal = () => {
+    setIsAddNewQU(true);
+    setIsModalOpen(true);
+  };
+
+  const [isdeleteModalOpen, setIsdeleteModalOpen] = useState(false);
+
+  const openDeleteModal = (id: string) => {
+    set_Id(`${id}`);
+    setIsdeleteModalOpen(true);
+  };
+  const closeDeleteModal = () => {
+    setIsdeleteModalOpen(false);
+  };
+
   interface QU_IF {
     description: string;
     difficulty: string;
@@ -76,7 +89,7 @@ export default function Questions() {
     }
   };
 
-  ///add Qu
+  ///add Qu and Update
   const {
     register,
     handleSubmit,
@@ -103,17 +116,26 @@ export default function Questions() {
         //   _id: "",
         // });
       } else {
-       await axiosInstance.put(
-          QuestionsUrl.updateQuestion(`${_id}`),
-          data
-        );
+        await axiosInstance.put(QuestionsUrl.updateQuestion(`${_id}`), data);
         toast.info(" updated successfully");
-
       }
       allQut();
       closeModal();
     } catch (error: any) {
       toast.success("error");
+    }
+  };
+
+  //delete Qu
+
+  const deleteQu = async () => {
+    try {
+      await axiosInstance.delete(QuestionsUrl.deleteQuestion(`${_id}`));
+      toast.info("deleted successfully");
+      allQut();
+      closeDeleteModal();
+    } catch (error: any) {
+      toast.error(error);
     }
   };
 
@@ -284,23 +306,30 @@ export default function Questions() {
     );
   };
 
-  const allQut = async () => {
-    try {
-      const res = await axiosInstance.get(
-        QuestionsUrl.gettAllQUT
-      );
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    allQut()
-  });
+  // const allQut = async () => {
+  //   try {
+  //     const res = await axiosInstance.get(
+  //       QuestionsUrl.gettAllQUT
+  //     );
+  //     console.log(res);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   allQut()
+  // });
 
   return (
     <>
       <div className="border-2 p-4 rounded-lg">
+        <DeleteConfirmation
+          deleteFun={deleteQu}
+          closeModal={closeDeleteModal}
+          showModal={isdeleteModalOpen}
+          title={"questions"}
+        />
+
         <Modal isOpen={isModalOpen} closeModal={closeModal} />
 
         <div className="flex items-center justify-between">
@@ -320,14 +349,14 @@ export default function Questions() {
           </button>
         </div>
 
-        <table className="caption-top	  text-center leading-loose border-separate border-spacing-1 border w-full border-none p-0 m-0 table-fixed">
+        <table className=" text-center leading-loose border-separate border-spacing-1 border w-full border-none p-0 m-0 table-fixed">
           <thead>
             <tr className="bg-black text-white">
               <th className="border border-slate-300 ">title</th>
               <th className="border border-slate-300 ">Question Desc</th>
               <th className="border border-slate-300 ">difficulty level</th>
               <th className="border border-slate-300 "> points</th>
-              <th className="border border-slate-300 "> Actions</th>
+              <th className="border border-slate-300 "> Actions </th>
             </tr>
           </thead>
           <tbody>
@@ -346,10 +375,13 @@ export default function Questions() {
                     onClick={() => getSpcQUbyid(QU._id)}
                   ></i>
                   <i
-                    className="fa-solid fa-pen-to-square  px-4"
+                    className="fa-solid fa-pen-to-square cursor-pointer px-2  mx-2"
                     onClick={() => getSpcQUbyid(QU._id)}
                   ></i>
-                  <i className="fa-solid fa-trash-can"></i>
+                  <i
+                    className="fa-solid fa-trash-can cursor-pointer"
+                    onClick={() => openDeleteModal(QU._id)}
+                  ></i>
                 </td>
               </tr>
             ))}
