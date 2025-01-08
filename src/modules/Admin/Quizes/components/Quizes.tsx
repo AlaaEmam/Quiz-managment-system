@@ -1,13 +1,16 @@
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { BsBank2 } from 'react-icons/bs';
-import { FaCheck, FaCheckCircle, FaLongArrowAltRight } from 'react-icons/fa';
-import { IoIosAlarm, IoIosCopy } from 'react-icons/io';
-import { TiArrowRight } from 'react-icons/ti';
-import { toast } from 'react-toastify';
-import upcoming1 from '../../../../assets/images/upcoming-quiz1.png';
-import { axiosInstance, Groups, Quiz } from '../../../../Constants/URLS/URL';
-import { GetRequiredMessage } from '../../../../Constants/Validation/validation';
+import { format } from "date-fns";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { BsBank2 } from "react-icons/bs";
+import { FaCheck, FaCheckCircle, FaLongArrowAltRight } from "react-icons/fa";
+import { IoIosAlarm, IoIosCopy } from "react-icons/io";
+import { TiArrowRight } from "react-icons/ti";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import upcoming1 from "../../../../assets/images/upcoming-quiz1.png";
+import { axiosInstance, Groups, Quiz } from "../../../../Constants/URLS/URL";
+import { GetRequiredMessage } from "../../../../Constants/Validation/validation";
+import { useNavigate } from "react-router-dom";
 // import upcoming2 from "../../../../assets/images/upcoming-quiz2.png"
 
 interface QuizData {
@@ -15,18 +18,20 @@ interface QuizData {
   description: string;
   group: string;
   questions_number: number;
-  difficulty: 'easy' | 'medium' | 'hard';
-  type: 'FE' | 'BE' | 'DO';
+  difficulty: "easy" | "medium" | "hard";
+  type: "FE" | "BE" | "DO";
   schadule: string;
   duration: number;
   score_per_question: number;
 }
 
 export default function Quizes() {
+  const navigate = useNavigate();
   const [groups, setGroups] = useState([]);
+  const [incomingQuiz, setIncomingQuiz] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
-
+  const [code, setCode] = useState(0);
   const {
     register,
     handleSubmit,
@@ -34,13 +39,29 @@ export default function Quizes() {
     formState: { errors, isSubmitting },
   } = useForm<QuizData>();
 
+
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(code)
+      .then(() => {
+        toast.success("code copied to clipboard")
+      })
+  };
+
+
+
   const onSubmit = async (data: QuizData) => {
     try {
       const response = await axiosInstance.post(Quiz.Create_Quiz, data);
+      setCode(response.data.data.code)
+      console.log(code);
       console.log(response);
-      toast.success('Create succesfully');
+      toast.success("Create succesfully");
+      setIsModalOpen(false);
+      setIsSecondModalOpen(true);
+      reset()
     } catch (error) {
       console.log(error);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -54,8 +75,19 @@ export default function Quizes() {
     }
   };
 
+  const getIncomingQuiz = async () => {
+    try {
+      const response = await axiosInstance.get(Quiz.Incomming_Quiz);
+      console.log(response);
+      setIncomingQuiz(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getAllGroups();
+    getIncomingQuiz();
   }, []);
 
   return (
@@ -96,68 +128,39 @@ export default function Quizes() {
             <h3 className=" font-semibold text-xl tracking-wide mb-5">
               Upcoming quizzes
             </h3>
-            <div className="flex items-center justify-start gap-x-4 border-2 rounded-lg mb-5">
-              <div className="bg-light_cream p-2 rounded-lg">
-                <img src={upcoming1} alt="upcoming1" />
-              </div>
-              <div>
-                <span className="block font-bold text-lg ">
-                  Introduction to computer programming
-                </span>
-                <span className="block">
-                  12 / 03 / 2023{' '}
-                  <span>
-                    <span className="mx-3">|</span>09:00 AM
-                  </span>
-                </span>
-                <div className="flex mt-3 justify-between">
-                  <div>
-                    <span className="block font-semibold ">
-                      No. of students enrolled: 32
+
+            {incomingQuiz.map((quiz) => (
+              <div className="flex items-center justify-start gap-x-4 border-2 rounded-lg mb-5">
+                <div className="bg-light_cream p-2 rounded-lg">
+                  <img src={upcoming1} alt="upcoming1" />
+                </div>
+                <div>
+                  <span className="block font-bold text-lg ">{quiz.title}</span>
+                  <span className="block">
+                    {format(new Date(quiz.schadule), "yyyy-MM-dd")}
+                    <span>
+                      <span className="mx-3">|</span>
+                      {format(new Date(quiz.schadule), "HH : mm")}
                     </span>
-                  </div>
-                  <div>
-                    <button className="flex items-center">
-                      open
-                      <div className="bg-green  rounded-lg text-white">
-                        <TiArrowRight />
-                      </div>
-                    </button>
+                  </span>
+                  <div className="flex mt-3 justify-between gap-20 ">
+                    <div>
+                      <span className="block font-semibold ">
+                        No. of students enrolled: {quiz.participants}
+                      </span>
+                    </div>
+                    <div>
+                      <Link to="/quiz-details" className="flex items-center">
+                        open
+                        <div className="bg-green  rounded-lg text-white">
+                          <TiArrowRight />
+                        </div>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="flex items-center justify-start gap-x-4 border-2 rounded-lg">
-              <div className="bg-light_cream p-2 rounded-lg">
-                <img src={upcoming1} alt="upcoming1" />
-              </div>
-              <div>
-                <span className="block font-bold text-lg ">
-                  Introduction to computer programming
-                </span>
-                <span className="block">
-                  12 / 03 / 2023{' '}
-                  <span>
-                    <span className="mx-3">|</span>09:00 AM
-                  </span>
-                </span>
-                <div className="flex mt-3 justify-between">
-                  <div>
-                    <span className="block font-semibold ">
-                      No. of students enrolled: 32
-                    </span>
-                  </div>
-                  <div>
-                    <button className="flex items-center">
-                      open
-                      <div className="bg-green  rounded-lg text-white">
-                        <TiArrowRight />
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
 
           <div className="border-2 rounded-lg p-4 mt-8">
@@ -226,16 +229,6 @@ export default function Quizes() {
       </div>
 
       <div>
-        <div className="">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="block text-black "
-            type="button"
-          >
-            New Quiz
-          </button>
-        </div>
-
         {isModalOpen && (
           <div
             role="dialog"
@@ -252,12 +245,7 @@ export default function Quizes() {
                   Set up a new quiz
                 </h3>
                 <div className="flex justify-center items-center gap-8">
-                  <button
-                    onClick={() => {
-                      setIsModalOpen(false);
-                      setIsSecondModalOpen(true);
-                    }}
-                  >
+                  <button>
                     <FaCheck className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-[30px] p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" />
                   </button>
                   <button
@@ -294,8 +282,8 @@ export default function Quizes() {
                     </span>
                     <input
                       className="pl-24 rounded-lg  w-full p-2 border border-black focus:border-none "
-                      {...register('title', {
-                        required: GetRequiredMessage('title'),
+                      {...register("title", {
+                        required: GetRequiredMessage("title"),
                       })}
                     />
                   </div>
@@ -315,8 +303,8 @@ export default function Quizes() {
                         </span>
                         <select
                           className="pl-28 rounded-lg w-full border border-black"
-                          {...register('duration', {
-                            required: GetRequiredMessage('Duration'),
+                          {...register("duration", {
+                            required: GetRequiredMessage("Duration"),
                           })}
                         >
                           <option value="" disabled selected>
@@ -341,8 +329,8 @@ export default function Quizes() {
                         </span>
                         <select
                           className="pl-40 rounded-lg w-full p-2 border border-black"
-                          {...register('questions_number', {
-                            required: GetRequiredMessage('No. of questions'),
+                          {...register("questions_number", {
+                            required: GetRequiredMessage("No. of questions"),
                           })}
                         >
                           <option value="" disabled selected>
@@ -367,8 +355,8 @@ export default function Quizes() {
                         </span>
                         <select
                           className="pl-40 rounded-lg w-full p-2 border border-black"
-                          {...register('score_per_question', {
-                            required: GetRequiredMessage('Score per question'),
+                          {...register("score_per_question", {
+                            required: GetRequiredMessage("Score per question"),
                           })}
                         >
                           <option value="" disabled selected>
@@ -395,8 +383,8 @@ export default function Quizes() {
                     </span>
                     <input
                       className="pl-36 rounded-lg  w-full p-6 border border-black focus:border-none "
-                      {...register('description', {
-                        required: GetRequiredMessage('description'),
+                      {...register("description", {
+                        required: GetRequiredMessage("description"),
                       })}
                     />
                   </div>
@@ -415,8 +403,8 @@ export default function Quizes() {
                     <input
                       type="date"
                       className="pl-32 rounded-lg  w-full p-2 border border-black focus:border-none "
-                      {...register('schadule', {
-                        required: GetRequiredMessage('schadule'),
+                      {...register("schadule", {
+                        required: GetRequiredMessage("schadule"),
                       })}
                     />
                   </div>
@@ -435,8 +423,8 @@ export default function Quizes() {
                       </span>
                       <select
                         className="pl-40 rounded-lg w-full p-2 border border-black focus:outline-none"
-                        {...register('difficulty', {
-                          required: GetRequiredMessage('Difficulty level'),
+                        {...register("difficulty", {
+                          required: GetRequiredMessage("Difficulty level"),
                         })}
                       >
                         <option value="" disabled selected>
@@ -461,8 +449,8 @@ export default function Quizes() {
                       </span>
                       <select
                         className="pl-40 rounded-lg w-full p-2 border border-black focus:outline-none"
-                        {...register('type', {
-                          required: GetRequiredMessage('type'),
+                        {...register("type", {
+                          required: GetRequiredMessage("type"),
                         })}
                       >
                         <option value="" disabled selected>
@@ -487,15 +475,17 @@ export default function Quizes() {
                       </span>
                       <select
                         className="pl-40 rounded-lg w-full p-2 border border-black focus:outline-none"
-                        {...register('group', {
-                          required: GetRequiredMessage('Group'),
+                        {...register("group", {
+                          required: GetRequiredMessage("Group"),
                         })}
                       >
                         <option value="" disabled selected>
                           Select group
                         </option>
                         {groups.map(({ _id, name }) => (
-                          <option key={_id} value={_id}>{name}</option>
+                          <option key={_id} value={_id}>
+                            {name}
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -534,12 +524,12 @@ export default function Quizes() {
                 </div>
                 <div className="flex justify-between items-center gap-4 mt-[10px] border-2 rounded-[20px]">
                   <span className="bg-light_cream p-3 rounded-tl-[20px] rounded-bl-[20px] font-[700] text-[20px]">
-                    CODE:{' '}
+                    CODE:{" "}
                   </span>
-                  <span className="font-[700] text-[20px]">A123DDS</span>
-                  <span className="px-5 text-xl">
+                  <span className="font-[700] text-[20px]">{code}</span>
+                  <button className="px-5 text-xl" onClick={handleCopyCode}>
                     <IoIosCopy />
-                  </span>
+                  </button>
                 </div>
                 <div className="mt-[44px]">
                   <button

@@ -12,7 +12,9 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const [isDropdownOpen, setDropdownOpen] = useState<boolean>(false);
-  const user = useAppSelector(state=>state.auth.user)
+  const user = useAppSelector(state => state.auth.user);
+  console.log("Logged in user:", user);
+  
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
   };
@@ -53,7 +55,8 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
 
           {/* New Quiz Button */}
           <div className="flex items-center ms-3">
-            <button
+            <Link
+              to={"/quiz"}
               type="button"
               className="mr-11 px-8 text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 me-2 mb-2"
             >
@@ -63,7 +66,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                 className="text-gray-500 pr-4 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
               />
               <div className="font-bold text-xl">New Quiz</div>
-            </button>
+            </Link>
 
             {/* User Profile Dropdown */}
             <button
@@ -99,7 +102,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                 <div className="z-50 absolute top-16 right-3 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                   <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                     <div className="font-medium">Pro User</div>
-                    <div className="truncate">name@flowbite.com</div>
+                    <div className="truncate">{user?.email}</div>
                   </div>
                   <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                     <li>
