@@ -1,10 +1,5 @@
-import { useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { axiosInstance, Groups } from '../../../../Constants/URLS/URL';
 
 interface DeleteConfirmationProps {
-  showDelete: boolean;
   handleCloseDelete: () => void; // Function to close the modal
   deleteItem: string; // Name of the item to delete
   deleteFunction: () => any; // Function to call the delete API
@@ -12,20 +7,10 @@ interface DeleteConfirmationProps {
 }
 
 const DeleteGroup: React.FC<DeleteConfirmationProps> = ({
-  showDelete,
   handleCloseDelete,
-  deleteItem,
   deleteFunction,
   isOpen,
 }) => {
-  const [groupList, setGroupList]=useState([]);
-  
-
-  const getGroups=async()=>{
-    const response= await axiosInstance.get(Groups.getAll);
-    setGroupList(response?.data)
-    console.log(response.data);
-  }
   
 
 

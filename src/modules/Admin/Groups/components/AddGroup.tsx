@@ -1,19 +1,23 @@
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { axiosInstance, Groups } from '../../../../Constants/URLS/URL';
-
+import { axiosInstance, Groups, Student } from '../../../../Constants/URLS/URL';
+import Select from "react-select";
 
 interface FormData{
   name:string;
   students:[string];
 }
 
-interface ApiResponse{
-  message: string;  
+// Interface for students (adjust to your API response structure)
+interface StudentData {
+  _id: string; // Assuming students have an id property
+  first_name: string;
 }
 
-
+interface Option {
+  value: string | number;
+  label: string;
+}
 
 export default function AddGroup() {
   
@@ -23,31 +27,50 @@ export default function AddGroup() {
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
-  const [names, setNames] = useState<string[]>([]); // Initial state is an empty array
-
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    
-    // Split the input by commas and remove any extra spaces, then update the state
-    const nameArray = inputValue
-      .split(',')
-      .map(name => name.trim())  // Trim each name to remove spaces
-      .filter(name => name.length > 0); // Filter out empty strings
-
-    setNames(nameArray);
+  const [students, setStudents] = useState<StudentData[]>([]); // State for students
+  
+  const [selectedStudentsOptions, setSelectedStudentsOptions] = useState<Option[]>([]); // State for selected options
+  
+  
+  
+  // Fetch students data
+  const getStudents = async () => {
+    try {
+      const response = await axiosInstance.get(Student.getAll);
+      console.log(response.data);
+      setStudents(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+
   const onSubmitHandler:SubmitHandler<FormData>=async(data)=>{
     try{
       const response=await axiosInstance.post(Groups.createGroup, data)
-      // toast.success("Category added");
+      
       console.log(response);
-
+      closeModal;
     }catch(error){
       console.log(error)
     }
   }
 
+   // Fetch groups and students on component mount
+    useEffect(() => {
+      getStudents();
+    }, []);
+
+  // Create student options for react-select
+  const studentOptions: Option[] = students.map((student) => ({
+    value: student._id, // Use the student's ID as the value
+    label: student.first_name, // Use the student's first name as the label
+  }));
+
+  // Handle selection change for react-select (multiple selection)
+  function handleSelect(selectedOptions: any) {
+    setSelectedStudentsOptions(selectedOptions); // Update selected students
+  }
 
   return (
     <>
@@ -105,18 +128,25 @@ export default function AddGroup() {
               </div>
 
               {errors?.students?.message &&<div className="text-gray-800">{errors?.students?.message}</div>}
-              <div className="py-4 rounded-xl border-2 m-5 ">
+              <div className="py-4 rounded-xl border-2 m-5 flex ">
                 <span className="py-4 px-2 rounded-xl bg-orange-200 mr-4">
                   List Students
                 </span>
 
+
+                <Select
+                className='w-3/5'
+            options={studentOptions}
+            placeholder="Select students"
+            value={selectedStudentsOptions} // Value is the selected options
+            isSearchable={true}
+            {...register("students",{required:"please fill the student list"})}
+            isMulti // Enable multi-select
+            onChange={handleSelect} // Handle selection change
+          />
+
                 
-                <input 
-                className="border-2 xl:w-60 py-2 md:w-52" 
-                type="text" 
-                {...register("students", {required:"Please fill the list of students"})}
-                 onChange={handleInputChange} 
-                />
+                
               </div>
             </form>
           </div>

@@ -1,132 +1,137 @@
 import { useEffect, useState } from "react";
-import { axiosInstance, Groups } from "../../../../Constants/URLS/URL";
+import { axiosInstance, Groups, Student } from "../../../../Constants/URLS/URL";
 import AddGroup from "./AddGroup";
 import DeleteGroup from "./DeleteGroup";
+import Select from "react-select";
+
+// Interface for students (adjust to your API response structure)
+interface StudentData {
+  _id: string; // Assuming students have an id property
+  first_name: string;
+}
+
+interface Option {
+  value: string | number;
+  label: string;
+}
 
 export default function Group() {
-  const [groupList, setGroupList]=useState([]);
+  const [groupList, setGroupList] = useState<any[]>([]); // Define type based on your data structure
   const [isOpen, setIsOpen] = useState(false);
+  const [students, setStudents] = useState<StudentData[]>([]); // State for students
 
-  
-  
-  
-
-  const [showDelete, setShowDelete] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedStudentsOptions, setSelectedStudentsOptions] = useState<Option[]>([]); // State for selected options
+
+  // Close Delete Dialog
   const handleCloseDelete = () => setIsOpen(false);
 
+  // Show Delete Dialog
   const handleShowDelete = (id: number) => {
     setSelectedId(id);
     setIsOpen(true);
   };
 
-  
-
-  const getGroups=async()=>{
-    const response= await axiosInstance.get(Groups.getAll);
-    setGroupList(response?.data)
-    console.log(response.data);
-  }
-  
-
-const deleteGroup=async()=>{
-    try{
-      const response=await axiosInstance.delete(Groups.deleteGroup(selectedId));
-      console.log(response);
-      getGroups();
-      handleCloseDelete();
-    }catch(error){
-      console.log(error)
+  // Fetch students data
+  const getStudents = async () => {
+    try {
+      const response = await axiosInstance.get(Student.getAll);
+      console.log(response.data);
+      setStudents(response.data);
+    } catch (error) {
+      console.log(error);
     }
-  }
+  };
 
+  // Fetch group data
+  const getGroups = async () => {
+    try {
+      const response = await axiosInstance.get(Groups.getAll);
+      setGroupList(response?.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  // Delete group
+  const deleteGroup = async () => {
+    try {
+      const response = await axiosInstance.delete(Groups.deleteGroup(String(selectedId)));
+      handleCloseDelete();
+      getGroups();
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  useEffect(()=>{
+  // Fetch groups and students on component mount
+  useEffect(() => {
     getGroups();
+    getStudents();
+  }, []);
 
-  },[])
+  // Create student options for react-select
+  const studentOptions: Option[] = students.map((student) => ({
+    value: student._id, // Use the student's ID as the value
+    label: student.first_name, // Use the student's first name as the label
+  }));
 
-  
-
+  // Handle selection change for react-select (multiple selection)
+  function handleSelect(selectedOptions: any) {
+    setSelectedStudentsOptions(selectedOptions); // Update selected students
+  }
 
   return (
-  <div className="w-full">
-      <DeleteGroup isOpen={isOpen} deleteItem={'Group'}
-      handleCloseDelete={handleCloseDelete}
-      showDelete={showDelete}
-      deleteFunction={deleteGroup}></DeleteGroup>
-      {/* <span>
-        
-        
-        
-        {isOpen && (
-          <div 
-            onClick={closeModal}
-            className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 transition-opacity duration-300 ${
-              isOpen ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <div
-              className={`bg-white rounded-lg shadow-lg w-2/4 transition-transform transform duration-300 ${
-                isOpen ? 'scale-100' : 'scale-95'
-              }`}
-              onClick={(e) => e.stopPropagation()} // Prevent close when clicking inside modal
-              
-            >
-              <div className="flex justify-between border-b-2 p-2">
-                <h2 className="text-xl font-semibold"> Delete this Group</h2>
-                <div className="text-2xl">
-                  <button
-                    className="border-l-2 px-2"
-                    onClick={deleteGroup}
-                  >
-                    <i className="bi bi-check-lg"></i>
-                  </button>
-                  <button
-                    className="border-l-2 px-2"
-                    onClick={closeModal}
-                  >
-                    <i className="bi bi-x-lg"></i>
-                  </button>
+    <div className="w-full">
+      <DeleteGroup
+        isOpen={isOpen}
+        deleteItem={"Group"}
+        handleCloseDelete={handleCloseDelete}
+        deleteFunction={deleteGroup}
+      />
+
+      <div className="mt-2 p-10">
+        <div className="flex justify-end">
+          {/* Add Group */}
+          <AddGroup />
+
+          {/* react-select for selecting students */}
+          <Select
+            options={studentOptions}
+            placeholder="Select students"
+            value={selectedStudentsOptions} // Value is the selected options
+            onChange={handleSelect} // Handle selection change
+            isSearchable={true}
+            isMulti // Enable multi-select
+          />
+        </div>
+
+        <div className="border-2 mt-4 rounded-xl h-svh p-5">
+          <h1 className="text-3xl">Group list</h1>
+          <div className="grid grid-cols-2 gap-2 mt-4">
+            {groupList.map((group: any) => (
+              <div
+                className="p-3 border-2 rounded-lg flex justify-between"
+                key={group._id}
+              >
+                <div>
+                  <p className="text-2xl">Group: {group.name}</p>
+                  <p className="text-md">No. of Students: {group?.students.length}</p>
+                </div>
+                <div>
+                  <i className="bi bi-pencil-square text-3xl"></i>
+                  <i
+                    onClick={() => handleShowDelete(group?._id)}
+                    className="bi bi-trash text-3xl"
+                  ></i>
                 </div>
               </div>
-
-              
-              
-            </div>
+            ))}
           </div>
-        )}
-      </span> */}
-
-    <div className="mt-2 p-10">
-
-      <div className="flex justify-end">
-        {/* Incomplete */}
-       <AddGroup/>
-      </div>
-      <div className="border-2 mt-4 rounded-xl h-svh p-5">
-        <h1 className="text-3xl">Group list</h1>
-        <div className="grid grid-cols-2 gap-2 mt-4">
-          {groupList.map(group=>
-
-            
-          <div className="p-3 border-2 rounded-lg flex justify-between" key={group._id}>
-            <div>
-              <p className="text-2xl">Group: {group.name}</p>
-              <p className="text-md">No. of Students: {group?.students.length}</p>
-            </div>
-            <div>
-              <i className="bi bi-pencil-square text-3xl"></i>
-              
-              <i onClick={() => handleShowDelete(group?._id)} className="bi bi-trash text-3xl"></i>
-        
-            </div>
-          </div>
-          
-        )}
         </div>
       </div>
     </div>
-  </div>);
+  );
 }
