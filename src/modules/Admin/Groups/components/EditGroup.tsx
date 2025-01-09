@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { axiosInstance, Groups, Student } from '../../../../Constants/URLS/URL';
-// import Select from "react-select";
+import Select from "react-select";
+import { toast } from 'react-toastify';
 
 interface FormData{
   name:string;
@@ -25,7 +26,7 @@ interface StudentData {
 //   label: string;
 // }
 
-const AddGroup:React.FC<AddGroupProps>=({handleCloseAddGroup, AddGroup, isOpenAddGroup})=> {
+const EditGroup:React.FC<AddGroupProps>=({handleCloseAddGroup, AddGroup, isOpenAddGroup})=> {
   
   
   let { register, formState:{ errors}, handleSubmit}=useForm<FormData>({mode:'onChange'});
@@ -50,18 +51,18 @@ const AddGroup:React.FC<AddGroupProps>=({handleCloseAddGroup, AddGroup, isOpenAd
   };
 
 
-  // const onSubmitHandler:SubmitHandler<FormData>=async(data)=>{
-  //   try{
-  //     const response=await axiosInstance.post(Groups.createGroup, data)
+  const onSubmitHandler:SubmitHandler<FormData>=async(data)=>{
+    try{
+      const response=await axiosInstance.post(Groups.createGroup, data)
       
-  //     console.log(response);
-  //     handleCloseAddGroup();
-  //   }catch(error){
-  //     toast.error("Student already in group")
+      console.log(response);
+      handleCloseAddGroup();
+    }catch(error){
+      toast.error("Student already in group")
       
-  //     console.log(error);
-  //   }
-  // }
+      console.log(error);
+    }
+  }
 
    // Fetch groups and students on component mount
     useEffect(() => {
@@ -173,4 +174,4 @@ const AddGroup:React.FC<AddGroupProps>=({handleCloseAddGroup, AddGroup, isOpenAd
   );
 }
 
-export default AddGroup
+export default EditGroup

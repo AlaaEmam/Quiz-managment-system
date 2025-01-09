@@ -3,13 +3,13 @@ interface DeleteConfirmationProps {
   handleCloseDelete: () => void; // Function to close the modal
   deleteItem: string; // Name of the item to delete
   deleteFunction: () => any; // Function to call the delete API
-  isOpen:boolean;
+  isOpenDelete:boolean;
 }
 
 const DeleteGroup: React.FC<DeleteConfirmationProps> = ({
   handleCloseDelete,
   deleteFunction,
-  isOpen,
+  isOpenDelete,
 }) => {
   
 
@@ -19,16 +19,16 @@ const DeleteGroup: React.FC<DeleteConfirmationProps> = ({
     <>
       <span>
         
-        {isOpen && (
+        {isOpenDelete && (
           <div 
             onClick={handleCloseDelete}
             className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 transition-opacity duration-300 ${
-              isOpen ? 'opacity-100' : 'opacity-0'
+              isOpenDelete ? 'opacity-100' : 'opacity-0'
             }`}
           >
             <div
               className={`bg-white rounded-lg shadow-lg w-2/4 transition-transform transform duration-300 ${
-                isOpen ? 'scale-100' : 'scale-95'
+                isOpenDelete ? 'scale-100' : 'scale-95'
               }`}
               onClick={(e) => e.stopPropagation()} // Prevent close when clicking inside modal
               

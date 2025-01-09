@@ -3,6 +3,7 @@ import { axiosInstance, Groups, Student } from "../../../../Constants/URLS/URL";
 import AddGroup from "./AddGroup";
 import DeleteGroup from "./DeleteGroup";
 import { toast } from "react-toastify";
+import { SubmitHandler } from "react-hook-form";
 // import Select from "react-select";
 
 // Interface for students (adjust to your API response structure)
@@ -11,6 +12,10 @@ interface StudentData {
   first_name: string[];
 }
 
+interface FormData{
+  name:string;
+  students:string[];
+}
 // interface Option {
 //   value: string | number;
 //   label: string;
@@ -18,31 +23,41 @@ interface StudentData {
 
 export default function Group() {
   const [groupList, setGroupList] = useState<any[]>([]); // Define type based on your data structure
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
+  const [isOpenAddGroup, setIsOpenAddGroup] = useState(false);
   const [students, setStudents] = useState<StudentData[]>([]); // State for students
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
   // const [selectedStudentsOptions, setSelectedStudentsOptions] = useState<Option[]>([]); // State for selected options
 
   // Close Delete Dialog
-  const handleCloseDelete = () => setIsOpen(false);
+  const handleCloseDelete = () => setIsOpenDelete(false);
+  
+
+  // close Add Group Dialog
+  const handleCloseAddGroup=()=> setIsOpenAddGroup(false);
 
   // Show Delete Dialog
   const handleShowDelete = (id: number) => {
     setSelectedId(id);
-    setIsOpen(true);
+    setIsOpenDelete(true);
   };
 
+  const handleShowAddGroup=()=>{
+    setIsOpenAddGroup(true);
+  }
+
   // Fetch students data
-  const getStudents = async () => {
-    try {
-      const response = await axiosInstance.get(Student.getAll);
-      console.log(response.data);
-      setStudents(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  
+  // const getStudents = async () => {
+  //   try {
+  //     const response = await axiosInstance.get(Student.getAll);
+  //     console.log(response.data);
+  //     setStudents(response.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   // Fetch group data
   const getGroups = async () => {
@@ -50,12 +65,23 @@ export default function Group() {
       const response = await axiosInstance.get(Groups.getAll);
       setGroupList(response?.data);
       console.log(response.data);
-      toast.success("You have deleted this group");
     } catch (error) {
-      toast.error("delete failed");
       console.log(error);
     }
   };
+
+  const onSubmitHandler:SubmitHandler<FormData>=async(data:any)=>{
+      try{
+        const response=await axiosInstance.post(Groups.createGroup, data)
+        getGroups()
+        console.log(response);
+        handleCloseAddGroup();
+      }catch(error){
+        toast.error("Student already in group")
+        
+        console.log(error);
+      }
+    }
 
   // Delete group
   const deleteGroup = async () => {
@@ -63,8 +89,11 @@ export default function Group() {
       const response = await axiosInstance.delete(Groups.deleteGroup(String(selectedId)));
       handleCloseDelete();
       getGroups();
+      toast.success("You have deleted this group");
       console.log(response);
     } catch (error) {
+      
+      toast.error("delete failed");
       console.log(error);
     }
   };
@@ -72,7 +101,7 @@ export default function Group() {
   // Fetch groups and students on component mount
   useEffect(() => {
     getGroups();
-    getStudents();
+    // getStudents();
   }, []);
 
   // Create student options for react-select
@@ -91,7 +120,7 @@ export default function Group() {
   return (
     <div className="w-full">
       <DeleteGroup
-        isOpen={isOpen}
+        isOpenDelete={isOpenDelete}
         deleteItem={"Group"}
         handleCloseDelete={handleCloseDelete}
         deleteFunction={deleteGroup}
@@ -100,12 +129,22 @@ export default function Group() {
       <div className="mt-2 p-10">
         <div className="flex justify-end">
           {/* Add Group */}
-          <AddGroup />
+          <button 
+          onClick={handleShowAddGroup} 
+          className="mr-10 border-2 p-2 px-4 rounded-full">
+          <span>
+            <i className="bi bi-plus-circle-fill"></i>
+          </span>  
+          Add Group
+        </button>
+          <AddGroup handleCloseAddGroup={handleCloseAddGroup}
+          AddGroup={onSubmitHandler}
+          isOpenAddGroup={isOpenAddGroup}/>
 
           
         </div>
 
-        <div className="border-2 mt-4 rounded-xl h-svh p-5">
+        <div className="border-2 mt-4 rounded-xl h-lvh p-5">
           <h1 className="text-3xl">Group list</h1>
           <div className="grid grid-cols-2 gap-2 mt-4">
             {groupList.map((group: any) => (
