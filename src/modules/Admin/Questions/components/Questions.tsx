@@ -183,10 +183,12 @@ export default function Questions() {
                bg-white px-3 py-1.5 shadow-none
               text-base text-gray-900 border-none
                placeholder:text-gray-400  sm:text-sm/6    "
-                    {...register("title")}
+                    {...register("title",{required:"this field is required"})}
                   />
+                          {errors.title && <span className="text-xs text-red-700  ml-3">{errors.title.message}</span>}
+
                 </div>
-                ``
+
               </div>
 
               <div className="mb-3 sm:col-span-3 lex  place-items-stretch relative grid grid-cols-12 ">
@@ -196,12 +198,14 @@ export default function Questions() {
                 <div className=" col-span-8 m-0 border-2 rounded-r-lg border-l-0 ">
                   <textarea
                     id="about"
-                    {...register("description")}
+                    {...register("description",{required:"this field is required"})}
                     className="block w-full rounded-md
                  bg-white px-3 py-1.5 text-base text-gray-900 border-none
                    outline-gray-300 placeholder:text-gray-400
                   sm:text-sm/6"
                   ></textarea>
+                          {errors.description && <span className="text-xs text-red-700  ml-3">{errors.description.message}</span>}
+
                 </div>
               </div>
 
@@ -212,12 +216,13 @@ export default function Questions() {
                 <div className=" mb-3 col-span-5 m-0 border-2 rounded-r-lg border-l-0 ">
                   <input
                     type="text"
-                    {...register("options.A")}
+                    {...register("options.A",{required:"this field is required"})}
                     className=" leading-10   w-full rounded-md
                bg-white px-3 py-1.5
               text-base text-gray-900 border-none
                placeholder:text-gray-400  sm:text-sm/6    "
                   />
+                          {errors.options?.A && <span className="text-xs text-red-700  ml-3">{errors.options.A.message}</span>}
                 </div>
                 <div className="mb-3 border-2  border-r-0 rounded-l-lg  text-sm/6  col-span-1  font-medium text-gray-900  w-auto px-5 flex items-center justify-center leading-10 py-0   bg-light_cream">
                   B
@@ -225,12 +230,14 @@ export default function Questions() {
                 <div className=" mb-3 col-span-5 m-0 border-2 rounded-r-lg border-l-0 ">
                   <input
                     type="text"
-                    {...register("options.B")}
+                    {...register("options.B",{required:"this field is required"})}
                     className=" leading-10   w-full rounded-md
                bg-white px-3 py-1.5
               text-base text-gray-900 border-none
                placeholder:text-gray-400  sm:text-sm/6    "
                   />
+                          {errors.options?.B && <span className="text-xs text-red-700  ml-3">{errors.options.B.message}</span>}
+
                 </div>{" "}
                 <div className="mb-3 border-2  border-r-0 rounded-l-lg  text-sm/6  col-span-1  font-medium text-gray-900  w-auto px-5 flex items-center justify-center leading-10 py-0   bg-light_cream">
                   C
@@ -238,25 +245,29 @@ export default function Questions() {
                 <div className=" mb-3 col-span-5 m-0 border-2 rounded-r-lg border-l-0 ">
                   <input
                     type="text"
-                    {...register("options.C")}
+                    {...register("options.C",{required:"this field is required"})}
                     className=" leading-10   w-full rounded-md
                bg-white px-3 py-1.5
               text-base text-gray-900 border-none
                placeholder:text-gray-400  sm:text-sm/6    "
                   />
-                </div>{" "}
+                {errors.options?.C && <span className="text-xs text-red-700  ml-3">{errors.options.C.message}</span>}
+
+                </div>
                 <div className="mb-3 border-2  border-r-0 rounded-l-lg  text-sm/6  col-span-1  font-medium text-gray-900  w-auto px-5 flex items-center justify-center leading-10 py-0   bg-light_cream">
                   D
                 </div>
                 <div className=" mb-3 col-span-5 m-0 border-2 rounded-r-lg border-l-0 ">
                   <input
                     type="text"
-                    {...register("options.D")}
+                    {...register("options.D",{required:"this field is required"})}
                     className=" leading-10   w-full rounded-md
                bg-white px-3 py-1.5
               text-base text-gray-900 border-none
                placeholder:text-gray-400  sm:text-sm/6    "
                   />
+                 {errors.options?.D && <span className="text-xs text-red-700  ml-3">{errors.options.D.message}</span>}
+
                 </div>
               </div>
 
@@ -267,12 +278,14 @@ export default function Questions() {
                 <div className=" col-span-1 m-0 border-2 rounded-r-lg border-l-0 ">
                   <input
                     type="text"
-                    {...register("answer")}
+                    {...register("answer",{required:"this field is required"})}
                     className=" leading-10   w-full rounded-md
                bg-white px-3 py-1.5 shadow-none text-center
               text-base text-gray-900 border-none
                placeholder:text-gray-400  sm:text-sm/6    "
                   />
+                {errors.answer && <span className="text-xs text-red-700  ml-3">{errors.answer.message}</span>}
+
                 </div>
 
                 <div className="col-end-12 border-3  border-r-0 rounded-l-lg  text-sm/6  col-span-4  font-medium text-gray-900  w-auto px-5 flex items-center justify-center leading-10 py-0   bg-light_cream">
@@ -280,8 +293,7 @@ export default function Questions() {
                 </div>
                 <div className=" col-span-1 m-0 border-2 rounded-r-lg border-l-0 ">
                   <select
-                    id="country"
-                    {...register("type")}
+                    {...register("type") }
                     className="  leading-10   w-full rounded-md border-none bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   >
                     <option>BE</option>
