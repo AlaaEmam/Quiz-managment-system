@@ -148,6 +148,8 @@ export default function Questions() {
        
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div className="bg-white rounded-lg shadow-lg pt-0 max-w-screen-md w-full">
+          
+          
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-12 border-b-2 ">
               <h2 className="text-lg font-bold col-span-8    py-2  px-3 leading-10">
@@ -326,16 +328,22 @@ export default function Questions() {
 
   return (
     <>
+      <div className="flex items-center space-x-2 mb-5">
+          <h3 className="font-light text-gray-500">
+            <Link to="/dashboard">  Dashboard </Link>
+             /            
+             <Link to="/quiz">  Quizzes </Link>
+             /        
+            <Link
+              to="#" // Adjust this route as needed
+              className="font-normal text-gray-900 underline"
+            >
+              Question Bank
+            </Link>
+          </h3>
+      </div>
+
       <div className="border-2 p-4 rounded-lg">
-        <DeleteConfirmation
-          deleteFun={deleteQu}
-          closeModal={closeDeleteModal}
-          showModal={isdeleteModalOpen}
-          title={"questions"}
-        />
-
-        <Modal isOpen={isModalOpen} closeModal={closeModal} />
-
         <div className="flex items-center justify-between">
           <h3 className="leading-10 font-bold text-xl ">Bank Of Questions</h3>
           <button
@@ -392,6 +400,16 @@ export default function Questions() {
           </tbody>
         </table>
       </div>
+
+
+      <DeleteConfirmation
+          deleteFun={deleteQu}
+          closeModal={closeDeleteModal}
+          showModal={isdeleteModalOpen}
+          title={"questions"}
+        />
+
+        <Modal isOpen={isModalOpen} closeModal={closeModal} />
     </>
   );
 }
