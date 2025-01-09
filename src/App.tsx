@@ -15,7 +15,7 @@ import ResetPassword from './modules/Auth/Reset password/components/ResetPasswor
 import AuthLayout from './modules/Shared/AuthLayout/components/AuthLayouts';
 import MasterAdminLayout from './modules/Shared/MasterAdminLayout/components/MasterAdminLayout';
 import NotFound from './modules/Shared/NotFound/components/NotFound';
-import Results from './modules/Learner/Results/components/Results';
+import Results from './modules/Admin/Results/components/Results';
 // import ProtectedRoute from './modules/Shared/ProtectedRoute/components/ProtectedRoute';
 
 
@@ -43,11 +43,11 @@ function App() {
         { index: true, element: <Dashboard /> },
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'group', element: <Group /> },
-        { path: 'result', element: <Results /> },
+        { path: 'results', element: <Results /> },
         { path: 'quiz', element: <Quizes /> },
         { path: 'quiz-details', element: <QuizesDetails /> },
         { path: 'students', element: <Students /> },
-        { path: 'questions', element: <Questions /> },
+        { path: 'quiz/questions', element: <Questions /> },
       ],
     },
   ]);

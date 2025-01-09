@@ -4,7 +4,7 @@ export const baseURL = 'https://upskilling-egypt.com:3005/api';
 
 export const axiosInstance = axios.create({
   baseURL,
-  // headers: { Authorization: localStorage.getItem('token') },
+   headers: { Authorization: localStorage.getItem('token') },
 });
 
 export const AuthAxiosInstance = axios.create({
@@ -48,10 +48,28 @@ export const Student = {
   AddToGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
   updateStudentGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
 };
+
+
+
 export const Quiz = {
   Create_Quiz: `/quiz`,
+  Incomming_Quiz: `/quiz/incomming`,
   getAll: `/quiz`,
   deleteQuiz : (id:number) => `/quiz/${id}`,
+  getQuizById : (id:number) => `/quiz/${id}`,
+  editQuiz : (id:number) => `/quiz/${id}`,
+  firstFiveIncomming:`quiz/incomming`,
+  lastFiveCompleted:`quiz/completed`,
   allResults:`quiz/result`,
+
+
+};
+
+export const QuestionsUrl = {
+  gettAllQUT:"/question",
+  getSpcQUT:(id:string)=>`/question/${id}`,
+  addQuestion:'/question',
+  updateQuestion:(id:string)=>`/question/${id}`,
+  deleteQuestion:(id:string)=>`/question/${id}`,
 
 };

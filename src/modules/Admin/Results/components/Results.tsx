@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { axiosInstance, Quiz } from "../../../../Constants/URLS/URL";
+import { axiosInstance, Quiz } from '../../../../Constants/URLS/URL';
 
 const Results = () => {
     const [results, setResults] = useState([]); // حالة لتخزين البيانات من الـ API
     const [loading, setLoading] = useState(true); // حالة لتحميل البيانات
-    const [error, setError] = useState(null); // حالة لمعالجة الأخطاء
+    const [error, setError] = useState<string | null>(null); // حالة لمعالجة الأخطاء
     const [detailedResults, setDetailedResults] = useState(null); // لحفظ بيانات النتائج التفصيلية
     const [showNewTable, setShowNewTable] = useState(false); // لتبديل العرض بين الجدولين
 
@@ -15,7 +15,7 @@ const Results = () => {
                 setLoading(true);
                 const response = await axiosInstance.get(Quiz.getAll); // استدعاء API
                 setResults(response.data); // تخزين البيانات في الحالة
-            } catch (err) {
+            } catch (error) {
                 setError('Failed to load results');
             } finally {
                 setLoading(false);
