@@ -9,7 +9,7 @@ import DeleteConfirmation from "../../../Shared/DeleteConfirmation/DeleteConfirm
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { GetRequiredMessage } from "../../../../Constants/Validation/validation";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 interface quizData {
   _id: number;
   title: string;
@@ -209,6 +209,18 @@ export default function QuizesDetails() {
           </div>
         </div>
       )}
+   <div className="flex items-center space-x-2 mb-5">
+          <h3 className="font-light text-gray-500">
+          <Link to="/dashboard">  Dashboard </Link>
+          /<Link to="/quiz">  Quizzes </Link>  / 
+            <Link
+              to="#" // Adjust this route as needed
+              className="font-normal text-gray-900 underline"
+            >
+              Quizzes Details
+            </Link>
+          </h3>
+        </div>
 
       <div className="grid grid-cols-2 gap-10">
         {quizes.map((quiz) => (

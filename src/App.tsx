@@ -43,11 +43,11 @@ function App() {
         { index: true, element: <Dashboard /> },
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'group', element: <Group /> },
-        { path: 'result', element: <Results /> },
+        { path: 'results', element: <Results /> },
         { path: 'quiz', element: <Quizes /> },
         { path: 'quiz-details', element: <QuizesDetails /> },
         { path: 'students', element: <Students /> },
-        { path: 'questions', element: <Questions /> },
+        { path: 'quiz/questions', element: <Questions /> },
       ],
     },
   ]);
