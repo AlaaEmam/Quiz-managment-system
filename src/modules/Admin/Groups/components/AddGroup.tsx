@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { axiosInstance, Groups, Student } from '../../../../Constants/URLS/URL';
 import Select from "react-select";
+import { toast } from 'react-toastify';
 
 interface FormData{
   name:string;
-  students:[string];
+  students:string[];
 }
 
 // Interface for students (adjust to your API response structure)
@@ -14,24 +15,36 @@ interface StudentData {
   first_name: string;
 }
 
-interface Option {
-  value: string | number;
-  label: string;
-}
+// interface Option {
+//   value: string | number;
+//   label: string;
+// }
 
 export default function AddGroup() {
   
   
   let { register, formState:{ errors}, handleSubmit}=useForm<FormData>({mode:'onChange'});
-    
+  const [groupList, setGroupList] = useState<any[]>([]); // Define type based on your data structure
+   
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
   const [students, setStudents] = useState<StudentData[]>([]); // State for students
   
-  const [selectedStudentsOptions, setSelectedStudentsOptions] = useState<Option[]>([]); // State for selected options
+  // const [selectedStudentsOptions, setSelectedStudentsOptions] = useState<Option[]>([]); // State for selected options
   
   
+
+  const getGroups = async () => {
+    try {
+      const response = await axiosInstance.get(Groups.getAll);
+      setGroupList(response?.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   
   // Fetch students data
   const getStudents = async () => {
@@ -48,11 +61,13 @@ export default function AddGroup() {
   const onSubmitHandler:SubmitHandler<FormData>=async(data)=>{
     try{
       const response=await axiosInstance.post(Groups.createGroup, data)
-      
+      closeModal();
+      getGroups();
       console.log(response);
-      closeModal;
     }catch(error){
-      console.log(error)
+      // toast.error("Student already in group")
+      
+      console.log(error);
     }
   }
 
@@ -62,15 +77,17 @@ export default function AddGroup() {
     }, []);
 
   // Create student options for react-select
-  const studentOptions: Option[] = students.map((student) => ({
-    value: student._id, // Use the student's ID as the value
-    label: student.first_name, // Use the student's first name as the label
-  }));
+  
+  // const studentOptions: Option[] = students.map((student) => ({
+  //   value: student._id, // Use the student's ID as the value
+  //   label: student.first_name, // Use the student's first name as the label
+  // }));
 
   // Handle selection change for react-select (multiple selection)
-  function handleSelect(selectedOptions: any) {
-    setSelectedStudentsOptions(selectedOptions); // Update selected students
-  }
+ 
+  // function handleSelect(selectedOptions: any) {
+  //   setSelectedStudentsOptions(selectedOptions); // Update selected students
+  // }
 
   return (
     <>
@@ -133,8 +150,23 @@ export default function AddGroup() {
                   List Students
                 </span>
 
-
-                <Select
+                <select
+                multiple
+                  className="pl-28 rounded-lg w-full border border-black"
+                  {...register("students", {
+                    required: "fill the student list",
+                  })}
+                >
+                  <option value="" disabled selected>
+                    fill the student
+                  </option>
+                  {students.map((addStudents)=>(
+                    <option  key={addStudents._id}>
+                      {[addStudents._id]} 
+                    </option>
+                  ))}
+                  </select>
+                {/* <Select
                 className='w-3/5'
             options={studentOptions}
             placeholder="Select students"
@@ -143,7 +175,7 @@ export default function AddGroup() {
             {...register("students",{required:"please fill the student list"})}
             isMulti // Enable multi-select
             onChange={handleSelect} // Handle selection change
-          />
+          /> */}
 
                 
                 

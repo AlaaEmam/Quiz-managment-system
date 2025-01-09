@@ -2,18 +2,19 @@ import { useEffect, useState } from "react";
 import { axiosInstance, Groups, Student } from "../../../../Constants/URLS/URL";
 import AddGroup from "./AddGroup";
 import DeleteGroup from "./DeleteGroup";
-import Select from "react-select";
+import { toast } from "react-toastify";
+// import Select from "react-select";
 
 // Interface for students (adjust to your API response structure)
 interface StudentData {
   _id: string; // Assuming students have an id property
-  first_name: string;
+  first_name: string[];
 }
 
-interface Option {
-  value: string | number;
-  label: string;
-}
+// interface Option {
+//   value: string | number;
+//   label: string;
+// }
 
 export default function Group() {
   const [groupList, setGroupList] = useState<any[]>([]); // Define type based on your data structure
@@ -21,7 +22,7 @@ export default function Group() {
   const [students, setStudents] = useState<StudentData[]>([]); // State for students
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [selectedStudentsOptions, setSelectedStudentsOptions] = useState<Option[]>([]); // State for selected options
+  // const [selectedStudentsOptions, setSelectedStudentsOptions] = useState<Option[]>([]); // State for selected options
 
   // Close Delete Dialog
   const handleCloseDelete = () => setIsOpen(false);
@@ -49,7 +50,9 @@ export default function Group() {
       const response = await axiosInstance.get(Groups.getAll);
       setGroupList(response?.data);
       console.log(response.data);
+      toast.success("You have deleted this group");
     } catch (error) {
+      toast.error("delete failed");
       console.log(error);
     }
   };
@@ -73,15 +76,17 @@ export default function Group() {
   }, []);
 
   // Create student options for react-select
-  const studentOptions: Option[] = students.map((student) => ({
-    value: student._id, // Use the student's ID as the value
-    label: student.first_name, // Use the student's first name as the label
-  }));
+ 
+  // const studentOptions: Option[] = students.map((student) => ({
+  //   value: student._id, // Use the student's ID as the value
+  //   label: student.first_name, // Use the student's first name as the label
+  // }));
 
   // Handle selection change for react-select (multiple selection)
-  function handleSelect(selectedOptions: any) {
-    setSelectedStudentsOptions(selectedOptions); // Update selected students
-  }
+  
+  // function handleSelect(selectedOptions: any) {
+  //   setSelectedStudentsOptions(selectedOptions); // Update selected students
+  // }
 
   return (
     <div className="w-full">
@@ -97,15 +102,7 @@ export default function Group() {
           {/* Add Group */}
           <AddGroup />
 
-          {/* react-select for selecting students */}
-          <Select
-            options={studentOptions}
-            placeholder="Select students"
-            value={selectedStudentsOptions} // Value is the selected options
-            onChange={handleSelect} // Handle selection change
-            isSearchable={true}
-            isMulti // Enable multi-select
-          />
+          
         </div>
 
         <div className="border-2 mt-4 rounded-xl h-svh p-5">
