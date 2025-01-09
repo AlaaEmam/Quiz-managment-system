@@ -6,6 +6,7 @@ import { store } from "./redux/index.ts";
 
 import "bootstrap-icons/font/bootstrap-icons.css";
 import App from "./App.tsx";
+import '@fortawesome/fontawesome-free/css/all.min.css'
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
