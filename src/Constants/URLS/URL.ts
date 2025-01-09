@@ -58,7 +58,9 @@ export const Quiz = {
   deleteQuiz : (id:number) => `/quiz/${id}`,
   getQuizById : (id:number) => `/quiz/${id}`,
   editQuiz : (id:number) => `/quiz/${id}`,
-  allResults:`quiz/result`,
+  firstFiveIncomming:`quiz/incomming`,
+  lastFiveCompleted:`quiz/completed`,
+
 };
 
 export const QuestionsUrl = {

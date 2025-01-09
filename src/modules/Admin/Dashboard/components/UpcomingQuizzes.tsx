@@ -58,7 +58,7 @@ const UpcomingQuizzes = ({ incomingQuiz }: UpcomingQuizzesProps) => {
                 </span>
               </div>
               <div className="open-div">
-                <Link to="quiz-details" className="flex items-center">
+                <Link to="/quiz-details" className="flex items-center">
                   Open
                   <div className="bg-green rounded-lg text-white m-1">
                     <TiArrowRight />
