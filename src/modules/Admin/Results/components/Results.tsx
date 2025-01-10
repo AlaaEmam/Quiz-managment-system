@@ -1,21 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { axiosInstance, Quiz } from '../../../../Constants/URLS/URL';
+import { axiosInstance, Quiz } from "../../../../Constants/URLS/URL";
 
 const Results = () => {
-    const [results, setResults] = useState([]); // حالة لتخزين البيانات من الـ API
-    const [loading, setLoading] = useState(true); // حالة لتحميل البيانات
-    const [error, setError] = useState<string | null>(null); // حالة لمعالجة الأخطاء
-    const [detailedResults, setDetailedResults] = useState(null); // لحفظ بيانات النتائج التفصيلية
-    const [showNewTable, setShowNewTable] = useState(false); // لتبديل العرض بين الجدولين
+    const [results, setResults] = useState([]); 
+    const [lastFiveResults, setLastFiveResults] = useState([]); 
+    const [loading, setLoading] = useState(true); 
+    const [error, setError] = useState(null); 
+    const [showNewTable, setShowNewTable] = useState(false); 
 
-    // جلب البيانات من الـ API عند تحميل المكون
     useEffect(() => {
         const fetchResults = async () => {
             try {
                 setLoading(true);
-                const response = await axiosInstance.get(Quiz.getAll); // استدعاء API
-                setResults(response.data); // تخزين البيانات في الحالة
-            } catch (error) {
+
+                // Fetch lastFiveResults data 
+                const lastFiveResponse = await axiosInstance.get(Quiz.lastFiveCompleted);
+                const lastFiveData = lastFiveResponse.data[0];
+                const lastFiveArray = Array.isArray(lastFiveData) ? lastFiveData : [lastFiveData];
+                setLastFiveResults(lastFiveArray);
+
+                // Fetch allResults data
+                const allResultsResponse = await axiosInstance.get(Quiz.allResults);
+                
+                // Ensure that results is an array
+                const quizData = allResultsResponse.data[0].quiz;
+                const resultsArray = Array.isArray(quizData) ? quizData : [quizData];
+                
+                setResults(resultsArray);
+
+            } catch (err) {
                 setError('Failed to load results');
             } finally {
                 setLoading(false);
@@ -24,20 +37,6 @@ const Results = () => {
 
         fetchResults();
     }, []);
-
-    // جلب البيانات التفصيلية عند الضغط على "View"
-    const fetchDetailedResults = async () => {
-        try {
-            setLoading(true);
-            const response = await axiosInstance.get(Quiz.allResults); // استدعاء API لنتائج التفصيلية
-            setDetailedResults(response.data[0].quiz); // تخزين البيانات التفصيلية
-            console.log(response.data[0].quiz); // طباعة البيانات في الكونسول
-        } catch (err) {
-            setError('Failed to load detailed results');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
@@ -51,19 +50,19 @@ const Results = () => {
                         <thead className="bg-gray-800 text-white">
                             <tr>
                                 <th className="py-3 px-4 text-left font-medium">Title</th>
-                                <th className="py-3 px-4 text-left font-medium">Score per Question</th>
-                                <th className="py-3 px-4 text-left font-medium">Number of Questions</th>
-                                <th className="py-3 px-4 text-left font-medium">Last Updated</th>
+                                <th className="py-3 px-4 text-left font-medium">Group Name</th>
+                                <th className="py-3 px-4 text-left font-medium">No. of Questions</th>
+                                <th className="py-3 px-4 text-left font-medium">Instructor</th>
                                 <th className="py-3 px-4 text-left font-medium">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {detailedResults && (
-                                <tr className="border-t bg-gray-50">
-                                    <td className="py-3 px-4">{detailedResults.title}</td>
-                                    <td className="py-3 px-4">{detailedResults.score_per_question}</td>
-                                    <td className="py-3 px-4">{detailedResults.questions_number}</td>
-                                    <td className="py-3 px-4">{new Date(detailedResults.updatedAt).toLocaleTimeString()}</td> {/* يعرض الوقت فقط */}
+                            {lastFiveResults.map((result, index) => (
+                                <tr key={index} className={`border-t ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
+                                    <td className="py-3 px-4">{result.title}</td>
+                                    <td className="py-3 px-4">{result.group}</td>
+                                    <td className="py-3 px-4">{result.questions_number}</td>
+                                    <td className="py-3 px-4">{result.instructor}</td>
                                     <td className="py-3 px-4">
                                         <button
                                             className="w-[75px] h-[25px] bg-[#C5D86D] rounded-tl-[10px]"
@@ -73,10 +72,9 @@ const Results = () => {
                                         </button>
                                     </td>
                                 </tr>
-                            )}
+                            ))}
                         </tbody>
-                    </table>
-                </>
+                    </table> </>
             ) : (
                 <>
                     <h1 className="text-2xl font-bold text-gray-800 mb-6">Completed Quizzes</h1>
@@ -85,11 +83,10 @@ const Results = () => {
                             <thead className="bg-gray-800 text-white">
                                 <tr>
                                     <th className="py-3 px-4 text-left font-medium">Title</th>
-                                    <th className="py-3 px-4 text-left font-medium">Group Name</th>
-                                    <th className="py-3 px-4 text-left font-medium">No. of persons in group</th>
+                                    <th className="py-3 px-4 text-left font-medium">Group</th>
                                     <th className="py-3 px-4 text-left font-medium">Participants</th>
-                                    <th className="py-3 px-4 text-left font-medium">Date</th> {/* يعرض التاريخ فقط */}
-                                    <th className="py-3 px-4 text-left font-medium">Action</th>
+                                    <th className="py-3 px-4 text-left font-medium">Date</th>
+                                    <th className="py-3 px-4 text-left font-medium">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -97,16 +94,12 @@ const Results = () => {
                                     <tr key={index} className={`border-t ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
                                         <td className="py-3 px-4">{result.title}</td>
                                         <td className="py-3 px-4">{result.group}</td>
-                                        <td className="py-3 px-4">{result.questions_number} persons</td>
-                                        <td className="py-3 px-4">{result.participants.length} participants</td>
-                                        <td className="py-3 px-4">{new Date(result.createdAt).toLocaleDateString()}</td> {/* يعرض التاريخ فقط */}
+                                        <td className="py-3 px-4">{result.participants}</td>
+                                        <td className="py-3 px-4">{new Date(result.closed_at).toLocaleDateString()}</td>
                                         <td className="py-3 px-4">
                                             <button
                                                 className="w-[75px] h-[25px] bg-[#C5D86D] rounded-tl-[10px]"
-                                                onClick={() => {
-                                                    setShowNewTable(true);
-                                                    fetchDetailedResults(); // جلب التفاصيل
-                                                }}
+                                                onClick={() => setShowNewTable(true)}
                                             >
                                                 View
                                             </button>
