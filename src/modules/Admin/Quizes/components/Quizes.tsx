@@ -1,30 +1,149 @@
-import { BsBank2 } from 'react-icons/bs';
-import { FaLongArrowAltRight } from 'react-icons/fa';
-import { IoIosAlarm } from 'react-icons/io';
-import { TiArrowRight } from 'react-icons/ti';
-import upcoming1 from '../../../../assets/images/upcoming-quiz1.png';
+import { format } from "date-fns";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { BsBank2 } from "react-icons/bs";
+import { FaCheck, FaCheckCircle, FaLongArrowAltRight } from "react-icons/fa";
+import { IoIosAlarm, IoIosCopy } from "react-icons/io";
+import { TiArrowRight } from "react-icons/ti";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import upcoming1 from "../../../../assets/images/upcoming-quiz1.png";
+ import { axiosInstance, Groups, Quiz } from "../../../../Constants/URLS/URL";
+import { GetRequiredMessage } from "../../../../Constants/Validation/validation";
+import { useNavigate } from "react-router-dom";
+import UpcomingQuizzes from "../../Dashboard/components/UpcomingQuizzes";
+import CompletedQuizzes from "./CompleteQuiz";
+import QuizCreationModal from "./QuizCreationModal";
+import SuccessModal from "./SuccessModal";
 // import upcoming2 from "../../../../assets/images/upcoming-quiz2.png"
 
+interface QuizData {
+  title: string;
+  description: string;
+  group: string;
+  questions_number: number;
+  difficulty: "easy" | "medium" | "hard";
+  type: "FE" | "BE" | "DO";
+  schadule: string;
+  duration: number;
+  score_per_question: number;
+}
+
 export default function Quizes() {
+  const navigate = useNavigate();
+  const [groups, setGroups] = useState([]);
+  const [firstFiveIncoming, setFirstFiveIncoming] = useState([]);
+  const [completedQuizzes, setCompletedQuizzes] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  const [code, setCode] = useState(0);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<QuizData>();
+
+
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(code.toString())
+      .then(() => {
+        toast.success("code copied to clipboard")
+      })
+  };
+
+
+
+  const onSubmit = async (data: QuizData) => {
+    try {
+      const response = await axiosInstance.post(Quiz.Create_Quiz, data);
+      setCode(response.data.data.code)
+      console.log(code);
+      console.log(response);
+      toast.success("Create Successfully ");
+      setIsModalOpen(false);
+      setIsSecondModalOpen(true);
+      reset()
+    } catch (error) {
+      console.log(error);
+      toast.error(`Request failed`);
+    }
+  };
+
+  const getAllGroups = async () => {
+    try {
+      const response = await axiosInstance.get(Groups.getAll);
+      console.log(response.data);
+      setGroups(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getFirstFiveIncoming = async () => {
+    try {
+      const response = await axiosInstance.get(Quiz.firstFiveIncomming);
+      console.log(response);
+      setFirstFiveIncoming(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getCompletedQuizzes = async () => {
+    try {
+      const response = await axiosInstance.get(Quiz.lastFiveCompleted);
+      console.log("getCompletedQuizzes: " ,response);
+      setCompletedQuizzes(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+
+  useEffect(() => {
+    getAllGroups();
+    getFirstFiveIncoming();
+    getCompletedQuizzes();
+  }, []);
+
   return (
     <>
-      <div className="grid grid-cols-2 gap-16">
+    <div className="flex items-center space-x-2 mb-5">
+          <h3 className="font-light text-gray-500">
+            <Link to="/dashboard">  Dashboard </Link>
+             / 
+            <Link
+              to="/quiz" // Adjust this route as needed
+              className="font-normal text-gray-900 underline"
+            >
+              Quizzes
+            </Link>
+          </h3>
+    </div>
+
+        <div className="grid grid-cols-2 gap-16">
         <div>
           <div className="grid grid-cols-2 gap-5">
-            <div className="border-2 rounded-lg py-5 ">
-              <div className="flex flex-col justify-center  items-center gap-y-2">
+            <button
+              className="border-2 rounded-lg py-5 hover:bg-slate-900 hover:text-light_cream"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <div className="flex flex-col justify-center items-center gap-y-2">
                 <div>
                   <IoIosAlarm className="text-6xl" />
                 </div>
                 <div>
-                  <span className="font-semibold text-lg">
-                    Set up a new quiz
-                  </span>
+                  <span className="font-semibold text-lg">Set up a new quiz</span>
                 </div>
               </div>
-            </div>
-            <div className="border-2 rounded-lg py-5 ">
-              <div className="flex flex-col justify-center  items-center gap-y-2">
+            </button>
+            <Link
+              to="questions"
+              className="border-2 rounded-lg py-5 hover:bg-slate-900 hover:text-light_cream"
+            >
+              <div className="flex flex-col justify-center items-center gap-y-2">
                 <div>
                   <BsBank2 className="text-6xl" />
                 </div>
@@ -32,142 +151,36 @@ export default function Quizes() {
                   <span className="font-semibold text-lg">Question Bank</span>
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
+
+          <CompletedQuizzes quizzes={completedQuizzes}/>
         </div>
 
         <div>
-          <div className="border-2 rounded-lg py-4 ps-4">
-            <h3 className=" font-semibold text-xl tracking-wide mb-5">
-              Upcoming quizzes
-            </h3>
-            <div className="flex items-center justify-start gap-x-4 border-2 rounded-lg mb-5">
-              <div className="bg-light_cream p-2 rounded-lg">
-                <img src={upcoming1} alt="upcoming1" />
-              </div>
-              <div>
-                <span className="block font-bold text-lg ">
-                  Introduction to computer programming
-                </span>
-                <span className="block">
-                  12 / 03 / 2023{' '}
-                  <span>
-                    <span className="mx-3">|</span>09:00 AM
-                  </span>
-                </span>
-                <div className="flex mt-3 justify-between">
-                  <div>
-                    <span className="block font-semibold ">
-                      No. of students enrolled: 32
-                    </span>
-                  </div>
-                  <div>
-                    <button className="flex items-center">
-                      open
-                      <div className="bg-green  rounded-lg text-white">
-                        <TiArrowRight />
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center justify-start gap-x-4 border-2 rounded-lg">
-              <div className="bg-light_cream p-2 rounded-lg">
-                <img src={upcoming1} alt="upcoming1" />
-              </div>
-              <div>
-                <span className="block font-bold text-lg ">
-                  Introduction to computer programming
-                </span>
-                <span className="block">
-                  12 / 03 / 2023{' '}
-                  <span>
-                    <span className="mx-3">|</span>09:00 AM
-                  </span>
-                </span>
-                <div className="flex mt-3 justify-between">
-                  <div>
-                    <span className="block font-semibold ">
-                      No. of students enrolled: 32
-                    </span>
-                  </div>
-                  <div>
-                    <button className="flex items-center">
-                      open
-                      <div className="bg-green  rounded-lg text-white">
-                        <TiArrowRight />
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <UpcomingQuizzes incomingQuiz={firstFiveIncoming} /> 
 
-          <div className="border-2 rounded-lg p-4 mt-8">
-            <div className="flex items-center justify-between">
-              <h3 className=" font-semibold text-xl tracking-wide">
-                Completed Quizzes
-              </h3>
-              <div>
-                <button className="flex items-center gap-2 texe-sm">
-                  Result <FaLongArrowAltRight className="text-green" />
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <div className="overflow-x-auto mt-3">
-                <table className="table-auto border-collapse border  w-full">
-                  <thead>
-                    <tr className="bg-black text-white">
-                      <th className="border  capitalize">Title</th>
-                      <th className="border ">Group name</th>
-                      <th className="border ">No. of persons in group</th>
-                      {/* <th className="border ">Date</th> */}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="border border-gray-300 px-4 py-2">
-                        Row 1, Col 1
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        Row 1, Col 2
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        Row 1, Col 3
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="border border-gray-300 px-4 py-2">
-                        Row 2, Col 1
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        Row 2, Col 2
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        Row 2, Col 3
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="border border-gray-300 px-4 py-2">
-                        Row 3, Col 1
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        Row 3, Col 2
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        Row 3, Col 3
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
         </div>
+      </div>
+
+      <div>
+      <QuizCreationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={onSubmit}
+        errors={errors}
+        register={register}
+        handleSubmit={handleSubmit}
+        reset={reset}
+        groups={groups}
+      />
+      <SuccessModal
+          isOpen={isSecondModalOpen}
+          onClose={() => setIsSecondModalOpen(false)}
+          code={code}
+          onCopyCode={handleCopyCode}
+        />
+
       </div>
     </>
   );
