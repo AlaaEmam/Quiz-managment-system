@@ -10,9 +10,9 @@ interface FormData{
 }
 
 interface AddGroupProps {
-  handleCloseAddGroup: () => void; 
-  AddGroup: () => any; 
-  isOpenAddGroup:boolean;
+  handleCloseEditGroup: () => void; 
+  editGroup: () => any; 
+  isOpenEditGroup:boolean;
 }
 
 // Interface for students (adjust to your API response structure)
@@ -26,7 +26,7 @@ interface StudentData {
 //   label: string;
 // }
 
-const EditGroup:React.FC<AddGroupProps>=({handleCloseAddGroup, AddGroup, isOpenAddGroup})=> {
+const EditGroup:React.FC<AddGroupProps>=({handleCloseEditGroup, editGroup, isOpenEditGroup})=> {
   
   
   let { register, formState:{ errors}, handleSubmit}=useForm<FormData>({mode:'onChange'});
@@ -51,23 +51,23 @@ const EditGroup:React.FC<AddGroupProps>=({handleCloseAddGroup, AddGroup, isOpenA
   };
 
 
-  const onSubmitHandler:SubmitHandler<FormData>=async(data)=>{
-    try{
-      const response=await axiosInstance.post(Groups.createGroup, data)
+  // const onSubmitHandler:SubmitHandler<FormData>=async(data)=>{
+  //   try{
+  //     const response=await axiosInstance.post(Groups.createGroup, data)
       
-      console.log(response);
-      handleCloseAddGroup();
-    }catch(error){
-      toast.error("Student already in group")
+  //     console.log(response);
+  //     handleCloseEditGroup();
+  //   }catch(error){
+  //     toast.error("Student already in group")
       
-      console.log(error);
-    }
-  }
+  //     console.log(error);
+  //   }
+  // }
 
    // Fetch groups and students on component mount
     useEffect(() => {
-      
       getStudents();
+      
     }, []);
 
   // Create student options for react-select
@@ -88,22 +88,22 @@ const EditGroup:React.FC<AddGroupProps>=({handleCloseAddGroup, AddGroup, isOpenA
       <div>
        
         
-        {isOpenAddGroup && (
+        {isOpenEditGroup && (
           <div
-            onClick={handleCloseAddGroup}
+            onClick={handleCloseEditGroup}
             className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 transition-opacity duration-300 ${
-              isOpenAddGroup ? 'opacity-100' : 'opacity-0'
+              isOpenEditGroup ? 'opacity-100' : 'opacity-0'
             }`}
           >
             <form
               className={`bg-white rounded-lg shadow-lg w-2/4 transition-transform transform duration-300 ${
-                isOpenAddGroup ? 'scale-100' : 'scale-95'
+                isOpenEditGroup ? 'scale-100' : 'scale-95'
               }`}
               onClick={(e) => e.stopPropagation()} // Prevent close when clicking inside modal
-              onSubmit={handleSubmit(AddGroup)}
+              onSubmit={handleSubmit(editGroup)}
             >
               <div className="flex justify-between border-b-2 p-2">
-                <h2 className="text-xl font-semibold"> Set up a new Group</h2>
+                <h2 className="text-xl font-semibold"> Edit this group</h2>
                 <div className="text-2xl">
                   <button
                     className="border-l-2 px-2"
@@ -112,7 +112,7 @@ const EditGroup:React.FC<AddGroupProps>=({handleCloseAddGroup, AddGroup, isOpenA
                   </button>
                   <button
                     className="border-l-2 px-2"
-                    onClick={handleCloseAddGroup}
+                    onClick={handleCloseEditGroup}
                   >
                     <i className="bi bi-x-lg"></i>
                   </button>

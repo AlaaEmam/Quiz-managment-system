@@ -25,7 +25,7 @@ interface StudentData {
 //   label: string;
 // }
 
-const AddGroup:React.FC<AddGroupProps>=({handleCloseAddGroup, AddGroup, isOpenAddGroup})=> {
+const AddGroup:React.FC<AddGroupProps>=({handleCloseAddGroup, AddNewGroup, isOpenAddGroup})=> {
   
   
   let { register, formState:{ errors}, handleSubmit}=useForm<FormData>({mode:'onChange'});
@@ -50,18 +50,6 @@ const AddGroup:React.FC<AddGroupProps>=({handleCloseAddGroup, AddGroup, isOpenAd
   };
 
 
-  // const onSubmitHandler:SubmitHandler<FormData>=async(data)=>{
-  //   try{
-  //     const response=await axiosInstance.post(Groups.createGroup, data)
-      
-  //     console.log(response);
-  //     handleCloseAddGroup();
-  //   }catch(error){
-  //     toast.error("Student already in group")
-      
-  //     console.log(error);
-  //   }
-  // }
 
    // Fetch groups and students on component mount
     useEffect(() => {
@@ -99,7 +87,7 @@ const AddGroup:React.FC<AddGroupProps>=({handleCloseAddGroup, AddGroup, isOpenAd
                 isOpenAddGroup ? 'scale-100' : 'scale-95'
               }`}
               onClick={(e) => e.stopPropagation()} // Prevent close when clicking inside modal
-              onSubmit={handleSubmit(AddGroup)}
+              onSubmit={handleSubmit(AddNewGroup)}
             >
               <div className="flex justify-between border-b-2 p-2">
                 <h2 className="text-xl font-semibold"> Set up a new Group</h2>

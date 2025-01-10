@@ -4,6 +4,7 @@ import AddGroup from "./AddGroup";
 import DeleteGroup from "./DeleteGroup";
 import { toast } from "react-toastify";
 import { SubmitHandler } from "react-hook-form";
+import EditGroup from "./EditGroup";
 // import Select from "react-select";
 
 // Interface for students (adjust to your API response structure)
@@ -24,27 +25,38 @@ interface FormData{
 export default function Group() {
   const [groupList, setGroupList] = useState<any[]>([]); // Define type based on your data structure
   const [isOpenDelete, setIsOpenDelete] = useState(false);
+  const [isOpenEdit, setIsOpenEdit]=useState(false);
   const [isOpenAddGroup, setIsOpenAddGroup] = useState(false);
-  const [students, setStudents] = useState<StudentData[]>([]); // State for students
+  // const [students, setStudents] = useState<StudentData[]>([]); // State for students
 
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   // const [selectedStudentsOptions, setSelectedStudentsOptions] = useState<Option[]>([]); // State for selected options
 
-  // Close Delete Dialog
+  // Close Delete Group
   const handleCloseDelete = () => setIsOpenDelete(false);
   
 
-  // close Add Group Dialog
+  // close Add Group 
   const handleCloseAddGroup=()=> setIsOpenAddGroup(false);
 
-  // Show Delete Dialog
-  const handleShowDelete = (id: number) => {
+  // close Edit Group 
+  const handleCloseEditGroup=()=>setIsOpenEdit(false);
+
+  // Show Delete Group
+  const handleShowDelete = (id: string) => {
     setSelectedId(id);
     setIsOpenDelete(true);
   };
 
+  // handle Show Add Group
   const handleShowAddGroup=()=>{
     setIsOpenAddGroup(true);
+  }
+
+  // handle show Edit Group
+  const handleShowEditGroup=(id:string)=>{
+    setSelectedId(id);
+    setIsOpenEdit(true);
   }
 
   // Fetch students data
@@ -70,18 +82,34 @@ export default function Group() {
     }
   };
 
-  const onSubmitHandler:SubmitHandler<FormData>=async(data:any)=>{
-      try{
-        const response=await axiosInstance.post(Groups.createGroup, data)
-        getGroups()
-        console.log(response);
-        handleCloseAddGroup();
-      }catch(error){
-        toast.error("Student already in group")
-        
-        console.log(error);
-      }
+  const addNewGroup:SubmitHandler<FormData>=async(data:any)=>{
+    try{
+      const response=await axiosInstance.post(Groups.createGroup, data)
+      getGroups()
+      console.log(response);
+      toast.success("New Group Added")
+      handleCloseAddGroup();
+    }catch(error){
+      toast.error("Student already in group")
+      
+      console.log(error);
     }
+  }
+
+  const editGroup:SubmitHandler<FormData>=async(data:any)=>{
+    try{
+      const response=await axiosInstance.put(Groups.updateGroup(selectedId),data);
+
+      console.log(response);
+      toast.success("Edited Group");
+      getGroups();
+      handleCloseEditGroup();
+    }catch(error){
+      toast.error("Edit Failed")
+      console.log(error)
+    }
+  }
+  
 
   // Delete group
   const deleteGroup = async () => {
@@ -125,7 +153,9 @@ export default function Group() {
         handleCloseDelete={handleCloseDelete}
         deleteFunction={deleteGroup}
       />
-
+      <EditGroup handleCloseEditGroup={handleCloseEditGroup} 
+      editGroup={editGroup} isOpenEditGroup={isOpenEdit} />
+      
       <div className="mt-2 p-10">
         <div className="flex justify-end">
           {/* Add Group */}
@@ -138,7 +168,7 @@ export default function Group() {
           Add Group
         </button>
           <AddGroup handleCloseAddGroup={handleCloseAddGroup}
-          AddGroup={onSubmitHandler}
+          AddNewGroup={addNewGroup}
           isOpenAddGroup={isOpenAddGroup}/>
 
           
@@ -157,7 +187,7 @@ export default function Group() {
                   <p className="text-md">No. of Students: {group?.students.length}</p>
                 </div>
                 <div>
-                  <i className="bi bi-pencil-square text-3xl"></i>
+                  <i onClick={()=> handleShowEditGroup(group?._id)} className="bi bi-pencil-square text-3xl"></i>
                   <i
                     onClick={() => handleShowDelete(group?._id)}
                     className="bi bi-trash text-3xl"
