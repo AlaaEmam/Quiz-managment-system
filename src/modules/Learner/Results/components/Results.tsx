@@ -13,8 +13,8 @@ const Results = () => {
         const fetchResults = async () => {
             try {
                 setLoading(true);
-                const response = await axiosInstance.get(Quiz.getAll); // استدعاء API
-                setResults(response.data); // تخزين البيانات في الحالة
+                const response = await axiosInstance.get(Quiz.lastFiveCompleted); // استدعاء الـ API الجديد
+                setResults(response.data.questions); // تخزين البيانات من الـ "questions" في الحالة
             } catch (err) {
                 setError('Failed to load results');
             } finally {
@@ -31,7 +31,6 @@ const Results = () => {
             setLoading(true);
             const response = await axiosInstance.get(Quiz.allResults); // استدعاء API لنتائج التفصيلية
             setDetailedResults(response.data[0].quiz); // تخزين البيانات التفصيلية
-            console.log(response.data[0].quiz); // طباعة البيانات في الكونسول
         } catch (err) {
             setError('Failed to load detailed results');
         } finally {
@@ -63,7 +62,7 @@ const Results = () => {
                                     <td className="py-3 px-4">{detailedResults.title}</td>
                                     <td className="py-3 px-4">{detailedResults.score_per_question}</td>
                                     <td className="py-3 px-4">{detailedResults.questions_number}</td>
-                                    <td className="py-3 px-4">{new Date(detailedResults.updatedAt).toLocaleTimeString()}</td> {/* يعرض الوقت فقط */}
+                                    <td className="py-3 px-4">{new Date(detailedResults.updatedAt).toLocaleTimeString()}</td>
                                     <td className="py-3 px-4">
                                         <button
                                             className="w-[75px] h-[25px] bg-[#C5D86D] rounded-tl-[10px]"
@@ -88,7 +87,7 @@ const Results = () => {
                                     <th className="py-3 px-4 text-left font-medium">Group Name</th>
                                     <th className="py-3 px-4 text-left font-medium">No. of persons in group</th>
                                     <th className="py-3 px-4 text-left font-medium">Participants</th>
-                                    <th className="py-3 px-4 text-left font-medium">Date</th> {/* يعرض التاريخ فقط */}
+                                    <th className="py-3 px-4 text-left font-medium">Date</th>
                                     <th className="py-3 px-4 text-left font-medium">Action</th>
                                 </tr>
                             </thead>
@@ -98,14 +97,14 @@ const Results = () => {
                                         <td className="py-3 px-4">{result.title}</td>
                                         <td className="py-3 px-4">{result.group}</td>
                                         <td className="py-3 px-4">{result.questions_number} persons</td>
-                                        <td className="py-3 px-4">{result.participants.length} participants</td>
-                                        <td className="py-3 px-4">{new Date(result.createdAt).toLocaleDateString()}</td> {/* يعرض التاريخ فقط */}
+                                        <td className="py-3 px-4">{result.participants?.length || 0} participants</td>
+                                        <td className="py-3 px-4">{new Date(result.createdAt).toLocaleDateString()}</td>
                                         <td className="py-3 px-4">
                                             <button
                                                 className="w-[75px] h-[25px] bg-[#C5D86D] rounded-tl-[10px]"
                                                 onClick={() => {
                                                     setShowNewTable(true);
-                                                    fetchDetailedResults(); // جلب التفاصيل
+                                                    fetchDetailedResults();
                                                 }}
                                             >
                                                 View
