@@ -12,17 +12,14 @@ const Results = () => {
         const fetchResults = async () => {
             try {
                 setLoading(true);
-
-                // Fetch lastFiveResults data 
+                    // completed
                 const lastFiveResponse = await axiosInstance.get(Quiz.lastFiveCompleted);
                 const lastFiveData = lastFiveResponse.data[0];
                 const lastFiveArray = Array.isArray(lastFiveData) ? lastFiveData : [lastFiveData];
                 setLastFiveResults(lastFiveArray);
-
-                // Fetch allResults data
+                //allresults
                 const allResultsResponse = await axiosInstance.get(Quiz.allResults);
                 
-                // Ensure that results is an array
                 const quizData = allResultsResponse.data[0].quiz;
                 const resultsArray = Array.isArray(quizData) ? quizData : [quizData];
                 
