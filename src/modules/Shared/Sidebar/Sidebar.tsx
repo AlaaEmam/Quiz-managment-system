@@ -4,6 +4,7 @@ import { FiHome } from "react-icons/fi";
 import { FaUsers, FaQuestionCircle, FaClipboardList } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { GoLog } from "react-icons/go";
+import { GoPeople } from "react-icons/go";
 
 interface SidebarProps {
   isSidebarOpen: boolean;
@@ -97,6 +98,26 @@ const SideBar: React.FC<SidebarProps> = ({ isSidebarOpen }) => {
                 }`}
               />
               <span className="ms-3">Results</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="students"
+              className={`flex items-center p-6 text-gray-900 rounded-lg dark:text-white group transition-all duration-75 ${
+                location.pathname === "/results"
+                  ? "text-light_cream bg-slate-900 dark:bg-gray-600 shadow-md"
+                  : "hover:bg-gray-100 dark:hover:bg-gray-700"
+              }`}
+            >
+              <GoPeople
+
+                className={`text-2xl transition duration-75 ${
+                  location.pathname === "/results"
+                    ? "text-light_cream dark:text-light_cream"
+                    : "text-gray-500 dark:text-gray-400"
+                }`}
+              />
+              <span className="ms-3">Students</span>
             </Link>
           </li>
           <li>

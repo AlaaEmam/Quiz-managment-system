@@ -16,6 +16,7 @@ import AuthLayout from './modules/Shared/AuthLayout/components/AuthLayouts';
 import MasterAdminLayout from './modules/Shared/MasterAdminLayout/components/MasterAdminLayout';
 import NotFound from './modules/Shared/NotFound/components/NotFound';
 import Results from './modules/Admin/Results/components/Results';
+import ResultSingleQuiz from './modules/Admin/Results/components/ResultSingleQuiz';
 // import ProtectedRoute from './modules/Shared/ProtectedRoute/components/ProtectedRoute';
 
 
@@ -36,7 +37,7 @@ function App() {
       ],
     },
     {
-      path: '',
+      path: 'dashboard',
       element: <MasterAdminLayout />,
       errorElement: <NotFound />,
       children: [
@@ -44,6 +45,7 @@ function App() {
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'group', element: <Group /> },
         { path: 'results', element: <Results /> },
+        { path: 'results/:quizId', element: <ResultSingleQuiz /> },
         { path: 'quiz', element: <Quizes /> },
         { path: 'quiz-details', element: <QuizesDetails /> },
         { path: 'students', element: <Students /> },

@@ -1,177 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { axiosInstance, Quiz, Student } from "../../../../Constants/URLS/URL";
+import { Link, Router } from 'react-router-dom';
+import { axiosInstance, Quiz } from '../../../../Constants/URLS/URL';
+import AllDetailsCompleteQuizzes from './AllDetailsCompleteQuizzes';
+import ResultSingleQuiz from './ResultSingleQuiz';
 
-// Interface للـ lastFiveCompleted
-interface Question {
-    [key: string]: any;
-}
 
-interface LastFiveResult {
-    _id: string;
-    code: string;
-    title: string;
-    description: string;
-    difficulty: string;
-    duration: number;
-    group: string;
-    instructor: string;
-    questions: Question[];
-    participants: number;
-    questions_number: number;
-    schadule: string; // Date string
-    score_per_question: number;
-    status: string;
-    type: string;
-    closed_at: string; // Date string
-    createdAt: string; // Date string
-    updatedAt: string; // Date string
-    __v: number;
-}
-
-// Interface للـ allResults
-interface AllResults {
-    _id: string;
-    code: string;
-    title: string;
-    description: string;
-    difficulty: string;
-    duration: number;
-    group: string;
-    instructor: string;
-    questions_number: number;
-    schadule: string; // Date string
-    score_per_question: number;
-    status: string;
-    type: string;
-    closed_at: string; // Date string
-    createdAt: string; // Date string
-    updatedAt: string; // Date string
-    __v: number;
-    participants: string; // أضف هذه الخاصية
-}
 
 const Results = () => {
-    const [results, setResults] = useState<AllResults[]>([]);
-    const [lastFiveResults, setLastFiveResults] = useState<LastFiveResult[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [showNewTable, setShowNewTable] = useState(false);
-    useEffect(() => {
-        const fetchResults = async () => {
-            try {
-                setLoading(true);
+    const [completedQuizzes, setCompletedQuizzes] = useState([]);
 
-                // Fetch the last five completed quizzes
-                const lastFiveResponse = await axiosInstance.get(Quiz.lastFiveCompleted);
-                const lastFiveData = lastFiveResponse.data[0];
+    const getCompletedQuizzes = async () => {
+        try {
+          const response = await axiosInstance.get(Quiz.lastFiveCompleted);
+          console.log("getCompletedQuizzes: " ,response);
+          setCompletedQuizzes(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      useEffect(() => {
+        getCompletedQuizzes();
+      }, []);
+    
+    // if (loading) return <div>Loading...</div>;
+    // if (error) return <div>{error}</div>;
 
-                console.log("lastFiveData:", lastFiveData);
-
-                const lastFiveArray = Array.isArray(lastFiveData) ? lastFiveData : [lastFiveData];
-                setLastFiveResults(lastFiveArray);
-
-                // Fetch all results
-                const allResultsResponse = await axiosInstance.get(Quiz.allResults);
-                const allResultsData = allResultsResponse.data[0].quiz;
-                const resultsArray = Array.isArray(allResultsData) ? allResultsData : [allResultsData];
-                console.log("allResultsData:", allResultsData);
-                setResults(resultsArray);
-
-            } catch (err) {
-                setError('Failed to load results');
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchResults();
-    }, []);
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
-
+    
     return (
-        <div className="p-6 bg-gray-50 min-h-screen">
-            {showNewTable ? (
-                <>
-                    <h2 className="text-lg font-semibold mb-4">Results</h2>
-                    <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md" style={{ width: '50%' }}>
-                        <thead className="bg-gray-800 text-white">
-                            <tr>
-                                {/* second  */}
-                                <th className="py-3 px-4 text-left font-medium">studnet</th>
-                                <th className="py-3 px-4 text-left font-medium"> score</th>
-                                <th className="py-3 px-4 text-left font-medium">Average</th>
-                                <th className="py-3 px-4 text-left font-medium">Time submitted</th>
-                                <th className="py-3 px-4 text-left font-medium">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {lastFiveResults.map((result, index) => (
-                                <tr key={index} className={`border-t ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
-                                    <td className="py-3 px-4">{result.title}</td>
-                                    <td className="py-3 px-4">{result.score_per_question}</td>
-                                    <td className="py-3 px-4">{result.questions_number}</td>
-                                    <td className="py-3 px-4">
-                                        {new Date(result.closed_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
-                                    </td>
-
-                                    <td className="py-3 px-4">
-                                        <button
-                                            className="w-[75px] h-[25px] bg-[#C5D86D] rounded-tl-[10px]"
-                                            onClick={() => setShowNewTable(false)}
-                                        >
-                                            Back
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </>
-            ) : (
-                <>
-                    <h1 className="text-2xl font-bold text-gray-800 mb-6">Completed Quizzes</h1>
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md" style={{ borderRadius: '10px' }}>
-                            <thead className="bg-gray-800 text-white">
-                                <tr>
-                                    {/* first */}
-                                    <th className="py-3 px-4 text-left font-medium">Title</th>
-                                    <th className="py-3 px-4 text-left font-medium">Group</th>
-                                    <th className="py-3 px-4 text-left font-medium">No. of Persons in Group</th>
-                                    <th className="py-3 px-4 text-left font-medium">Participants</th>
-                                    <th className="py-3 px-4 text-left font-medium">Date</th>
-                                    <th className="py-3 px-4 text-left font-medium">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {results.map((result, index) => (
-                                    <tr key={index} className={`border-t ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
-                                        <td className="py-3 px-4">{result.title}</td>
-                                        <td className="py-3 px-4">{result.group}</td>
-                                        <td className="py-3 px-4">{result.questions_number}</td>
-                                        {/* <td className="py-3 px-4">{result.participants} participants</td> */}
-                                        <td className="py-3 px-4">0 participants</td>
-
-                                        <td className="py-3 px-4">{new Date(result.closed_at).toLocaleDateString()}</td>
-                                        <td className="py-3 px-4">
-                                            <button
-                                                className="w-[75px] h-[25px] bg-[#C5D86D] rounded-tl-[10px]"
-                                                onClick={() => setShowNewTable(true)}
-                                            >
-                                                View
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </>
-            )}
-        </div>
+        <>
+    <div className="flex items-center space-x-2 mb-5">
+        <h3 className="font-light text-gray-500">
+        <Link to="/dashboard">  Dashboard </Link>
+            / 
+        <Link
+            to="/results" // Adjust this route as needed
+            className="font-normal text-gray-900 underline"
+        >
+            Complete Quizzes
+        </Link>
+        </h3>
+    </div>
+  
+  <AllDetailsCompleteQuizzes  quizzes={completedQuizzes}/>
+        </>
+      
     );
 };
 
