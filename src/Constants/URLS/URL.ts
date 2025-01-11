@@ -47,6 +47,7 @@ export const Student = {
   deleteFromGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
   AddToGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
   updateStudentGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
+  gettopFiveStudents: `/student/top-five`,
 };
 
 
@@ -59,7 +60,9 @@ export const Quiz = {
   getQuizById : (id:number) => `/quiz/${id}`,
   editQuiz : (id:number) => `/quiz/${id}`,
   firstFiveIncomming:`quiz/incomming`,
-  lastFiveCompleted:`quiz/completed`,
+  lastFiveCompleted:`/quiz/completed`,
+  allResults:`quiz/result`,
+
 
 };
 
