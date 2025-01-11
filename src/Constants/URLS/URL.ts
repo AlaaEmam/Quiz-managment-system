@@ -47,6 +47,7 @@ export const Student = {
   deleteFromGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
   AddToGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
   updateStudentGroup: (id: string, id2: string) => `/student/${id}/${id2}`,
+  gettopFiveStudents: `/student/top-five`,
 };
 
 

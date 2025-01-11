@@ -1,32 +1,85 @@
 import React, { useState, useEffect } from 'react';
-import { axiosInstance, Quiz } from "../../../../Constants/URLS/URL";
+import { axiosInstance, Quiz, Student } from "../../../../Constants/URLS/URL";
+
+// Interface للـ lastFiveCompleted
+interface Question {
+    [key: string]: any;
+}
+
+interface LastFiveResult {
+    _id: string;
+    code: string;
+    title: string;
+    description: string;
+    difficulty: string;
+    duration: number;
+    group: string;
+    instructor: string;
+    questions: Question[];
+    participants: number;
+    questions_number: number;
+    schadule: string; // Date string
+    score_per_question: number;
+    status: string;
+    type: string;
+    closed_at: string; // Date string
+    createdAt: string; // Date string
+    updatedAt: string; // Date string
+    __v: number;
+}
+
+// Interface للـ allResults
+interface AllResults {
+    _id: string;
+    code: string;
+    title: string;
+    description: string;
+    difficulty: string;
+    duration: number;
+    group: string;
+    instructor: string;
+    questions_number: number;
+    schadule: string; // Date string
+    score_per_question: number;
+    status: string;
+    type: string;
+    closed_at: string; // Date string
+    createdAt: string; // Date string
+    updatedAt: string; // Date string
+    __v: number;
+    participants: string; // أضف هذه الخاصية
+}
 
 const Results = () => {
-    const [results, setResults] = useState([]); 
-    const [lastFiveResults, setLastFiveResults] = useState([]); 
-    const [loading, setLoading] = useState(true); 
-    const [error, setError] = useState(null); 
-    const [showNewTable, setShowNewTable] = useState(false); 
-
+    const [results, setResults] = useState<AllResults[]>([]);
+    const [lastFiveResults, setLastFiveResults] = useState<LastFiveResult[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [showNewTable, setShowNewTable] = useState(false);
     useEffect(() => {
         const fetchResults = async () => {
             try {
                 setLoading(true);
-                    // completed
+
+                // Fetch the last five completed quizzes
                 const lastFiveResponse = await axiosInstance.get(Quiz.lastFiveCompleted);
                 const lastFiveData = lastFiveResponse.data[0];
+
+                console.log("lastFiveData:", lastFiveData);
+
                 const lastFiveArray = Array.isArray(lastFiveData) ? lastFiveData : [lastFiveData];
                 setLastFiveResults(lastFiveArray);
-                //allresults
+
+                // Fetch all results
                 const allResultsResponse = await axiosInstance.get(Quiz.allResults);
-                
-                const quizData = allResultsResponse.data[0].quiz;
-                const resultsArray = Array.isArray(quizData) ? quizData : [quizData];
-                
+                const allResultsData = allResultsResponse.data[0].quiz;
+                const resultsArray = Array.isArray(allResultsData) ? allResultsData : [allResultsData];
+                console.log("allResultsData:", allResultsData);
                 setResults(resultsArray);
 
             } catch (err) {
                 setError('Failed to load results');
+                console.error(err);
             } finally {
                 setLoading(false);
             }
@@ -42,14 +95,15 @@ const Results = () => {
         <div className="p-6 bg-gray-50 min-h-screen">
             {showNewTable ? (
                 <>
-                    <h2 className="text-lg font-semibold mb-4">Quiz Details</h2>
+                    <h2 className="text-lg font-semibold mb-4">Results</h2>
                     <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md" style={{ width: '50%' }}>
                         <thead className="bg-gray-800 text-white">
                             <tr>
-                                <th className="py-3 px-4 text-left font-medium">Title</th>
-                                <th className="py-3 px-4 text-left font-medium">Group Name</th>
-                                <th className="py-3 px-4 text-left font-medium">No. of Questions</th>
-                                <th className="py-3 px-4 text-left font-medium">Instructor</th>
+                                {/* second  */}
+                                <th className="py-3 px-4 text-left font-medium">studnet</th>
+                                <th className="py-3 px-4 text-left font-medium"> score</th>
+                                <th className="py-3 px-4 text-left font-medium">Average</th>
+                                <th className="py-3 px-4 text-left font-medium">Time submitted</th>
                                 <th className="py-3 px-4 text-left font-medium">Actions</th>
                             </tr>
                         </thead>
@@ -57,9 +111,12 @@ const Results = () => {
                             {lastFiveResults.map((result, index) => (
                                 <tr key={index} className={`border-t ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
                                     <td className="py-3 px-4">{result.title}</td>
-                                    <td className="py-3 px-4">{result.group}</td>
+                                    <td className="py-3 px-4">{result.score_per_question}</td>
                                     <td className="py-3 px-4">{result.questions_number}</td>
-                                    <td className="py-3 px-4">{result.instructor}</td>
+                                    <td className="py-3 px-4">
+                                        {new Date(result.closed_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
+                                    </td>
+
                                     <td className="py-3 px-4">
                                         <button
                                             className="w-[75px] h-[25px] bg-[#C5D86D] rounded-tl-[10px]"
@@ -71,7 +128,8 @@ const Results = () => {
                                 </tr>
                             ))}
                         </tbody>
-                    </table> </>
+                    </table>
+                </>
             ) : (
                 <>
                     <h1 className="text-2xl font-bold text-gray-800 mb-6">Completed Quizzes</h1>
@@ -79,8 +137,10 @@ const Results = () => {
                         <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md" style={{ borderRadius: '10px' }}>
                             <thead className="bg-gray-800 text-white">
                                 <tr>
+                                    {/* first */}
                                     <th className="py-3 px-4 text-left font-medium">Title</th>
                                     <th className="py-3 px-4 text-left font-medium">Group</th>
+                                    <th className="py-3 px-4 text-left font-medium">No. of Persons in Group</th>
                                     <th className="py-3 px-4 text-left font-medium">Participants</th>
                                     <th className="py-3 px-4 text-left font-medium">Date</th>
                                     <th className="py-3 px-4 text-left font-medium">Actions</th>
@@ -91,7 +151,10 @@ const Results = () => {
                                     <tr key={index} className={`border-t ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
                                         <td className="py-3 px-4">{result.title}</td>
                                         <td className="py-3 px-4">{result.group}</td>
-                                        <td className="py-3 px-4">{result.participants}</td>
+                                        <td className="py-3 px-4">{result.questions_number}</td>
+                                        {/* <td className="py-3 px-4">{result.participants} participants</td> */}
+                                        <td className="py-3 px-4">0 participants</td>
+
                                         <td className="py-3 px-4">{new Date(result.closed_at).toLocaleDateString()}</td>
                                         <td className="py-3 px-4">
                                             <button
