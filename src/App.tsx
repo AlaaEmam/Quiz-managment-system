@@ -52,6 +52,20 @@ function App() {
         { path: 'quiz/questions', element: <Questions /> },
       ],
     },
+    {
+      path: 'learner',
+      element: <MasterAdminLayout />,
+      errorElement: <NotFound />,
+      children: [
+        { index: true, element: <Dashboard /> },
+        { path: 'home-page', element: <Dashboard /> },
+        { path: 'results', element: <Results /> },
+        { path: 'results/:quizId', element: <ResultSingleQuiz /> },
+        { path: 'quiz', element: <Quizes /> },
+        { path: 'quiz/quiz-details', element: <QuizesDetails /> },
+        { path: 'quiz/questions', element: <Questions /> },
+      ],
+    },
   ]);
 
   return (

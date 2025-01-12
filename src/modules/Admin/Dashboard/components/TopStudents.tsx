@@ -2,12 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { TiArrowRight } from 'react-icons/ti';
 import { GoDotFill } from "react-icons/go";
-
-import image1 from '../../../../assets/user.svg';
-import image2 from '../../../../assets/user2.svg';
-import image3 from '../../../../assets/user3.svg';
-import image4 from '../../../../assets/user4.svg';
-import image5 from '../../../../assets/user5.svg';
+// import { image1, image2, image3, image4, image5 } from '@/assets/index';  
+import image1 from '../../../assets/image1.png';
+import image2 from '../../../assets/image2.png';
+import image3 from '../../../assets/image3.png';
+import image4 from '../../../assets/image4.png';
+import image5 from '../../../assets/image5.png';
 
 interface TopFiveStudents {
   _id: number;
