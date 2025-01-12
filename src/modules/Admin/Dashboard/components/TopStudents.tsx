@@ -29,7 +29,7 @@ const TopStudents: React.FC<TopStudentsProps> = ({ students }) => {
       <div className="flex items-center justify-between m-2">
         <h3 className="font-bold text-xl tracking-wide mb-5">Top 5 Students</h3>
         <div>
-          <Link to="student" className="items-center">
+          <Link to="/dashboard/students" className="items-center">
             <div className="flex">
               All Students <TiArrowRight className="text-3xl text-green" />
             </div>
