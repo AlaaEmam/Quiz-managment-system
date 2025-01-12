@@ -63,8 +63,12 @@ export default function Group() {
   //Edit Group 
   const editGroup: SubmitHandler<FormData> = async (data: any) => {
     try {
-      const response = await axiosInstance.put(Groups.updateGroup(selectedId), data);
-      console.log(response);
+      if (selectedId) {
+        const response = await axiosInstance.put(Groups.updateGroup(selectedId), data);
+        console.log("editGroup: ",response);
+      } else {
+        throw new Error("Selected ID is null");
+      }
       toast.success("Edited Group");
       getGroups();
       handleCloseEditGroup();
@@ -156,7 +160,7 @@ export default function Group() {
                 <p className="text-md">No. of Students: {group?.students.length}</p>
               </div>
               <div>
-                <i onClick={() => handleShowEditGroup(group._id)} className="bi bi-pencil-square text-3xl"></i>
+                <i onClick={() => handleShowEditGroup(group?._id)} className="bi bi-pencil-square text-3xl"></i>
                 <i
                   onClick={() => handleShowDelete(group?._id)}
                   className="bi bi-trash text-3xl"

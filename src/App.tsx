@@ -47,7 +47,7 @@ function App() {
         { path: 'results', element: <Results /> },
         { path: 'results/:quizId', element: <ResultSingleQuiz /> },
         { path: 'quiz', element: <Quizes /> },
-        { path: 'quiz-details', element: <QuizesDetails /> },
+        { path: 'quiz/quiz-details', element: <QuizesDetails /> },
         { path: 'students', element: <Students /> },
         { path: 'quiz/questions', element: <Questions /> },
       ],
