@@ -6,56 +6,16 @@ import { toast } from "react-toastify";
 import { SubmitHandler } from "react-hook-form";
 import EditGroup from "./EditGroup";
 import { Link } from "react-router-dom";
-// import Select from "react-select";
+import DeleteConfirmation from "../../../Shared/DeleteConfirmation/DeleteConfirmation";
 
-// Interface for students (adjust to your API response structure)
-interface StudentData {
-  _id: string; // Assuming students have an id property
-  first_name: string[];
-}
-
-interface FormData{
-  name:string;
-  students:string[];
-}
-// interface Option {
-//   value: string | number;
-//   label: string;
-// }
 
 export default function Group() {
   const [groupList, setGroupList] = useState<any[]>([]); // Define type based on your data structure
   const [isOpenDelete, setIsOpenDelete] = useState(false);
-  const [isOpenEdit, setIsOpenEdit]=useState(false);
+  const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [isOpenAddGroup, setIsOpenAddGroup] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-
-
-  // Close Delete Group
-  const handleCloseDelete = () => setIsOpenDelete(false);
-  
-  // close Add Group 
-  const handleCloseAddGroup=()=> setIsOpenAddGroup(false);
-
-  // close Edit Group 
-  const handleCloseEditGroup=()=>setIsOpenEdit(false);
-
-  // Show Delete Group
-  const handleShowDelete = (id: string) => {
-    setSelectedId(id);
-    setIsOpenDelete(true);
-  };
-
-  // handle Show Add Group
-  const handleShowAddGroup=()=>{
-    setIsOpenAddGroup(true);
-  }
-
-  // handle show Edit Group
-  const handleShowEditGroup=(id:string)=>{
-    setSelectedId(id);
-    setIsOpenEdit(true);
-  }
+  const [groupData, setGroupData] = useState<any>(null);
 
   // Fetch group data
   const getGroups = async () => {
@@ -68,6 +28,7 @@ export default function Group() {
     }
   };
 
+  // Add Group 
   const addNewGroup:SubmitHandler<FormData>=async(data:any)=>{
     try{
       const response=await axiosInstance.post(Groups.createGroup, data)
@@ -81,21 +42,48 @@ export default function Group() {
       console.log(error);
     }
   }
+  // close Add Group 
+  const handleCloseAddGroup=()=> setIsOpenAddGroup(false);
+  // handle Show Add Group
+  const handleShowAddGroup=()=>{
+    setIsOpenAddGroup(true);
+  }
 
-  const editGroup:SubmitHandler<FormData>=async(data:any)=>{
-    try{
-      const response=await axiosInstance.put(Groups.updateGroup(selectedId),data);
 
+  // Fetch a specific group to edit based on selectedId
+  const getGroupById = async (id: string) => {
+    try {
+      const response = await axiosInstance.get(Groups.getById(id));
+      setGroupData(response?.data); // Store the group data for editing
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //Edit Group 
+  const editGroup: SubmitHandler<FormData> = async (data: any) => {
+    try {
+      const response = await axiosInstance.put(Groups.updateGroup(selectedId), data);
       console.log(response);
       toast.success("Edited Group");
       getGroups();
       handleCloseEditGroup();
-    }catch(error){
-      toast.error("Edit Failed")
-      console.log(error)
+    } catch (error) {
+      toast.error("Edit Failed");
+      console.log(error);
     }
-  }
-  
+  };
+
+  // close Edit Group
+  const handleCloseEditGroup = () => setIsOpenEdit(false);
+
+  // handle show Edit Group
+  const handleShowEditGroup = (id: string) => {
+    setSelectedId(id);
+    getGroupById(id); // Fetch the group data by ID
+    setIsOpenEdit(true); // Show the edit modal
+  };
+
 
   // Delete group
   const deleteGroup = async () => {
@@ -111,6 +99,15 @@ export default function Group() {
       console.log(error);
     }
   };
+  // Close Delete Group
+  const handleCloseDelete = () => setIsOpenDelete(false);
+  
+  // Show Delete Group
+  const handleShowDelete = (id: string) => {
+    setSelectedId(id);
+    setIsOpenDelete(true);
+  };
+
 
   useEffect(() => {
     getGroups();
@@ -118,6 +115,13 @@ export default function Group() {
 
   return (
 <>
+      <EditGroup
+        handleCloseEditGroup={handleCloseEditGroup}
+        EditGroup={editGroup} // Ensure correct prop name
+        isOpenEditGroup={isOpenEdit}
+        groupData={groupData} // Pass groupData for editing
+      />
+
     <div className="flex justify-between items-center space-x-2 mb-5">
         <h3 className="font-light text-gray-500">
         <Link to="/dashboard">  Dashboard </Link>
@@ -152,7 +156,7 @@ export default function Group() {
                 <p className="text-md">No. of Students: {group?.students.length}</p>
               </div>
               <div>
-                <i onClick={()=> handleShowEditGroup(group?._id)} className="bi bi-pencil-square text-3xl"></i>
+                <i onClick={() => handleShowEditGroup(group._id)} className="bi bi-pencil-square text-3xl"></i>
                 <i
                   onClick={() => handleShowDelete(group?._id)}
                   className="bi bi-trash text-3xl"
@@ -167,16 +171,31 @@ export default function Group() {
   <AddGroup 
   handleCloseAddGroup={handleCloseAddGroup}
   AddNewGroup={addNewGroup}
-  isOpenAddGroup={isOpenAddGroup}/>
-        
-  <DeleteGroup
-  isOpenDelete={isOpenDelete}
-  deleteItem={"Group"}
-  handleCloseDelete={handleCloseDelete}
-  deleteFunction={deleteGroup}
+  isOpenAddGroup={isOpenAddGroup}
   />
-  <EditGroup handleCloseEditGroup={handleCloseEditGroup} 
-  editGroup={editGroup} isOpenEditGroup={isOpenEdit} />
+        
+  <DeleteConfirmation
+    deleteFun={deleteGroup}
+    showModal={isOpenDelete}
+    closeModal={handleCloseDelete}
+    title="Group"
+  />
+
+
 </>
   );
 }
+
+// interface StudentData {
+//   _id: string; 
+//   first_name: string[];
+// }
+
+// interface FormData{
+//   name:string;
+//   students:string[];
+// }
+// // interface Option {
+// //   value: string | number;
+// //   label: string;
+// // }
