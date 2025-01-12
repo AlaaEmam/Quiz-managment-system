@@ -17,7 +17,13 @@ import MasterAdminLayout from './modules/Shared/MasterAdminLayout/components/Mas
 import NotFound from './modules/Shared/NotFound/components/NotFound';
 import Results from './modules/Admin/Results/components/Results';
 import ResultSingleQuiz from './modules/Admin/Results/components/ResultSingleQuiz';
+import MasterUserLayout from './modules/Shared/MasterUserLayout/MasterUserLayout';
 // import ProtectedRoute from './modules/Shared/ProtectedRoute/components/ProtectedRoute';
+import StudentQuize from './modules/Learner/StudentQuize/components/StudentQuize';
+import StudentResults from './modules/Learner/StudentResults/components/StudentResults';
+import JoinQuiz from './modules/Learner/JoinQuiz/components/JoinQuiz';
+import HomePage from './modules/Learner/HomePage/components/HomePage';
+import Quiz from './modules/Learner/Quiz/components/Quiz';
 
 
 
@@ -54,16 +60,14 @@ function App() {
     },
     {
       path: 'learner',
-      element: <MasterAdminLayout />,
+      element: <MasterUserLayout />,
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Dashboard /> },
-        { path: 'home-page', element: <Dashboard /> },
-        { path: 'results', element: <Results /> },
-        { path: 'results/:quizId', element: <ResultSingleQuiz /> },
-        { path: 'quiz', element: <Quizes /> },
-        { path: 'quiz/quiz-details', element: <QuizesDetails /> },
-        { path: 'quiz/questions', element: <Questions /> },
+        { index: true, element: <HomePage /> },
+        { path: 'home-page', element: <HomePage /> },
+        { path: 'join-quiz', element: <JoinQuiz /> },
+        { path: 'quiz', element: <Quiz /> },
+        { path: 'student-results', element: <StudentResults /> },
       ],
     },
   ]);

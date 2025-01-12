@@ -1,4 +1,4 @@
-export default function Quizes() {
+export default function HomePage() {
   return (
   <>
     Quizes
