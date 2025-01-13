@@ -72,5 +72,10 @@ export const QuestionsUrl = {
   addQuestion:'/question',
   updateQuestion:(id:string)=>`/question/${id}`,
   deleteQuestion:(id:string)=>`/question/${id}`,
+};
 
+// LEARNER APIS
+
+export const LearnerQuiz = {
+  joinQuiz:"/quiz/join",
 };

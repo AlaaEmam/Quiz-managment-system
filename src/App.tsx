@@ -19,7 +19,6 @@ import Results from './modules/Admin/Results/components/Results';
 import ResultSingleQuiz from './modules/Admin/Results/components/ResultSingleQuiz';
 import MasterUserLayout from './modules/Shared/MasterUserLayout/MasterUserLayout';
 // import ProtectedRoute from './modules/Shared/ProtectedRoute/components/ProtectedRoute';
-import StudentQuize from './modules/Learner/StudentQuize/components/StudentQuize';
 import StudentResults from './modules/Learner/StudentResults/components/StudentResults';
 import JoinQuiz from './modules/Learner/JoinQuiz/components/JoinQuiz';
 import HomePage from './modules/Learner/HomePage/components/HomePage';
