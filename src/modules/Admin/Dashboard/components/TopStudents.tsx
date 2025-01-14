@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { TiArrowRight } from 'react-icons/ti';
 import { GoDotFill } from "react-icons/go";
-
+// import { image1, image2, image3, image4, image5 } from '@/assets/index';  
 import image1 from '../../../../assets/user.svg';
 import image2 from '../../../../assets/user2.svg';
 import image3 from '../../../../assets/user3.svg';
@@ -29,7 +29,7 @@ const TopStudents: React.FC<TopStudentsProps> = ({ students }) => {
       <div className="flex items-center justify-between m-2">
         <h3 className="font-bold text-xl tracking-wide mb-5">Top 5 Students</h3>
         <div>
-          <Link to="student" className="items-center">
+          <Link to="/dashboard/students" className="items-center">
             <div className="flex">
               All Students <TiArrowRight className="text-3xl text-green" />
             </div>

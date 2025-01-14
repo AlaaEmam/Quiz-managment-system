@@ -27,7 +27,7 @@ const UpcomingQuizzes = ({ incomingQuiz }: UpcomingQuizzesProps) => {
       <div className="flex items-center justify-between m-2">
         <h3 className="font-bold text-xl tracking-wide mb-5">Upcoming 5 quizzes</h3>
         <div>
-          <Link to="#" className="items-center">
+          <Link to="/dashboard/quiz" className="items-center">
             <div className="flex">
               Quiz directory <TiArrowRight className="text-3xl text-green" />
             </div>
@@ -58,7 +58,7 @@ const UpcomingQuizzes = ({ incomingQuiz }: UpcomingQuizzesProps) => {
                 </span>
               </div>
               <div className="open-div">
-                <Link to="/quiz-details" className="flex items-center">
+                <Link to="quiz-details" className="flex items-center">
                   Open
                   <div className="bg-green rounded-lg text-white m-1">
                     <TiArrowRight />
