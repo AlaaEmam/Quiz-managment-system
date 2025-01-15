@@ -1,23 +1,34 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { createPortal } from "react-dom";  // Import createPortal
 import LogoDark from "../../../assets/Logo-black.svg";
 import NewQuiz from "../../../assets/icons/newquiz.svg";
-import { useAppSelector } from "../../../redux";
+import { useAppDispatch, useAppSelector } from "../../../redux";
+import { removeTokenFromLocalStorage } from "../../../redux/componenets/utils/localStorageUtils";
+import { clearToken } from "../../../redux/AuthSlice";
 
 // Define types for props
 interface NavbarProps {
   toggleSidebar: () => void;
 }
 
+
 const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
+  const navigate = useNavigate()
   const [isDropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const user = useAppSelector(state => state.auth.user);
+  const dispatch = useAppDispatch()
   console.log("Logged in user:", user);
   
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
   };
+
+  const handleLogOut = () => {
+    removeTokenFromLocalStorage()
+    dispatch(clearToken())
+    navigate("/login")
+  }
 
   return (
     <nav className="  sticky h-[12vh] top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 ">
@@ -76,8 +87,8 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
             >
               <span className="sr-only">Open user menu</span>
               <div className="text-left px-4 py-3 text-sm text-gray-900 dark:text-white">
-                <div className="font-medium">Nwabuikwu Chizuruoke</div>
-                <div className="truncate text-green">Instructor</div>
+                <div className="font-medium">{user?.email}</div>
+                <div className="truncate text-green">{user?.role}</div>
               </div>
               <svg
                 className="w-2.5 h-2.5 ms-3"
@@ -132,6 +143,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                   </ul>
                   <div className="py-2">
                     <a
+                    onClick={handleLogOut}
                       href="#"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                     >

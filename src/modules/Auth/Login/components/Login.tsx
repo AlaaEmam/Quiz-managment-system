@@ -11,6 +11,7 @@ import {
 } from '../../../../Constants/Validation/validation';
 import { useAppDispatch, useAppSelector } from '../../../../redux';
 import { setToken } from '../../../../redux/AuthSlice';
+import { saveTokenToLocalStorage } from '../../../../redux/componenets/utils/localStorageUtils';
 
 interface formData {
   email: string;
@@ -27,16 +28,19 @@ export default function Login() {
     handleSubmit,
   } = useForm<formData>();
 
-  // useEffect(() => {
-  //   if (token) {
-  //     navigate('/dashboard');
-  //   }
-  // }, [token, navigate]);
+  
+
+  useEffect(() => {
+    if (token) {
+      navigate('/dashboard');
+    }
+  }, [token, navigate]);
 
   const onSubmit = async (data: formData) => {
     try {
       const response = await AuthAxiosInstance.post(Auth.login, data);
       dispatch(setToken(response.data.data.accessToken));
+      saveTokenToLocalStorage(response.data.data.accessToken)
       // localStorage.setItem('token', response.data.data.accessToken);
       toast.success(response.data.message || 'login successfully');
       console.log(response);

@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { FaKey } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { RiCompassDiscoverFill } from 'react-icons/ri';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Auth, AuthAxiosInstance } from '../../../../Constants/URLS/URL';
 import {
@@ -17,6 +17,7 @@ interface formData {
 }
 
 export default function ResetPassword() {
+  const navigate = useNavigate()
   const location = useLocation();
   const {
     register,
@@ -30,6 +31,7 @@ export default function ResetPassword() {
     try {
       const response = await AuthAxiosInstance.post(Auth.resetPassword, data);
       toast.success(response.data.message || 'Password updated successfully');
+      navigate("/login")
     } catch (error) {
       console.log(error);
 
