@@ -1,8 +1,8 @@
-import React from 'react';
-import { FaCheck } from 'react-icons/fa';
-import { useForm } from 'react-hook-form';
-import QuizData from './Quizes'; // make sure to import QuizData type
-import { GetRequiredMessage } from '../../../../Constants/Validation/validation';
+import React from "react";
+import { FaCheck } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import QuizData from "./Quizes"; // make sure to import QuizData type
+import { GetRequiredMessage } from "../../../../Constants/Validation/validation";
 
 interface QuizCreationModalProps {
   isOpen: boolean;
@@ -12,8 +12,7 @@ interface QuizCreationModalProps {
   register: any;
   handleSubmit: any;
   reset: () => void;
-  groups: { _id: string, name: string }[]; // Assuming groups is passed as a prop
-
+  groups: { _id: string; name: string }[]; // Assuming groups is passed as a prop
 }
 
 const QuizCreationModal: React.FC<QuizCreationModalProps> = ({
@@ -70,239 +69,231 @@ const QuizCreationModal: React.FC<QuizCreationModalProps> = ({
           </div>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
-                <div>
-                <div className="relative ">
-                    <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black  border-e-0 border rounded-lg rounded-e-none">
-                    Title:
-                    </span>
-                    <input
-                    className="pl-24 rounded-lg  w-full p-2 border border-black focus:border-none "
-                    {...register("title", {
-                        required: GetRequiredMessage("title"),
+          <div>
+            <div className="relative ">
+              <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black  border-e-0 border rounded-lg rounded-e-none">
+                Title:
+              </span>
+              <input
+                className="pl-24 rounded-lg  w-full p-2 border border-black focus:border-none "
+                {...register("title", {
+                  required: GetRequiredMessage("title"),
+                })}
+              />
+            </div>
+            {errors?.title && (
+              <span className="text-red-600">{errors?.title?.message}</span>
+            )}
+          </div>
+          <div className="my-4">
+            <div className="grid grid-cols-3 gap-x-4">
+              <div>
+                <div className="relative flex items-center">
+                  <span className="px-5 absolute inset-y-0 flex items-center bg-light_cream font-semibold border-black border-e-0 border rounded-lg rounded-e-none">
+                    Duration
+                  </span>
+                  <select
+                    className="pl-28 rounded-lg w-full border border-black"
+                    {...register("duration", {
+                      required: GetRequiredMessage("Duration"),
                     })}
-                    />
+                  >
+                    <option value="" disabled selected>
+                      Select duration
+                    </option>
+                    <option value="10">10</option>
+                    <option value="10">20</option>
+                    <option value="30">30</option>
+                  </select>
                 </div>
-                {errors?.title && (
-                    <span className="text-red-600">
-                    {errors?.title?.message}
-                    </span>
+                {errors?.duration && (
+                  <span className="text-red-600">
+                    {errors?.duration?.message}
+                  </span>
                 )}
-                </div>
-                <div className="my-4">
-                <div className="grid grid-cols-3 gap-x-4">
-                    <div>
-                    <div className="relative flex items-center">
-                        <span className="px-5 absolute inset-y-0 flex items-center bg-light_cream font-semibold border-black border-e-0 border rounded-lg rounded-e-none">
-                        Duration
-                        </span>
-                        <select
-                        className="pl-28 rounded-lg w-full border border-black"
-                        {...register("duration", {
-                            required: GetRequiredMessage("Duration"),
-                        })}
-                        >
-                        <option value="" disabled selected>
-                            Select duration
-                        </option>
-                        <option value="10">10</option>
-                        <option value="10">20</option>
-                        <option value="30">30</option>
-                        </select>
-                    </div>
-                    {errors?.duration && (
-                        <span className="text-red-600">
-                        {errors?.duration?.message}
-                        </span>
-                    )}
-                    </div>
+              </div>
 
-                    <div>
-                    <div className="relative">
-                        <span className="px-5 absolute inset-y-0 flex items-center bg-light_cream font-semibold border-black border-e-0 border rounded-lg rounded-e-none">
-                        No. of questions
-                        </span>
-                        <select
-                        className="pl-40 rounded-lg w-full p-2 border border-black"
-                        {...register("questions_number", {
-                            required: GetRequiredMessage("No. of questions"),
-                        })}
-                        >
-                        <option value="" disabled selected>
-                            Select number of questions
-                        </option>
-                        <option value="10">1</option>
-                        <option value="20">2</option>
-                        <option value="50">3</option>
-                        <option value="20">4</option>
-                        <option value="50">5</option>
-                        <option value="10">6</option>
-                        <option value="20">7</option>
-                        <option value="50">8</option>
-                        <option value="20">9</option>
-                        <option value="50">10</option>
-                        </select>
-                    </div>
-                    {errors?.questions_number && (
-                        <span className="text-red-600">
-                        {errors?.questions_number?.message}
-                        </span>
-                    )}
-                    </div>
-
-                    <div>
-                    <div className="relative">
-                        <span className="px-5 absolute inset-y-0 flex items-center bg-light_cream font-semibold border-black border-e-0 border rounded-lg rounded-e-none">
-                        Score per que
-                        </span>
-                        <select
-                        className="pl-40 rounded-lg w-full p-2 border border-black"
-                        {...register("score_per_question", {
-                            required: GetRequiredMessage("Score per question"),
-                        })}
-                        >
-                        <option value="" disabled selected>
-                            Select score
-                        </option>
-                        <option value="1">1</option>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        </select>
-                    </div>
-                    {errors?.score_per_question && (
-                        <span className="text-red-600">
-                        {errors?.score_per_question?.message}
-                        </span>
-                    )}
-                    </div>
-                </div>
-                </div>
-
-                <div>
-                <div className="relative ">
-                    <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black  border-e-0 border rounded-lg rounded-e-none">
-                    Description:
-                    </span>
-                    <input
-                    className="pl-36 rounded-lg  w-full p-6 border border-black focus:border-none "
-                    {...register("description", {
-                        required: GetRequiredMessage("description"),
+              <div>
+                <div className="relative">
+                  <span className="px-5 absolute inset-y-0 flex items-center bg-light_cream font-semibold border-black border-e-0 border rounded-lg rounded-e-none">
+                    No. of questions
+                  </span>
+                  <select
+                    className="pl-40 rounded-lg w-full p-2 border border-black"
+                    {...register("questions_number", {
+                      required: GetRequiredMessage("No. of questions"),
                     })}
-                    />
+                  >
+                    <option value="" disabled selected>
+                      Select number of questions
+                    </option>
+                    <option value="10">1</option>
+                    <option value="20">2</option>
+                    <option value="50">3</option>
+                    <option value="20">4</option>
+                    <option value="50">5</option>
+                    <option value="10">6</option>
+                    <option value="20">7</option>
+                    <option value="50">8</option>
+                    <option value="20">9</option>
+                    <option value="50">10</option>
+                  </select>
                 </div>
-                {errors?.description && (
-                    <span className="text-red-600">
-                    {errors?.description?.message}
-                    </span>
+                {errors?.questions_number && (
+                  <span className="text-red-600">
+                    {errors?.questions_number?.message}
+                  </span>
                 )}
-                </div>
+              </div>
 
-                <div className="my-4">
-                <div className="relative ">
-                    <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black  border-e-0 border rounded-lg rounded-e-none">
-                    Schedule
-                    </span>
-                    <input
-                    type="date"
-                    className="pl-32 rounded-lg  w-full p-2 border border-black focus:border-none "
-                    {...register("schadule", {
-                        required: GetRequiredMessage("schadule"),
+              <div>
+                <div className="relative">
+                  <span className="px-5 absolute inset-y-0 flex items-center bg-light_cream font-semibold border-black border-e-0 border rounded-lg rounded-e-none">
+                    Score per que
+                  </span>
+                  <select
+                    className="pl-40 rounded-lg w-full p-2 border border-black"
+                    {...register("score_per_question", {
+                      required: GetRequiredMessage("Score per question"),
                     })}
-                    />
+                  >
+                    <option value="" disabled selected>
+                      Select score
+                    </option>
+                    <option value="1">1</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                  </select>
                 </div>
-                {errors?.schadule && (
-                    <span className="text-red-600">
-                    {errors?.schadule?.message}
-                    </span>
+                {errors?.score_per_question && (
+                  <span className="text-red-600">
+                    {errors?.score_per_question?.message}
+                  </span>
                 )}
-                </div>
+              </div>
+            </div>
+          </div>
 
-                <div className="grid grid-cols-3 gap-x-4 ">
-                <div>
-                    <div className="relative">
-                    <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black border-e-0 border rounded-lg rounded-e-none">
-                        Difficulty level
-                    </span>
-                    <select
-                        className="pl-40 rounded-lg w-full p-2 border border-black focus:outline-none"
-                        {...register("difficulty", {
-                        required: GetRequiredMessage("Difficulty level"),
-                        })}
-                    >
-                        <option value="" disabled selected>
-                        Select difficulty
-                        </option>
-                        <option value="easy">Easy</option>
-                        <option value="medium">Medium</option>
-                        <option value="hard">Hard</option>
-                    </select>
-                    </div>
-                    {errors?.difficulty && (
-                    <span className="text-red-600">
-                        {errors?.difficulty?.message}
-                    </span>
-                    )}
-                </div>
+          <div>
+            <div className="relative ">
+              <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black  border-e-0 border rounded-lg rounded-e-none">
+                Description:
+              </span>
+              <input
+                className="pl-36 rounded-lg  w-full p-6 border border-black focus:border-none "
+                {...register("description", {
+                  required: GetRequiredMessage("description"),
+                })}
+              />
+            </div>
+            {errors?.description && (
+              <span className="text-red-600">
+                {errors?.description?.message}
+              </span>
+            )}
+          </div>
 
-                <div>
-                    <div className="relative">
-                    <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black border-e-0 border rounded-lg rounded-e-none">
-                        Category type
-                    </span>
-                    <select
-                        className="pl-40 rounded-lg w-full p-2 border border-black focus:outline-none"
-                        {...register("type", {
-                        required: GetRequiredMessage("type"),
-                        })}
-                    >
-                        <option value="" disabled selected>
-                        Select category
-                        </option>
-                        <option value="FE">FE</option>
-                        <option value="BE">BE</option>
-                        <option value="DO">DO</option>
-                    </select>
-                    </div>
-                    {errors?.type && (
-                    <span className="text-red-600">
-                        {errors?.type?.message}
-                    </span>
-                    )}
-                </div>
+          <div className="my-4">
+            <div className="relative ">
+              <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black  border-e-0 border rounded-lg rounded-e-none">
+                Schedule
+              </span>
+              <input
+                type="date"
+                className="pl-32 rounded-lg  w-full p-2 border border-black focus:border-none "
+                {...register("schadule", {
+                  required: GetRequiredMessage("schadule"),
+                })}
+              />
+            </div>
+            {errors?.schadule && (
+              <span className="text-red-600">{errors?.schadule?.message}</span>
+            )}
+          </div>
 
-                <div>
-                    <div className="relative">
-                    <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black border-e-0 border rounded-lg rounded-e-none">
-                        Group name
-                    </span>
-                    <select
-                        className="pl-40 rounded-lg w-full p-2 border border-black focus:outline-none"
-                        {...register("group", {
-                        required: GetRequiredMessage("Group"),
-                        })}
-                    >
-                        <option value="" disabled selected>
-                        Select group
-                        </option>
-                        {groups.map(({ _id, name }) => (
-                        <option key={_id} value={_id}>
-                            {name}
-                        </option>
-                        ))}
-                    </select>
-                    </div>
-                    {errors?.group && (
-                    <span className="text-red-600">
-                        {errors?.group?.message}
-                    </span>
-                    )}
-                </div>
-                </div>
+          <div className="grid grid-cols-3 gap-x-4 ">
+            <div>
+              <div className="relative">
+                <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black border-e-0 border rounded-lg rounded-e-none">
+                  Difficulty level
+                </span>
+                <select
+                  className="pl-40 rounded-lg w-full p-2 border border-black focus:outline-none"
+                  {...register("difficulty", {
+                    required: GetRequiredMessage("Difficulty level"),
+                  })}
+                >
+                  <option value="" disabled selected>
+                    Select difficulty
+                  </option>
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="hard">Hard</option>
+                </select>
+              </div>
+              {errors?.difficulty && (
+                <span className="text-red-600">
+                  {errors?.difficulty?.message}
+                </span>
+              )}
+            </div>
 
-                <div className="flex justify-end">
-                <button className=" text-black my-6 px-6 py-2 rounded-lg bg-light_cream border-2 font-semibold ">
-                    Add Quiz
-                </button>
-                </div>
+            <div>
+              <div className="relative">
+                <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black border-e-0 border rounded-lg rounded-e-none">
+                  Category type
+                </span>
+                <select
+                  className="pl-40 rounded-lg w-full p-2 border border-black focus:outline-none"
+                  {...register("type", {
+                    required: GetRequiredMessage("type"),
+                  })}
+                >
+                  <option value="" disabled selected>
+                    Select category
+                  </option>
+                  <option value="FE">FE</option>
+                  <option value="BE">BE</option>
+                  <option value="DO">DO</option>
+                </select>
+              </div>
+              {errors?.type && (
+                <span className="text-red-600">{errors?.type?.message}</span>
+              )}
+            </div>
+
+            <div>
+              <div className="relative">
+                <span className="absolute inset-y-0 flex items-center bg-light_cream px-5 font-bold border-black border-e-0 border rounded-lg rounded-e-none">
+                  Group name
+                </span>
+                <select
+                  className="pl-40 rounded-lg w-full p-2 border border-black focus:outline-none"
+                  {...register("group", {
+                    required: GetRequiredMessage("Group"),
+                  })}
+                >
+                  <option value="" disabled selected>
+                    Select group
+                  </option>
+                  {groups.map(({ _id, name }) => (
+                    <option key={_id} value={_id}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {errors?.group && (
+                <span className="text-red-600">{errors?.group?.message}</span>
+              )}
+            </div>
+          </div>
+
+          <div className="flex justify-end">
+            <button className=" text-black my-6 px-6 py-2 rounded-lg bg-light_cream border-2 font-semibold ">
+              Add Quiz
+            </button>
+          </div>
         </form>
       </div>
     </div>

@@ -12,13 +12,15 @@ const AuthSlice = createSlice({
   reducers: {
     setToken: (state, action) => {
       state.token = action.payload;
-      localStorage.setItem("token", action.payload);
-      state.user = jwtDecode(action.payload);
+      
+      // localStorage.setItem("token", action.payload);
+      // state.user = jwtDecode(action.payload);
+      state.user = action.payload ? jwtDecode(action.payload) : null
     },
     clearToken: (state) => {
       state.token = null;
       state.user = null;
-      localStorage.removeItem("token");
+      // localStorage.removeItem("token");
     },
   },
 });
