@@ -1,10 +1,10 @@
-import axios from 'axios';
+import axios from "axios";
 
-export const baseURL = 'https://upskilling-egypt.com:3005/api';
+export const baseURL = "https://upskilling-egypt.com:3005/api";
 
 export const axiosInstance = axios.create({
   baseURL,
-   headers: { Authorization: localStorage.getItem('token') },
+  headers: { Authorization: localStorage.getItem("token") },
 });
 
 export const AuthAxiosInstance = axios.create({
@@ -12,9 +12,9 @@ export const AuthAxiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   if (!token) {
-    window.location.href = '/login';
+    window.location.href = "/login";
   } else {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -50,33 +50,30 @@ export const Student = {
   gettopFiveStudents: `/student/top-five`,
 };
 
-
-
 export const Quiz = {
   Create_Quiz: `/quiz`,
   Incomming_Quiz: `/quiz/incomming`,
   getAll: `/quiz`,
-  deleteQuiz : (id:number) => `/quiz/${id}`,
-  getQuizById : (id:number) => `/quiz/${id}`,
-  editQuiz : (id:number) => `/quiz/${id}`,
-  firstFiveIncomming:`quiz/incomming`,
-  lastFiveCompleted:`/quiz/completed`,
-  allResults:`quiz/result`,
-
-
+  deleteQuiz: (id: number) => `/quiz/${id}`,
+  getQuizById: (id: number) => `/quiz/${id}`,
+  editQuiz: (id: number) => `/quiz/${id}`,
+  firstFiveIncomming: `quiz/incomming`,
+  lastFiveCompleted: `/quiz/completed`,
+  allResults: `quiz/result`,
 };
 
 export const QuestionsUrl = {
-  gettAllQUT:"/question",
-  getSpcQUT:(id:string)=>`/question/${id}`,
-  addQuestion:'/question',
-  updateQuestion:(id:string)=>`/question/${id}`,
-  deleteQuestion:(id:string)=>`/question/${id}`,
+  gettAllQUT: "/question",
+  getSpcQUT: (id: string) => `/question/${id}`,
+  addQuestion: "/question",
+  updateQuestion: (id: string) => `/question/${id}`,
+  deleteQuestion: (id: string) => `/question/${id}`,
 };
 
 // LEARNER APIS
 
 export const LearnerQuiz = {
-  joinQuiz:"/quiz/join",            
-  qutionWithoutAnswer:(ID:String)=>`/quiz/without-answers/${ID}`
+  joinQuiz: "/quiz/join",
+  qutionWithoutAnswer: (ID: String) => `/quiz/without-answers/${ID}`,
+  submitQuiz: (ID: String) => `quiz/submit/${ID}`,
 };

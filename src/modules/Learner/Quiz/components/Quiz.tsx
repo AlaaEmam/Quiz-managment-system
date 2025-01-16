@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { axiosInstance, LearnerQuiz } from "../../../../Constants/URLS/URL";
-import { useParams } from "react-router-dom";
-import { Question } from "../../../Shared/Url/components/URL";
+import { data, useParams } from "react-router-dom";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 interface quitionWithoutAnswer {
   data: {
@@ -40,63 +41,88 @@ interface questions_IF {
 
 export default function Quiz() {
   const [exam, setExam] = useState<quitionWithoutAnswer | null>(null);
-
+  const [answers, setAnswers] = useState<any[]>([]); // State to store answers
   const { id } = useParams();
 
   // setQuizId(`${params.id}`)
   const qutions = async () => {
-    console.log(id);
-    const res = await axiosInstance.get<quitionWithoutAnswer>(
-      LearnerQuiz.qutionWithoutAnswer(`${id}`)
-    );
-    console.log(res.data.data.questions);
-    setExam(res.data);
+    try {
+      const res = await axiosInstance.get<quitionWithoutAnswer>(
+        LearnerQuiz.qutionWithoutAnswer(`${id}`)
+      );
+      toast.info("THIS IS YOUR  Quiz  ");
+      setExam(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  const { register, handleSubmit, control } = useForm();
+
+  const onSubmit = async (data) => {
+    try {
+      const results = exam?.data.questions.map((question) => ({
+        question: question._id,
+        answer: data[question._id] || null, // Capture the selected answer or null if unanswered
+      }));
+      const response = await axiosInstance.post(
+        LearnerQuiz.submitQuiz(`${id}`),
+        {
+          answers: results,
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     qutions();
   }, []);
-
   return (
     <>
-      <div className="flex flex-col  justify-center items-center  ">
-        {exam?.data.questions.map((qution) => (
-          <div key={qution._id} className="w-6/12  border mb-5 p-5 rounded">
-            <h3 className="mb-3">{qution.title}</h3>
-            <div className="mb-3" >
+
+    <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-col  justify-center items-center  ">
+          <h3 className="mb-4 text-2xl">{exam?.data.title}</h3>
+          <p className="mb-4">{exam?.data.description}</p>
+          {exam?.data.questions.map((qution) => (
+            <div
+              key={qution._id}
+              className="w-11/12  border mb-6 py-5 px-8 rounded-lg "
+            >
               <input
-                                className="peer/published mr-3 "
-                type="radio"
-                name={qution._id}
+                type="hidden"
+                value={qution.title}
+                {...register("question")}
               />
-              {qution.options.A}
+              <h3 className="mb-3 text-xl">{qution.title}</h3>
+
+              {Object.entries(qution.options)
+                .slice(0, -1)
+                .map(([key, value]) => (
+                  <div key={key} className="mb-2  text-gray-900 w-6/12 inline-block ">
+                    <input
+                      className="peer/published mr-3 "
+                      type="radio"
+                      {...register(qution._id, { required: true })}
+                      value={value} // Assign the option value
+                    />
+                    {value}
+                  </div>
+                ))}
+
+
             </div>
-            <div className="mb-3" >
-              <input
-                                className="peer/published mr-3 "
-                type="radio"
-                name={qution._id}
-              />
-              {qution.options.B}
-            </div>
-            <div className="mb-3" >
-              <input
-                                className="peer/published mr-3 "
-                type="radio"
-                name={qution._id}
-              />
-              {qution.options.C}
-            </div>
-            <div className="mb-3" >
-              <input
-                                className="peer/published mr-3 "
-                type="radio"
-                name={qution._id}
-              />
-              {qution.options.D}
-            </div>
-          </div>
-        ))}
-      </div>{" "}
+          ))}
+        </div>
+<div className="text-center">
+<button className="px-20 py-3 mb-4 rounded bg-gray-300  ">next</button>
+
+</div>
+      </form>
+
     </>
   );
 }

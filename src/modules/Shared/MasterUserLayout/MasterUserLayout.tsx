@@ -5,7 +5,7 @@ import StudentSideBar from '../StudentSideBar/StudentSideBar';
 
 export default function MasterUserLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
-  
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
