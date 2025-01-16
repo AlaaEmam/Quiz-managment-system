@@ -54,8 +54,13 @@ export default function Quiz() {
       setExam(res.data);
     } catch (error) {
       console.log(error);
+      toast.error(error)
     }
   };
+
+  useEffect(() => {
+    qutions();
+  }, []);
 
   const { register, handleSubmit, control } = useForm();
 
@@ -73,17 +78,13 @@ export default function Quiz() {
       );
       console.log(response);
     } catch (error) {
-      console.log(error);
+      toast.error(error);
     }
   };
 
-  useEffect(() => {
-    qutions();
-  }, []);
   return (
     <>
-
-    <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col  justify-center items-center  ">
           <h3 className="mb-4 text-2xl">{exam?.data.title}</h3>
           <p className="mb-4">{exam?.data.description}</p>
@@ -102,7 +103,10 @@ export default function Quiz() {
               {Object.entries(qution.options)
                 .slice(0, -1)
                 .map(([key, value]) => (
-                  <div key={key} className="mb-2  text-gray-900 w-6/12 inline-block ">
+                  <div
+                    key={key}
+                    className="mb-2  text-gray-900 w-6/12 inline-block "
+                  >
                     <input
                       className="peer/published mr-3 "
                       type="radio"
@@ -112,17 +116,15 @@ export default function Quiz() {
                     {value}
                   </div>
                 ))}
-
-
             </div>
           ))}
         </div>
-<div className="text-center">
-<button className="px-20 py-3 mb-4 rounded bg-gray-300  ">next</button>
-
-</div>
+        <div className="text-center">
+          <button className="px-20 py-3 mb-4 rounded bg-gray-200  ">
+            next
+          </button>
+        </div>
       </form>
-
     </>
   );
 }

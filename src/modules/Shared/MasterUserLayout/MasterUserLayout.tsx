@@ -28,8 +28,9 @@ export default function MasterUserLayout() {
       ) : (
         <div className="flex items-center justify-center h-screen">
           <Outlet /> {/* This will render the JoinQuiz component */}
-        </div>
+         </div>
       )}
+
     </>
   );
 }
