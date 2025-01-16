@@ -65,7 +65,9 @@ function App() {
         { index: true, element: <HomePage /> },
         { path: 'home-page', element: <HomePage /> },
         { path: 'join-quiz', element: <JoinQuiz /> },
-        { path: 'quiz', element: <Quiz /> },
+       // { path: 'quiz', element: <Quiz /> },
+        { path: `quiz/:id`, element: <Quiz /> },
+
         { path: 'student-results', element: <StudentResults /> },
       ],
     },

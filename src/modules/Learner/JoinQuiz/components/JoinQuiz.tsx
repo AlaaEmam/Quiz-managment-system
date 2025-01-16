@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import joinquiz from '../../../../assets/join-quiz.svg';
 import Logo from '../../../../assets/Logo-black.svg';
 import { IoClose } from "react-icons/io5";
@@ -18,6 +18,7 @@ import axios from 'axios';
 // });
 
 const JoinQuiz: React.FC = () => {
+
   interface FormData {
     code: string;
   }
@@ -28,8 +29,9 @@ const JoinQuiz: React.FC = () => {
   const onSubmit = async (data: FormData) => {
     try {
       const response = await axiosInstance.post(LearnerQuiz.joinQuiz, { code: data.code });
+    // setQuizId(response.data.data.quiz)
       toast.success(response.data.message || 'Starting quiz');
-      navigate('/learner/quiz');
+      navigate(`/learner/quiz/${response.data.data.quiz}`);
     } catch (error: any) {
       // Handle specific error cases
       if (axios.isAxiosError(error)) {
@@ -74,6 +76,13 @@ const JoinQuiz: React.FC = () => {
     }
   };
 
+
+
+
+
+
+
+
   const handleCancel = () => {
     navigate('/learner/quiz');
     toast.error('Quiz join canceled');
@@ -112,7 +121,7 @@ const JoinQuiz: React.FC = () => {
               Cancel
             </button>
             <button
-              type="submit" 
+              type="submit"
               className="text-2xl font-semibold bg-black border flex border-black text-light_cream hover:bg-light_cream hover:text-black rounded-lg px-6 py-4"
             >
               Start Quiz

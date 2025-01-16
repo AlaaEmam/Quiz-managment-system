@@ -77,5 +77,6 @@ export const QuestionsUrl = {
 // LEARNER APIS
 
 export const LearnerQuiz = {
-  joinQuiz:"/quiz/join",
+  joinQuiz:"/quiz/join",            
+  qutionWithoutAnswer:(ID:String)=>`/quiz/without-answers/${ID}`
 };
