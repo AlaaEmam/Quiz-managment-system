@@ -22,3 +22,23 @@ input:-webkit-autofill {
 .user-image{
   
 }
+.quiz-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 28px; 
+  font-weight: 700;
+  line-height: 34px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.quiz-success {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px; 
+  font-weight: 700;
+  line-height: 22px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
