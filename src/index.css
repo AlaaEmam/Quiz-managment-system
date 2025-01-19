@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+*{
+  padding: 0;
+  margin: 0;
+}
 input:-webkit-autofill {
     background-color: white !important;
     color: white !important;

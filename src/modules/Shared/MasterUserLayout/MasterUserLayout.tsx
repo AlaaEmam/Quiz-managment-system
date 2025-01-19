@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useMatch } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar';
 import StudentSideBar from '../StudentSideBar/StudentSideBar';
 
@@ -11,11 +11,12 @@ export default function MasterUserLayout() {
   };
 
   const location = useLocation();
-  const isJoinQuizPage = location.pathname === '/learner/join-quiz'; // Adjust the path as needed
+  const isJoinQuizPage = location.pathname === '/learner/join-quiz'; // Check for Join Quiz page
+  const isQuizPage = useMatch('/learner/quiz/:id'); // Check for Quiz page
 
   return (
     <>
-      {!isJoinQuizPage ? ( // Only render the navbar and sidebar if not on the Join Quiz page
+      {!isJoinQuizPage && !isQuizPage ? ( // Only render the navbar and sidebar if not on the Join Quiz or Quiz page
         <div>
           <Navbar toggleSidebar={toggleSidebar} />
           <div className="flex">
@@ -27,10 +28,9 @@ export default function MasterUserLayout() {
         </div>
       ) : (
         <div className="flex items-center justify-center h-screen">
-          <Outlet /> {/* This will render the JoinQuiz component */}
-         </div>
+          <Outlet /> {/* This will render the JoinQuiz component or the Quiz component */}
+        </div>
       )}
-
     </>
   );
 }
