@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { axiosInstance, LearnerQuiz } from "../../../../Constants/URLS/URL";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import logo from '../../../../assets/images/Logo.png';
@@ -39,6 +39,7 @@ export default function Quiz() {
   const { id } = useParams();
   const { register, handleSubmit } = useForm();
   const [timeRemaining, setTimeRemaining] = useState<number>(0); // State for countdown timer
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const fetchQuestions = async () => {
     try {
@@ -72,14 +73,14 @@ export default function Quiz() {
         }
         return prevTime - 1; // Decrement by 1 second
       });
-    }, 1000); // Set interval to 1000ms (1 second)
+    }, 2000); // Set interval to 1000ms (1 second)
   };
 
   const onSubmit = async (data: any) => {
     try {
       // Validate that all questions have been answered
       const unansweredQuestions = exam?.data.questions.filter((question) => !data[question._id]);
-      if (unansweredQuestions.length > 0) {
+      if (unansweredQuestions && unansweredQuestions.length > 0) {
         toast.warn("Please answer all questions before submitting.");
         return; // Exit early if there are unanswered questions
       }
@@ -96,14 +97,23 @@ export default function Quiz() {
   
       console.log(response);
       toast.success("Quiz submitted successfully!");
+      
+      // Navigate to homepage upon successful submission
+      navigate("/learner"); // Adjust the path as needed
+  
     } catch (error) {
       // Handle different types of errors
       if (axios.isAxiosError(error)) {
-        // This is an Axios error
         if (error.response) {
           // Server responded with a status other than 2xx
-          const errorMessage = error.response.data?.message || "An error occurred while submitting the quiz.";
-          toast.error(errorMessage);
+          if (error.response.status === 409) {
+            // Handle 409 Conflict error
+            toast.error("Conflict occurred. Navigating to homepage.");
+            navigate("/learner"); // Navigate to homepage on 409 error
+          } else {
+            const errorMessage = error.response.data?.message || "An error occurred while submitting the quiz.";
+            toast.error(errorMessage);
+          }
         } else if (error.request) {
           // Request was made but no response received
           toast.error("No response from the server. Please try again later.");
