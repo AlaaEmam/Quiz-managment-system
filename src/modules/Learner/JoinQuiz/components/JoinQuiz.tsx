@@ -84,7 +84,7 @@ const JoinQuiz: React.FC = () => {
 
 
   const handleCancel = () => {
-    navigate('/learner/quiz');
+    navigate('/learner');
     toast.error('Quiz join canceled');
   };
 
