@@ -6,6 +6,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import DeleteConfirmation from "../../../Shared/DeleteConfirmation/DeleteConfirmation";
 import { Link } from "react-router-dom";
+import NoData from "../../../Shared/NoData/NoData";
 export default function Questions() {
   const [question, setquestion] = useState<QU_IF[]>([]);
   const [isAddNewQU, setIsAddNewQU] = useState(false);
@@ -373,44 +374,50 @@ export default function Questions() {
           </button>
         </div>
 
-        <table className=" text-center leading-loose border-separate border-spacing-1 border w-full border-none p-0 m-0 table-fixed">
-          <thead>
-            <tr className="bg-black text-white">
-              <th className="border border-slate-300 ">title</th>
-              <th className="border border-slate-300 ">Question Desc</th>
-              <th className="border border-slate-300 ">difficulty level</th>
-              <th className="border border-slate-300 "> points</th>
-              <th className="border border-slate-300 "> Actions </th>
-            </tr>
-          </thead>
-          <tbody>
-            {question.map((QU) => (
-              <tr key={QU._id}>
-                <td className="border border-slate-300 ...">{QU.title}</td>
-                <td className="border border-slate-300 ...">
-                  {QU.description}
-                </td>
-                <td className="border border-slate-300 ...">{QU.difficulty}</td>
-                <td className="border border-slate-300 ...">{QU.points}</td>
+       {question.length > 0 ? (
+         <table className=" text-center leading-loose border-separate border-spacing-1 border w-full border-none p-0 m-0 table-fixed">
+         <thead>
+           <tr className="bg-black text-white">
+             <th className="border border-slate-300 ">title</th>
+             <th className="border border-slate-300 ">Question Desc</th>
+             <th className="border border-slate-300 ">difficulty level</th>
+             <th className="border border-slate-300 "> points</th>
+             <th className="border border-slate-300 "> Actions </th>
+           </tr>
+         </thead>
+         <tbody>
+           {question.map((QU) => (
+             <tr key={QU._id}>
+               <td className="border border-slate-300 ...">{QU.title}</td>
+               <td className="border border-slate-300 ...">
+                 {QU.description}
+               </td>
+               <td className="border border-slate-300 ...">{QU.difficulty}</td>
+               <td className="border border-slate-300 ...">{QU.points}</td>
 
-                <td className="border border-slate-300  text-orange">
-                  <i
-                    className="fa-solid fa-eye cursor-pointer "
-                    onClick={() => getSpcQUbyid(QU._id)}
-                  ></i>
-                  <i
-                    className="fa-solid fa-pen-to-square cursor-pointer px-2  mx-2"
-                    onClick={() => getSpcQUbyid(QU._id)}
-                  ></i>
-                  <i
-                    className="fa-solid fa-trash-can cursor-pointer"
-                    onClick={() => openDeleteModal(QU._id)}
-                  ></i>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+               <td className="border border-slate-300  text-orange">
+                 <i
+                   className="fa-solid fa-eye cursor-pointer "
+                   onClick={() => getSpcQUbyid(QU._id)}
+                 ></i>
+                 <i
+                   className="fa-solid fa-pen-to-square cursor-pointer px-2  mx-2"
+                   onClick={() => getSpcQUbyid(QU._id)}
+                 ></i>
+                 <i
+                   className="fa-solid fa-trash-can cursor-pointer"
+                   onClick={() => openDeleteModal(QU._id)}
+                 ></i>
+               </td>
+             </tr>
+           ))}
+         </tbody>
+       </table>
+       ) : (
+        <div className="text-center">
+          <NoData />
+        </div>
+       )}
       </div>
 
 

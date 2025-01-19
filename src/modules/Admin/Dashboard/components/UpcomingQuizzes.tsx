@@ -8,6 +8,7 @@ import image2 from '../../../../assets/images/upcoming-quiz4.png';
 import image3 from '../../../../assets/images/upcoming-quiz5.png';
 import image4 from '../../../../assets/images/upcoming-quiz6.png';
 import image5 from '../../../../assets/images/upcoming-quiz7.png';
+import NoData from '../../../Shared/NoData/NoData';
 interface UpcomingQuizzes {
   _id: string;
   schadule: string; // Correct spelling: `schedule`
@@ -34,41 +35,48 @@ const UpcomingQuizzes = ({ incomingQuiz }: UpcomingQuizzesProps) => {
           </Link>
         </div>
       </div>
-      {incomingQuiz.map((quiz ,index) => (
-        <div key={quiz._id} className="flex items-center gap-x-4 border-2 rounded-lg mb-5 p-1">
-          <div className="w-24 h-24 p-2 rounded-lg justify-start">
-            <img
+      {incomingQuiz.length > 0 ? (
+        incomingQuiz.map((quiz, index) => (
+          <div key={quiz._id} className="flex items-center gap-x-4 border-2 rounded-lg mb-5 p-1">
+            <div className="w-24 h-24 p-2 rounded-lg justify-start">
+              <img
                 src={defaultAvatars[index % defaultAvatars.length]} 
-              alt={quiz.title}
-            />
-          </div>
-          <div>
-            <span className="block font-bold text-lg">{quiz.title}</span>
-            <span className="block">
-              {format(new Date(quiz.schadule), 'yyyy-MM-dd')}
-              <span>
-                <span className="mx-3">|</span>
-                {format(new Date(quiz.schadule), 'hh:mm')} 
-              </span>
-            </span>
-            <div className="relative flex mt-3 justify-between gap-20 font-bold">
-              <div>
-                <span className="block font-semibold">
-                  No. of students enrolled: {quiz.participants}
+                alt={quiz.title}
+                className="object-cover w-full h-full"
+              />
+            </div>
+            <div>
+              <span className="block font-bold text-lg">{quiz.title}</span>
+              <span className="block">
+                {format(new Date(quiz.schadule), 'yyyy-MM-dd')}
+                <span>
+                  <span className="mx-3">|</span>
+                  {format(new Date(quiz.schadule), 'hh:mm a')} {/* Added am/pm */}
                 </span>
-              </div>
-              <div className="open-div">
-                <Link to="/quiz-details" className="flex items-center">
-                  Open
-                  <div className="bg-green rounded-lg text-white m-1">
-                    <TiArrowRight />
-                  </div>
-                </Link>
+              </span>
+              <div className="relative flex mt-3 justify-between gap-20 font-bold">
+                <div>
+                  <span className="block font-semibold">
+                    No. of students enrolled: {quiz.participants}
+                  </span>
+                </div>
+                <div className="open-div">
+                  <Link to="/quiz-details" className="flex items-center">
+                    Open
+                    <div className="bg-green rounded-lg text-white m-1">
+                      <TiArrowRight />
+                    </div>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
+        ))
+      ) : (
+        <div className="text-center">
+          <NoData />
         </div>
-      ))}
+      )}
     </div>
   );
 };

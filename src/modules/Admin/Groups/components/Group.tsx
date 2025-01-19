@@ -7,6 +7,7 @@ import { SubmitHandler } from "react-hook-form";
 import EditGroup from "./EditGroup";
 import { Link } from "react-router-dom";
 import DeleteConfirmation from "../../../Shared/DeleteConfirmation/DeleteConfirmation";
+import NoData from "../../../Shared/NoData/NoData";
 
 
 export default function Group() {
@@ -148,29 +149,38 @@ export default function Group() {
       </button>
     </div>
 
+     {groupList.length > 0 ? (
+       <div className="mt-2 border-2 rounded-xl p-5">
+       <div className="grid grid-cols-2 gap-2 ">
+         {groupList.map((group: any) => (
+           <div
+             className="p-3 border-2 rounded-lg flex justify-between"
+             key={group._id}
+           >
+             <div>
+               <p className="text-2xl">Group: {group.name}</p>
+               <p className="text-md">No. of Students: {group?.students.length}</p>
+             </div>
+             <div>
+               <i onClick={() => handleShowEditGroup(group?._id)} className="bi bi-pencil-square text-3xl"></i>
+               <i
+                 onClick={() => handleShowDelete(group?._id)}
+                 className="bi bi-trash text-3xl"
+               ></i>
+             </div>
+           </div>
+         ))}
+       </div>
+     </div>
+
+     ) : (
       <div className="mt-2 border-2 rounded-xl p-5">
-        <div className="grid grid-cols-2 gap-2 ">
-          {groupList.map((group: any) => (
-            <div
-              className="p-3 border-2 rounded-lg flex justify-between"
-              key={group._id}
-            >
-              <div>
-                <p className="text-2xl">Group: {group.name}</p>
-                <p className="text-md">No. of Students: {group?.students.length}</p>
-              </div>
-              <div>
-                <i onClick={() => handleShowEditGroup(group?._id)} className="bi bi-pencil-square text-3xl"></i>
-                <i
-                  onClick={() => handleShowDelete(group?._id)}
-                  className="bi bi-trash text-3xl"
-                ></i>
-              </div>
-            </div>
-          ))}
+        <div className="text-center">
+          <NoData />
         </div>
       </div>
-
+     )
+     }
 
   <AddGroup 
   handleCloseAddGroup={handleCloseAddGroup}
