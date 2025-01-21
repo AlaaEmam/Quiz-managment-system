@@ -30,27 +30,51 @@ export default function Login() {
 
   
 
-  useEffect(() => {
-    if (token) {
-      navigate('/dashboard');
-    }
-  }, [token, navigate]);
+  // useEffect(() => {
+  //   if (token) {
+  //     navigate('/dashboard');
+  //   }
+  // }, [token, navigate]);
 
+  // const onSubmit = async (data: formData) => {
+  //   try {
+  //     const response = await AuthAxiosInstance.post(Auth.login, data);
+  //     dispatch(setToken(response.data.data.accessToken));
+  //     saveTokenToLocalStorage(response.data.data.accessToken)
+  //     // localStorage.setItem('token', response.data.data.accessToken);
+  //     toast.success(response.data.message || 'login successfully');
+  //     console.log(response);
+      
+  //   } catch (error) {
+  //     console.log(error);
+
+  //     toast.error('Login failed');
+  //   }
+  // };
   const onSubmit = async (data: formData) => {
     try {
       const response = await AuthAxiosInstance.post(Auth.login, data);
       dispatch(setToken(response.data.data.accessToken));
-      saveTokenToLocalStorage(response.data.data.accessToken)
-      // localStorage.setItem('token', response.data.data.accessToken);
-      toast.success(response.data.message || 'login successfully');
-      console.log(response);
+      saveTokenToLocalStorage(response.data.data.accessToken);
+      toast.success(response.data.message || 'Login successfully');
       
+      const userRole = response.data.data.role; 
+      
+      if (userRole === 'Student') {
+        navigate('/learner'); 
+      } else if (userRole === 'Instructor') {
+        navigate('/dashboard'); 
+      } else {
+        navigate('/'); 
+      }
+  
+      console.log(response);
     } catch (error) {
       console.log(error);
-
       toast.error('Login failed');
     }
   };
+  
   return (
     <>
       <div>
