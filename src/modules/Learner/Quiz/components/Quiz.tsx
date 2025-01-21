@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import logo from '../../../../assets/images/Logo.png';
+import QuizModule from "./QuizModule";
 
 interface QuestionOption {
   A: string;
@@ -39,6 +40,8 @@ export default function Quiz() {
   const { id } = useParams();
   const { register, handleSubmit } = useForm();
   const [timeRemaining, setTimeRemaining] = useState<number>(0); // State for countdown timer
+  const [modalOpen, setModalOpen] = useState(false); // State for modal visibility
+  const [message, setMessage] = useState('');
   const navigate = useNavigate(); // Initialize useNavigate
 
   const fetchQuestions = async () => {
@@ -97,10 +100,14 @@ export default function Quiz() {
   
       console.log(response);
       toast.success("Quiz submitted successfully!");
-      
-      // Navigate to homepage upon successful submission
-      navigate("/learner"); // Adjust the path as needed
-  
+   
+     // Pass the success message and modal state to the homepage
+     navigate("/learner", {
+      state: {
+        modalOpen: true,
+        message: "Quiz submitted successfully!"
+      }
+    });
     } catch (error) {
       // Handle different types of errors
       if (axios.isAxiosError(error)) {
@@ -171,36 +178,13 @@ export default function Quiz() {
           </form>
         </div>
       </div>
+      {/* <QuizModule isOpen={modalOpen} onClose={() => setModalOpen(false)} title={message} /> */}
+
     </div>
+    
   );
 }
-// =========================
-// import React, { useState } from 'react';
-// import QuizModule from './QuizModule';
 
-// export default function Quiz() {
-//   const [showModule, setShowModule] = useState(false);
-
-//   const handleClose = () => {
-//     setShowModule(false);
-//   };
-
-//   return (
-//     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-//       {!showModule ? (
-//         <button
-//           className="px-6 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 transition-all duration-300"
-//           onClick={() => setShowModule(true)}
-//         >
-//           Start Quiz
-//         </button>
-//       ) : (
-//         <QuizModule onClose={handleClose} />
-//       )}
-//     </div>
-// );
-// }
-// src/Quiz.js
 
 
      

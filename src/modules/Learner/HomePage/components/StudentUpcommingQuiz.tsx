@@ -13,6 +13,7 @@ interface UpcomingQuizzes {
   _id: string;
   schadule: string; // Correct spelling: `schedule`
   title: string;
+  code: string;
   participants: number;
 }
 
@@ -20,20 +21,13 @@ interface UpcomingQuizzesProps {
   incomingQuiz: UpcomingQuizzes[]; // Prop name should match the parent component
 }
 
-const UpcomingQuizzes = ({ incomingQuiz }: UpcomingQuizzesProps) => {
+const StudentUpcommingQuiz = ({ incomingQuiz }: UpcomingQuizzesProps) => {
   const defaultAvatars = [image1, image2, image3, image4, image5];
 
   return (
     <div className="border-2 rounded-lg py-4 px-4">
       <div className="flex items-center justify-between m-2">
         <h3 className="font-bold text-xl tracking-wide mb-5">Upcoming 5 quizzes</h3>
-        <div>
-          <Link to="/dashboard/quiz" className="items-center">
-            <div className="flex">
-              Quiz directory <TiArrowRight className="text-3xl text-green" />
-            </div>
-          </Link>
-        </div>
       </div>
       {incomingQuiz.length > 0 ? (
         incomingQuiz.map((quiz, index) => (
@@ -47,28 +41,32 @@ const UpcomingQuizzes = ({ incomingQuiz }: UpcomingQuizzesProps) => {
             </div>
             <div>
               <span className="block font-bold text-lg">{quiz.title}</span>
-              <span className="block">
+              <span className="block font-bold text-lg">
+                Exam Code:
+                <span className="text-sm font-normal text-gray-500"> {quiz.code}</span>
+                </span>
+             <div className='flex items-center justify-around'>
+            <div> 
+              <span className="mx-2">
                 {format(new Date(quiz.schadule), 'yyyy-MM-dd')}
                 <span>
                   <span className="mx-3">|</span>
                   {format(new Date(quiz.schadule), 'hh:mm a')} {/* Added am/pm */}
                 </span>
               </span>
-              <div className="relative flex mt-3 justify-between gap-20 font-bold">
-                <div>
-                  <span className="block font-semibold">
-                    No. of students enrolled: {quiz.participants}
-                  </span>
-                </div>
-                <div className="open-div">
-                  <Link to="/dashboard/quiz/quiz-details" className="flex items-center">
-                    Open
-                    <div className="bg-green rounded-lg text-white m-1">
+              </div>
+             
+          <div>
+          <button className="open-div text-xs text-light_cream bg-black p-2 rounded-lg">   
+                  <Link to="/learner/join-quiz" className="flex items-center ">
+                    Start Your Exam
+                    <div className="bg-light-cream rounded-lg text-white m-1">
                       <TiArrowRight />
                     </div>
                   </Link>
-                </div>
-              </div>
+                </button>
+          </div>
+             </div>
             </div>
           </div>
         ))
@@ -81,4 +79,4 @@ const UpcomingQuizzes = ({ incomingQuiz }: UpcomingQuizzesProps) => {
   );
 };
 
-export default UpcomingQuizzes;
+export default StudentUpcommingQuiz;

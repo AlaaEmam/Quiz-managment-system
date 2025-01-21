@@ -1,5 +1,5 @@
 import { IoIosAlarm } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { FaLongArrowAltRight } from 'react-icons/fa';
@@ -8,24 +8,40 @@ import { Link } from 'react-router-dom';
 import { axiosInstance, LearnerQuiz } from '../../../../Constants/URLS/URL';
 import income from '../../../../assets/images/upcoming-quiz1.png';
 import NoData from "../../../Shared/NoData/NoData";
+import QuizModule from "../../Quiz/components/QuizModule";
+import UpcomingQuizzes from "../../../Admin/Dashboard/components/UpcomingQuizzes";
+import StudentUpcommingQuiz from "./StudentUpcommingQuiz";
+
 
 export default function HomePage() {
   const [completeQuiz, setCompleteQuiz] = useState([]); // Completed quizzes
-  const [incomingQuiz, setIncomingQuiz] = useState([]); // Upcoming quizzes
+  const [incomingQuiz, setIncomingQuiz] = useState<UpcomingQuizzes[]>([]); // Upcoming quizzes
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleButtonClick = () => {
     navigate('/learner/join-quiz');
   };
 
+    // Check if modal state is passed from the Quiz page
+    useEffect(() => {
+      if (location.state) {
+        setModalOpen(location.state.modalOpen);
+        setMessage(location.state.message);
+      }
+    }, [location.state]); // Dependency array ensures it updates on page load
+  
   // Fetch upcoming quizzes
   const getIncomingQuiz = async () => {
     try {
       setLoading(true);
       const response = await axiosInstance.get(LearnerQuiz.firstFiveIncomming);
       setIncomingQuiz(response.data);
+      console.log(response.data);
     } catch (err) {
       setError('Failed to fetch upcoming quizzes.');
     } finally {
@@ -57,23 +73,12 @@ export default function HomePage() {
       {error && <p className="text-red-500">{error}</p>}
 
 
-      <button
-        className="border-2 rounded-lg py-5 my-2 hover:bg-slate-900 hover:text-light_cream"
-        onClick={handleButtonClick}
-      >
-        <div className="flex flex-col justify-center items-center gap-y-2">
-          <div>
-            <IoIosAlarm className="text-6xl" />
-          </div>
-          <div>
-            <span className="font-semibold text-lg p-10">Join Quiz</span>
-          </div>
-        </div>
-      </button>
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Upcoming Quizzes Section */}
-        <div className="border-2 rounded-lg py-4 px-4">
+      <div className="col-span-1">
+        <StudentUpcommingQuiz incomingQuiz={incomingQuiz} /> {/* Correct prop name */}
+      </div>
+        {/* <div className="border-2 rounded-lg py-4 px-4">
           <div className="flex items-center justify-between mb-5">
             <h3 className="font-bold text-xl tracking-wide">
             Your Upcoming 5 Quizzes
@@ -122,7 +127,7 @@ export default function HomePage() {
             </div>
           </div>
           )}
-        </div>
+        </div> */}
 
         {/* Completed Quizzes Section */}
         <div className="border-2 rounded-lg py-4 px-4">
@@ -138,6 +143,8 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="overflow-x-auto">
+          {completeQuiz.length > 0 ? (
+
             <table className="table-auto w-full border-collapse border">
               <thead>
                 <tr className="bg-black text-white">
@@ -148,8 +155,8 @@ export default function HomePage() {
                 </tr>
               </thead>
               <tbody>
-                {completeQuiz.length > 0 ? (
-                  completeQuiz.map((quiz: Any) => (
+                {
+                  completeQuiz.map((quiz: any) => (
                     <tr key={quiz._id} className="hover:bg-gray-100">
                       <td className="border px-4 py-2">{quiz.title}</td>
                       <td className="border px-4 py-2">{quiz.difficulty}</td>
@@ -162,18 +169,20 @@ export default function HomePage() {
                       </td>
                     </tr>
                   ))
-                ) : (
-                  <tr>
-                    <td colSpan={3} className="text-center text-gray-500 py-4">
-                      No completed quizzes available.
-                    </td>
-                  </tr>
-                )}
+                }
+               
               </tbody>
             </table>
+             ) : (
+              <div className="text-center">
+                <NoData />
+              </div>
+            )}
           </div>
         </div>
       </div>
+      <QuizModule isOpen={modalOpen} onClose={() => setModalOpen(false)} title={message} />
+
     </div>
   );
 }

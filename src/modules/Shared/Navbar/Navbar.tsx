@@ -66,19 +66,6 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
 
           {/* New Quiz Button */}
           <div className="flex items-center ms-3">
-            <Link
-              to={"/quiz"}
-              type="button"
-              className="mr-11 px-8 text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 me-2 mb-2"
-            >
-              <img
-                src={NewQuiz}
-                alt="New Quiz Icon"
-                className="text-gray-500 pr-4 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-              />
-              <div className="font-bold text-xl">New Quiz</div>
-            </Link>
-
             {/* User Profile Dropdown */}
             <button
               onClick={toggleDropdown}
