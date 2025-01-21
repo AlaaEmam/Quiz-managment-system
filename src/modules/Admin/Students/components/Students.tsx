@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { axiosInstance, Student } from "../../../../Constants/URLS/URL";
 import AllStudents from "./AllStudent"; 
+import NoData from "../../../Shared/NoData/NoData";
 
 const Students = () => {
   const [studentsList, setStudentsList] = useState<any[]>([]); // We can use 'any' here if response type is not known
@@ -57,7 +58,8 @@ const Students = () => {
         </h3>
       </div>
 
-      <div className="border-2 rounded-lg py-4 ps-4">
+      {currentStudents.length > 0 ? (
+        <div className="border-2 rounded-lg py-4 ps-4">
         <div className="grid gap-4">
           <div className="col-span-1">
             {/* Displaying the students in 2 columns, 3 per column */}
@@ -78,6 +80,13 @@ const Students = () => {
           </div>
         </div>
       </div>
+      ) : (
+        <div className="mt-2 border-2 rounded-xl p-5">
+        <div className="text-center">
+          <NoData />
+        </div>
+      </div>
+      )}
 
       {/* Pagination */}
       <div className="inline-flex flex-row items-center mt-4">

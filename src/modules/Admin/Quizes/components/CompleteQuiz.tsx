@@ -2,6 +2,7 @@ import React from 'react';
 import { FaLongArrowAltRight } from 'react-icons/fa';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
+import NoData from '../../../Shared/NoData/NoData';
 
 interface CompletedQuizzes {
   _id: string;
@@ -26,28 +27,36 @@ const CompletedQuizzes = ({ quizzes }) => {
         </div>
       </div>
 
-      <div className="overflow-x-auto mt-3">
-        <table className="table-auto border-collapse border w-full">
-          <thead>
-            <tr className="bg-black text-white">
-              <th className="border capitalize">Quiz Code</th>
-              <th className="border">Quiz Name</th>
-              <th className="border">End Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {quizzes.map((quiz, index) => (
-              <tr key={index}>
-                <td className="border border-gray-300 px-4 py-2">{quiz.code}</td>
-                <td className="border border-gray-300 px-4 py-2">{quiz.title}</td>
-                <td className="border border-gray-300 px-4 py-2">
-                {format(new Date(quiz.closed_at), 'yyyy-MM-dd / hh:mm')}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+     {quizzes.length > 0 ? (
+       <div className="overflow-x-auto mt-3">
+       <table className="table-auto border-collapse border w-full">
+         <thead>
+           <tr className="bg-black text-white">
+             <th className="border capitalize">Quiz Code</th>
+             <th className="border">Quiz Name</th>
+             <th className="border">End Date</th>
+           </tr>
+         </thead>
+         <tbody>
+           {quizzes.map((quiz, index) => (
+             <tr key={index} 
+             className='[&_td]:border [&_td]:border-gray-300 [&_td]:px-4 [&_td]:py-2'
+             >
+               <td>{quiz.code}</td>
+               <td>{quiz.title}</td>
+               <td>
+               {format(new Date(quiz.closed_at), 'yyyy-MM-dd / hh:mm')}
+               </td>
+             </tr>
+           ))}
+         </tbody>
+       </table>
+     </div>
+     ): (
+        <div className="text-center">
+          <NoData />
+        </div>
+     )}
     </div>
   );
 };

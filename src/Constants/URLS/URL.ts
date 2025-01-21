@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
 
-export const baseURL = "https://upskilling-egypt.com:3005/api";
+export const baseURL = 'https://upskilling-egypt.com:3005/api';
 
 export const axiosInstance = axios.create({
   baseURL,
-  headers: { Authorization: localStorage.getItem("token") },
+  headers: { Authorization: localStorage.getItem('token') },
 });
 
 export const AuthAxiosInstance = axios.create({
@@ -12,9 +12,9 @@ export const AuthAxiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   if (!token) {
-    window.location.href = "/login";
+    window.location.href = '/login';
   } else {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -63,9 +63,9 @@ export const Quiz = {
 };
 
 export const QuestionsUrl = {
-  gettAllQUT: "/question",
+  gettAllQUT: '/question',
   getSpcQUT: (id: string) => `/question/${id}`,
-  addQuestion: "/question",
+  addQuestion: '/question',
   updateQuestion: (id: string) => `/question/${id}`,
   deleteQuestion: (id: string) => `/question/${id}`,
 };
@@ -73,7 +73,9 @@ export const QuestionsUrl = {
 // LEARNER APIS
 
 export const LearnerQuiz = {
-  joinQuiz: "/quiz/join",
+  joinQuiz: '/quiz/join',
   qutionWithoutAnswer: (ID: String) => `/quiz/without-answers/${ID}`,
   submitQuiz: (ID: String) => `quiz/submit/${ID}`,
+  firstFiveIncomming: `/quiz/incomming`,
+  lastFiveCompleted: `/quiz/completed`,
 };
