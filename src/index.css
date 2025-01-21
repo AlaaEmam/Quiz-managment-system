@@ -18,14 +18,14 @@ input:-webkit-autofill {
   }
 
 
-  .leading-10	{line-height: 2.5rem !important}
-
-  .focus:outline-transparent[type='text']:focus{outline:  none !important;}
-
-
-.user-image{
-  
+.leading-10	{
+  line-height: 2.5rem !important;
 }
+
+.focus:outline-transparent[type='text']:focus{
+  outline:  none !important;
+}
+
 .quiz-title {
   font-family: 'Inter', sans-serif;
   font-size: 28px; 
