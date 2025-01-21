@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-import React from 'react'
-
-export default function Results() {
-  return (
-    <div>Results</div>
-  )
-}
-=======
 import React, { useState, useEffect } from 'react';
 import { Link, Router } from 'react-router-dom';
 import { axiosInstance, Quiz } from '../../../../Constants/URLS/URL';
@@ -57,4 +48,3 @@ const Results = () => {
 };
 
 export default Results;
->>>>>>> ca4c2c510da5b6fadff091cdc13f04ba912ab493

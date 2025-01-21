@@ -1,6 +1,5 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FiHome } from "react-icons/fi";
 import { FaUsers, FaQuestionCircle, FaClipboardList } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { GoLog } from "react-icons/go";

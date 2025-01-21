@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -14,7 +12,6 @@ interface formData {
   email: string;
 }
 
->>>>>>> ca4c2c510da5b6fadff091cdc13f04ba912ab493
 export default function ForgotPassword() {
   const navigate = useNavigate();
   const {
